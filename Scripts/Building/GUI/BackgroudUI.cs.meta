@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 66541088a8d92c045957a33bc5288058
+timeCreated: 1478403200
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - mainUI: {instanceID: 0}
+  - pictureSelectObject: {instanceID: 0}
+  - Texture1: {instanceID: 0}
+  - Texture2: {instanceID: 0}
+  - Texture3: {instanceID: 0}
+  - DilithiumTex: {fileID: 2800000, guid: 623c64cd7d84b584eb4fd96d43fe6ee6, type: 3}
+  - TiteniumTex: {fileID: 2800000, guid: cf606c2d2673e22439e42af2e0a39972, type: 3}
+  - CrewTex: {fileID: 2800000, guid: 8fdfbe01dc5ebf14b8dcf368fedc71bd, type: 3}
+  - pictureDefault: {instanceID: 0}
+  - map: {instanceID: 0}
+  - mat: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
