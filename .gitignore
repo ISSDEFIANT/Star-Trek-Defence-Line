@@ -1,0 +1,10 @@
+.vs
+*.meta
+Temp
+ShaderCache
+metadata
+ShaderCache.db
+ProjectVersion.txt
+Collab
+**/*.log
+*.log
