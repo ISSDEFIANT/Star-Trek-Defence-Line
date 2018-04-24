@@ -1,0 +1,57 @@
+Este modelo digital do SpaceDock é para livre uso em renderizaçoes artisticas em 3D .
+
+É vedado o comercio deste arquivo sob qualquer meio ou midia.
+Todavia, peço a inclusão :
+1) o nome do autor do modelo seja citado.
+2) o site de origem seja citada na mesma (vvv.trekmeshes.ch).
+
+Por exemplo:
+" SpaceDock: Raul Mamoru - www.trekmeshes.ch "
+
+Se possivel, envie para mim seu comentario ou a sua arte renderizada com este modelo do SpaceDock:
+raul.mamoru@gmail.com
+
+Obrigado!
+
+********************************************************
+
+This digital model of the SpaceDock is free for use in artistic renderings in 3D.
+
+It is forbidden to trade this file in any media.
+However, I ask for inclusion:
+1) the name of the author's model is cited.
+2) the site of origin is mentioned in it.
+
+For example:
+"SpaceDock: Raul Mamoru - www.trekmeshes.ch "
+
+If possible, please send your comments or your art rendered with this model of the SpaceDock:
+raul.mamoru @ gmail.com
+
+Thanks!
+
+Translated by: Google
+
+================================================================
+================================================================
+
+Star Trek  "SPACEDOCK"
+
+Content:
+68 pieces
+52 maps
+
+Assembly Instructions
+
+**Bp=Bump Map
+**Df=Diffuse Map
+**SI=Self-Illumination Map
+**Sp=Specular Map
+**DF-SI=Diffuse Map and Self-Illumination Map (you must repeat the same map in both slots)
+**OP=Opacity
+
+1) Set/Configure all materials / maps (See "Map Example Config.bmp" / "SP Map Config.bmp")
+
+2) Import the 3ds object
+
+3) Select the object(s) and assign the corresponding material.
