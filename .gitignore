@@ -1,9 +1,14 @@
 .vs
 *.meta
+*.docx
 Temp
 ShaderCache
 metadata
 ShaderCache.db
+Сохранённое/
+"Может пригодится/"
+Версии/
+"LIST OF PHRASES Олеся Дорофеева/"
 ProjectVersion.txt
 Collab
 **/*.log
