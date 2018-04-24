@@ -1,0 +1,42 @@
+Federation
+
+Ships:
+Galactica class - 100
+Galactica class (cargo type) - 15
+
+Defiant class - 50
+Saber class - 40
+Nova class - 80
+
+Intrepid class - 150
+Steamrunner class - 200
+Akira class - 500
+
+Luna class - 350
+Prometheus class - 175
+Nebula class - 750
+Galaxy class - 1000
+Sovereign class - 855
+Excalibur class - 2000
+
+Heroes:
+U.S.S.NAGASAKI Nagasaki class - 1500
+U.S.S.BEOWULF Beowulf class (X) - 30
+U.S.S.INCURSION Incursion class - 87
+U.S.S.DEFIANT Defiant class - 50
+U.S.S.HERBERT Nebula class - 750
+U.S.S.EVOLUTION Evolution class - ???
+
+
+Stations:
+Starbase - 150000
+Resource recycling station - 3000
+Dry dock - 100
+Outpost - 50000
+Scientific station - 200
+Phaser turret - 0
+Surplus Depot - 350
+Sensor Array - 0
+Trading station - 450
+Torpedo turret - 0
+Shipyard - 120

@@ -1,0 +1,863 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class SaveAndLoad : MonoBehaviour {
+	public int SelectedSave;
+
+	public GameObject Slot1;
+	public GameObject Slot2;
+	public GameObject Slot3;
+	public GameObject Slot4;
+	public GameObject Slot5;
+
+	public bool SelectSlot1;
+	public bool SelectSlot2;
+	public bool SelectSlot3;
+	public bool SelectSlot4;
+	public bool SelectSlot5;
+
+	public string curSaveName;
+
+	public List<string> SaveObjects;
+
+	public List<Transform> SaveObjectsTransforms;
+
+	public List<float> ObjectsHealth;
+	public List<float> ObjectsShilds;
+	public List<float> ObjectsGenerator;
+	public List<float> ObjectsWeapon;
+	public List<float> ObjectsEngings;
+
+	public List<bool> AI;
+	public List<bool> FriendAI;
+
+	public List<bool> CanAttack;
+
+	public List<bool> Build;
+	public List<bool> IsFlag;
+
+	public List<bool> Agrass;
+	public List<bool> Protact;
+	public List<bool> Idle;
+
+	public List<string> LevelName;
+
+	//Stations
+	public GameObject FBase;
+	public GameObject FMine;
+	public GameObject FShop;
+	public GameObject FMagic;
+	public GameObject FShopUp;
+	public GameObject FTower;
+	public GameObject FSensor;
+	public GameObject FShopStation;
+
+	//Ships
+	public GameObject FBS;
+	public GameObject FTS;
+
+	public GameObject FS1;
+	public GameObject FS2;
+	public GameObject FS3;
+	public GameObject FS4;
+	public GameObject FS5;
+	public GameObject FS6;
+
+	public GameObject FS7;
+	public GameObject FS8;
+	public GameObject FS9;
+	public GameObject FS10;
+	public GameObject FS11;
+	public GameObject FS12;
+
+	public GameObject Slot1P;
+	public GameObject Slot2P;
+	public GameObject Slot3P;
+	public GameObject Slot4P;
+	public GameObject Slot5P;
+
+	public GameObject LoadingObject;
+
+	public bool load;
+
+
+	private bool LoadLevel;
+
+	// Use this for initialization
+	void Start () {
+		Slot1.GetComponent<SaveInfo> ().SaveName = Slot1P.GetComponent<SaveInfo> ().SaveName;
+
+		Slot1.GetComponent<SaveInfo> ().SaveObjects = Slot1P.GetComponent<SaveInfo> ().SaveObjects;
+
+		Slot1.GetComponent<SaveInfo> ().ObjectsHealth = Slot1P.GetComponent<SaveInfo> ().ObjectsHealth;
+		Slot1.GetComponent<SaveInfo> ().ObjectsShilds = Slot1P.GetComponent<SaveInfo> ().ObjectsShilds;
+		Slot1.GetComponent<SaveInfo> ().ObjectsGenerator = Slot1P.GetComponent<SaveInfo> ().ObjectsGenerator;
+		Slot1.GetComponent<SaveInfo> ().ObjectsWeapon = Slot1P.GetComponent<SaveInfo> ().ObjectsWeapon;
+		Slot1.GetComponent<SaveInfo> ().ObjectsEngings = Slot1P.GetComponent<SaveInfo> ().ObjectsEngings;
+	
+		Slot1.GetComponent<SaveInfo> ().AI = Slot1P.GetComponent<SaveInfo> ().AI;
+		Slot1.GetComponent<SaveInfo> ().FriendAI = Slot1P.GetComponent<SaveInfo> ().FriendAI;
+
+		Slot1.GetComponent<SaveInfo> ().CanAttack = Slot1P.GetComponent<SaveInfo> ().CanAttack;
+
+		Slot1.GetComponent<SaveInfo> ().Build = Slot1P.GetComponent<SaveInfo> ().Build;
+		Slot1.GetComponent<SaveInfo> ().IsFlag = Slot1P.GetComponent<SaveInfo> ().IsFlag;
+
+		Slot1.GetComponent<SaveInfo> ().Agrass = Slot1P.GetComponent<SaveInfo> ().Agrass;
+		Slot1.GetComponent<SaveInfo> ().Protact = Slot1P.GetComponent<SaveInfo> ().Protact;
+		Slot1.GetComponent<SaveInfo> ().Idle = Slot1P.GetComponent<SaveInfo> ().Idle;
+
+		Slot1.GetComponent<SaveInfo> ().ObjectTransform = Slot1P.GetComponent<SaveInfo> ().ObjectTransform;
+
+		Slot1.GetComponent<SaveInfo> ().LevelName = Slot1P.GetComponent<SaveInfo> ().LevelName;
+
+
+		Slot2.GetComponent<SaveInfo> ().SaveName = Slot2P.GetComponent<SaveInfo> ().SaveName;
+
+		Slot2.GetComponent<SaveInfo> ().SaveObjects = Slot2P.GetComponent<SaveInfo> ().SaveObjects;
+
+		Slot2.GetComponent<SaveInfo> ().ObjectsHealth = Slot2P.GetComponent<SaveInfo> ().ObjectsHealth;
+		Slot2.GetComponent<SaveInfo> ().ObjectsShilds = Slot2P.GetComponent<SaveInfo> ().ObjectsShilds;
+		Slot2.GetComponent<SaveInfo> ().ObjectsGenerator = Slot2P.GetComponent<SaveInfo> ().ObjectsGenerator;
+		Slot2.GetComponent<SaveInfo> ().ObjectsWeapon = Slot2P.GetComponent<SaveInfo> ().ObjectsWeapon;
+		Slot2.GetComponent<SaveInfo> ().ObjectsEngings = Slot2P.GetComponent<SaveInfo> ().ObjectsEngings;
+
+		Slot2.GetComponent<SaveInfo> ().AI = Slot2P.GetComponent<SaveInfo> ().AI;
+		Slot2.GetComponent<SaveInfo> ().FriendAI = Slot2P.GetComponent<SaveInfo> ().FriendAI;
+
+		Slot2.GetComponent<SaveInfo> ().CanAttack = Slot2P.GetComponent<SaveInfo> ().CanAttack;
+
+		Slot2.GetComponent<SaveInfo> ().Build = Slot2P.GetComponent<SaveInfo> ().Build;
+		Slot2.GetComponent<SaveInfo> ().IsFlag = Slot2P.GetComponent<SaveInfo> ().IsFlag;
+
+		Slot2.GetComponent<SaveInfo> ().Agrass = Slot2P.GetComponent<SaveInfo> ().Agrass;
+		Slot2.GetComponent<SaveInfo> ().Protact = Slot2P.GetComponent<SaveInfo> ().Protact;
+		Slot2.GetComponent<SaveInfo> ().Idle = Slot2P.GetComponent<SaveInfo> ().Idle;
+
+		Slot2.GetComponent<SaveInfo> ().ObjectTransform = Slot2P.GetComponent<SaveInfo> ().ObjectTransform;
+
+		Slot2.GetComponent<SaveInfo> ().LevelName = Slot2P.GetComponent<SaveInfo> ().LevelName;
+
+
+		Slot3.GetComponent<SaveInfo> ().SaveName = Slot3P.GetComponent<SaveInfo> ().SaveName;
+
+		Slot3.GetComponent<SaveInfo> ().SaveObjects = Slot3P.GetComponent<SaveInfo> ().SaveObjects;
+
+		Slot3.GetComponent<SaveInfo> ().ObjectsHealth = Slot3P.GetComponent<SaveInfo> ().ObjectsHealth;
+		Slot3.GetComponent<SaveInfo> ().ObjectsShilds = Slot3P.GetComponent<SaveInfo> ().ObjectsShilds;
+		Slot3.GetComponent<SaveInfo> ().ObjectsGenerator = Slot3P.GetComponent<SaveInfo> ().ObjectsGenerator;
+		Slot3.GetComponent<SaveInfo> ().ObjectsWeapon = Slot3P.GetComponent<SaveInfo> ().ObjectsWeapon;
+		Slot3.GetComponent<SaveInfo> ().ObjectsEngings = Slot3P.GetComponent<SaveInfo> ().ObjectsEngings;
+
+		Slot3.GetComponent<SaveInfo> ().AI = Slot3P.GetComponent<SaveInfo> ().AI;
+		Slot3.GetComponent<SaveInfo> ().FriendAI = Slot3P.GetComponent<SaveInfo> ().FriendAI;
+
+		Slot3.GetComponent<SaveInfo> ().CanAttack = Slot3P.GetComponent<SaveInfo> ().CanAttack;
+
+		Slot3.GetComponent<SaveInfo> ().Build = Slot3P.GetComponent<SaveInfo> ().Build;
+		Slot3.GetComponent<SaveInfo> ().IsFlag = Slot3P.GetComponent<SaveInfo> ().IsFlag;
+
+		Slot3.GetComponent<SaveInfo> ().Agrass = Slot3P.GetComponent<SaveInfo> ().Agrass;
+		Slot3.GetComponent<SaveInfo> ().Protact = Slot3P.GetComponent<SaveInfo> ().Protact;
+		Slot3.GetComponent<SaveInfo> ().Idle = Slot3P.GetComponent<SaveInfo> ().Idle;
+
+		Slot3.GetComponent<SaveInfo> ().ObjectTransform = Slot3P.GetComponent<SaveInfo> ().ObjectTransform;
+
+		Slot3.GetComponent<SaveInfo> ().LevelName = Slot3P.GetComponent<SaveInfo> ().LevelName;
+
+
+		Slot4.GetComponent<SaveInfo> ().SaveName = Slot4P.GetComponent<SaveInfo> ().SaveName;
+
+		Slot4.GetComponent<SaveInfo> ().SaveObjects = Slot4P.GetComponent<SaveInfo> ().SaveObjects;
+
+		Slot4.GetComponent<SaveInfo> ().ObjectsHealth = Slot4P.GetComponent<SaveInfo> ().ObjectsHealth;
+		Slot4.GetComponent<SaveInfo> ().ObjectsShilds = Slot4P.GetComponent<SaveInfo> ().ObjectsShilds;
+		Slot4.GetComponent<SaveInfo> ().ObjectsGenerator = Slot4P.GetComponent<SaveInfo> ().ObjectsGenerator;
+		Slot4.GetComponent<SaveInfo> ().ObjectsWeapon = Slot4P.GetComponent<SaveInfo> ().ObjectsWeapon;
+		Slot4.GetComponent<SaveInfo> ().ObjectsEngings = Slot4P.GetComponent<SaveInfo> ().ObjectsEngings;
+
+		Slot4.GetComponent<SaveInfo> ().AI = Slot4P.GetComponent<SaveInfo> ().AI;
+		Slot4.GetComponent<SaveInfo> ().FriendAI = Slot4P.GetComponent<SaveInfo> ().FriendAI;
+
+		Slot4.GetComponent<SaveInfo> ().CanAttack = Slot4P.GetComponent<SaveInfo> ().CanAttack;
+
+		Slot4.GetComponent<SaveInfo> ().Build = Slot4P.GetComponent<SaveInfo> ().Build;
+		Slot4.GetComponent<SaveInfo> ().IsFlag = Slot4P.GetComponent<SaveInfo> ().IsFlag;
+
+		Slot4.GetComponent<SaveInfo> ().Agrass = Slot4P.GetComponent<SaveInfo> ().Agrass;
+		Slot4.GetComponent<SaveInfo> ().Protact = Slot4P.GetComponent<SaveInfo> ().Protact;
+		Slot4.GetComponent<SaveInfo> ().Idle = Slot4P.GetComponent<SaveInfo> ().Idle;
+
+		Slot4.GetComponent<SaveInfo> ().ObjectTransform = Slot4P.GetComponent<SaveInfo> ().ObjectTransform;
+
+		Slot4.GetComponent<SaveInfo> ().LevelName = Slot4P.GetComponent<SaveInfo> ().LevelName;
+
+
+		Slot5.GetComponent<SaveInfo> ().SaveName = Slot4P.GetComponent<SaveInfo> ().SaveName;
+
+		Slot5.GetComponent<SaveInfo> ().SaveObjects = Slot4P.GetComponent<SaveInfo> ().SaveObjects;
+
+		Slot5.GetComponent<SaveInfo> ().ObjectsHealth = Slot5P.GetComponent<SaveInfo> ().ObjectsHealth;
+		Slot5.GetComponent<SaveInfo> ().ObjectsShilds = Slot5P.GetComponent<SaveInfo> ().ObjectsShilds;
+		Slot5.GetComponent<SaveInfo> ().ObjectsGenerator = Slot5P.GetComponent<SaveInfo> ().ObjectsGenerator;
+		Slot5.GetComponent<SaveInfo> ().ObjectsWeapon = Slot5P.GetComponent<SaveInfo> ().ObjectsWeapon;
+		Slot5.GetComponent<SaveInfo> ().ObjectsEngings = Slot5P.GetComponent<SaveInfo> ().ObjectsEngings;
+
+		Slot5.GetComponent<SaveInfo> ().AI = Slot4P.GetComponent<SaveInfo> ().AI;
+		Slot5.GetComponent<SaveInfo> ().FriendAI = Slot5P.GetComponent<SaveInfo> ().FriendAI;
+
+		Slot5.GetComponent<SaveInfo> ().CanAttack = Slot5P.GetComponent<SaveInfo> ().CanAttack;
+
+		Slot5.GetComponent<SaveInfo> ().Build = Slot5P.GetComponent<SaveInfo> ().Build;
+		Slot5.GetComponent<SaveInfo> ().IsFlag = Slot5P.GetComponent<SaveInfo> ().IsFlag;
+
+		Slot5.GetComponent<SaveInfo> ().Agrass = Slot5P.GetComponent<SaveInfo> ().Agrass;
+		Slot5.GetComponent<SaveInfo> ().Protact = Slot5P.GetComponent<SaveInfo> ().Protact;
+		Slot5.GetComponent<SaveInfo> ().Idle = Slot5P.GetComponent<SaveInfo> ().Idle;
+
+		Slot5.GetComponent<SaveInfo> ().ObjectTransform = Slot5P.GetComponent<SaveInfo> ().ObjectTransform;
+
+		Slot5.GetComponent<SaveInfo> ().LevelName = Slot5P.GetComponent<SaveInfo> ().LevelName;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (load) {
+			if (SelectSlot1) {
+				if (!LoadLevel) {
+					Application.LoadLevel (Slot1.GetComponent<SaveInfo> ().LevelName);
+					LoadLevel = true;
+				}
+				if (Slot1.GetComponent<SaveInfo> ().SaveObjects.Count > 0) {
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FedBS" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FedSS" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Defiant" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Nova" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Saber" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Akira" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Intrepid" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Steamrunner" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Luna" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Promentheus" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Nebula" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Galaxy" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Sovereign" || Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Excalibur") {
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FedBS") {
+							LoadingObject = (GameObject)Instantiate (FBS, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FedSS") {
+							LoadingObject = (GameObject)Instantiate (FTS, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Defiant") {
+							LoadingObject = (GameObject)Instantiate (FS1, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Nova") {
+							LoadingObject = (GameObject)Instantiate (FS2, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Saber") {
+							LoadingObject = (GameObject)Instantiate (FS3, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Akira") {
+							LoadingObject = (GameObject)Instantiate (FS4, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Intrepid") {
+							LoadingObject = (GameObject)Instantiate (FS5, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Steamrunner") {
+							LoadingObject = (GameObject)Instantiate (FS6, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Luna") {
+							LoadingObject = (GameObject)Instantiate (FS7, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Promentheus") {
+							LoadingObject = (GameObject)Instantiate (FS8, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Nebula") {
+							LoadingObject = (GameObject)Instantiate (FS9, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Galaxy") {
+							LoadingObject = (GameObject)Instantiate (FS10, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Sovereign") {
+							LoadingObject = (GameObject)Instantiate (FS11, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "Excalibur") {
+							LoadingObject = (GameObject)Instantiate (FS12, gameObject.transform.position, gameObject.transform.rotation);
+						}
+						GameObject ship;
+						ship = LoadingObject;
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Stats> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Stats> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.GetComponent<ActiveState> ().CanAttack = Slot1.GetComponent<SaveInfo> ().CanAttack [0];
+
+						ship.GetComponent<ActiveState> ().Build = Slot1.GetComponent<SaveInfo> ().Build [0];
+						ship.GetComponent<ActiveState> ().isFlag = Slot1.GetComponent<SaveInfo> ().IsFlag [0];
+
+						ship.GetComponent<ActiveState> ().Agrass = Slot1.GetComponent<SaveInfo> ().Agrass [0];
+						ship.GetComponent<ActiveState> ().Protact = Slot1.GetComponent<SaveInfo> ().Protact [0];
+						ship.GetComponent<ActiveState> ().Idle = Slot1.GetComponent<SaveInfo> ().Idle [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FBase") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FBase, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FMining") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FMine, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FShop") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FShop, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FMagic") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FMagic, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FShopUp") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FShopUp, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FTower") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FTower, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FSensor") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FSensor, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+					if (Slot1.GetComponent<SaveInfo> ().SaveObjects [0] == "FShopStation") {
+						GameObject ship;
+						ship = (GameObject)Instantiate (FShopStation, gameObject.transform.position, gameObject.transform.rotation);
+
+						ship.GetComponent<Health> ().curHealth = Slot1.GetComponent<SaveInfo> ().ObjectsHealth [0];
+						ship.GetComponent<Health> ().CurСилаПоля = Slot1.GetComponent<SaveInfo> ().ObjectsShilds [0];
+						//ship.GetComponent<Health> ().curGeneratorHealth = Slot1.GetComponent<SaveInfo> ().ObjectsGenerator [0];
+						//ship.GetComponent<Health> ().curWeaponHealth = Slot1.GetComponent<SaveInfo> ().ObjectsWeapon [0];
+						//ship.GetComponent<Health> ().curEngenHealth = Slot1.GetComponent<SaveInfo> ().ObjectsEngings [0];
+
+						ship.GetComponent<Castle> ().AI = Slot1.GetComponent<SaveInfo> ().AI [0];
+						ship.GetComponent<Castle> ().FreandAI = Slot1.GetComponent<SaveInfo> ().FriendAI [0];
+
+						ship.transform.position = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].position;
+						ship.transform.rotation = Slot1.GetComponent<SaveInfo> ().ObjectTransform [0].rotation;
+
+						Slot1.GetComponent<SaveInfo> ().SaveObjects.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsHealth.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsShilds.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsGenerator.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsWeapon.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectsEngings.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().ObjectTransform.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().AI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().FriendAI.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().CanAttack.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Build.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().IsFlag.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Agrass.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Protact.RemoveAt (0);
+						Slot1.GetComponent<SaveInfo> ().Idle.RemoveAt (0);
+					}
+
+				} else {
+					load = false;
+					GameObject.FindGameObjectWithTag ("MainUI").GetComponent<GameMenu> ().SsP.GetComponent<SaveAndLoad> ().load = false;
+				}
+			}
+		}
+		if(GameObject.FindGameObjectWithTag ("MainUI").GetComponent<GameMenu> ().Delete){
+			if (SelectSlot1) {
+				Slot1.GetComponent<SaveInfo> ().SaveName = "";
+
+				Slot1.GetComponent<SaveInfo> ().SaveObjects = null;
+
+				Slot1.GetComponent<SaveInfo> ().ObjectsHealth = null;
+				Slot1.GetComponent<SaveInfo> ().ObjectsShilds = null;
+				Slot1.GetComponent<SaveInfo> ().ObjectsGenerator = null;
+				Slot1.GetComponent<SaveInfo> ().ObjectsWeapon = null;
+				Slot1.GetComponent<SaveInfo> ().ObjectsEngings = null;
+
+				Slot1.GetComponent<SaveInfo> ().AI = null;
+				Slot1.GetComponent<SaveInfo> ().FriendAI = null;
+
+				Slot1.GetComponent<SaveInfo> ().CanAttack = null;
+
+				Slot1.GetComponent<SaveInfo> ().Build = null;
+				Slot1.GetComponent<SaveInfo> ().IsFlag = null;
+
+				Slot1.GetComponent<SaveInfo> ().Agrass = null;
+				Slot1.GetComponent<SaveInfo> ().Protact = null;
+				Slot1.GetComponent<SaveInfo> ().Idle = null;
+
+				Slot1.GetComponent<SaveInfo> ().ObjectTransform = null;
+
+				Slot1.GetComponent<SaveInfo> ().LevelName = ""; 
+			}
+			if (SelectSlot2) {
+				Slot2.GetComponent<SaveInfo> ().SaveName = "";
+
+				Slot2.GetComponent<SaveInfo> ().SaveObjects = null;
+
+				Slot2.GetComponent<SaveInfo> ().ObjectsHealth = null;
+				Slot2.GetComponent<SaveInfo> ().ObjectsShilds = null;
+				Slot2.GetComponent<SaveInfo> ().ObjectsGenerator = null;
+				Slot2.GetComponent<SaveInfo> ().ObjectsWeapon = null;
+				Slot2.GetComponent<SaveInfo> ().ObjectsEngings = null;
+
+				Slot2.GetComponent<SaveInfo> ().AI = null;
+				Slot2.GetComponent<SaveInfo> ().FriendAI = null;
+
+				Slot2.GetComponent<SaveInfo> ().CanAttack = null;
+
+				Slot2.GetComponent<SaveInfo> ().Build = null;
+				Slot2.GetComponent<SaveInfo> ().IsFlag = null;
+
+				Slot2.GetComponent<SaveInfo> ().Agrass = null;
+				Slot2.GetComponent<SaveInfo> ().Protact = null;
+				Slot2.GetComponent<SaveInfo> ().Idle = null;
+
+				Slot2.GetComponent<SaveInfo> ().ObjectTransform = null;
+
+				Slot2.GetComponent<SaveInfo> ().LevelName = ""; 
+			}
+			if (SelectSlot3) {
+				Slot3.GetComponent<SaveInfo> ().SaveName = "";
+
+				Slot3.GetComponent<SaveInfo> ().SaveObjects = null;
+
+				Slot3.GetComponent<SaveInfo> ().ObjectsHealth = null;
+				Slot3.GetComponent<SaveInfo> ().ObjectsShilds = null;
+				Slot3.GetComponent<SaveInfo> ().ObjectsGenerator = null;
+				Slot3.GetComponent<SaveInfo> ().ObjectsWeapon = null;
+				Slot3.GetComponent<SaveInfo> ().ObjectsEngings = null;
+
+				Slot3.GetComponent<SaveInfo> ().AI = null;
+				Slot3.GetComponent<SaveInfo> ().FriendAI = null;
+
+				Slot3.GetComponent<SaveInfo> ().CanAttack = null;
+
+				Slot3.GetComponent<SaveInfo> ().Build = null;
+				Slot3.GetComponent<SaveInfo> ().IsFlag = null;
+
+				Slot3.GetComponent<SaveInfo> ().Agrass = null;
+				Slot3.GetComponent<SaveInfo> ().Protact = null;
+				Slot3.GetComponent<SaveInfo> ().Idle = null;
+
+				Slot3.GetComponent<SaveInfo> ().ObjectTransform = null;
+
+				Slot3.GetComponent<SaveInfo> ().LevelName = ""; 
+			}
+			if (SelectSlot4) {
+				Slot4.GetComponent<SaveInfo> ().SaveName = "";
+
+				Slot4.GetComponent<SaveInfo> ().SaveObjects = null;
+
+				Slot4.GetComponent<SaveInfo> ().ObjectsHealth = null;
+				Slot4.GetComponent<SaveInfo> ().ObjectsShilds = null;
+				Slot4.GetComponent<SaveInfo> ().ObjectsGenerator = null;
+				Slot4.GetComponent<SaveInfo> ().ObjectsWeapon = null;
+				Slot4.GetComponent<SaveInfo> ().ObjectsEngings = null;
+
+				Slot4.GetComponent<SaveInfo> ().AI = null;
+				Slot4.GetComponent<SaveInfo> ().FriendAI = null;
+
+				Slot4.GetComponent<SaveInfo> ().CanAttack = null;
+
+				Slot4.GetComponent<SaveInfo> ().Build = null;
+				Slot4.GetComponent<SaveInfo> ().IsFlag = null;
+
+				Slot4.GetComponent<SaveInfo> ().Agrass = null;
+				Slot4.GetComponent<SaveInfo> ().Protact = null;
+				Slot4.GetComponent<SaveInfo> ().Idle = null;
+
+				Slot4.GetComponent<SaveInfo> ().ObjectTransform = null;
+
+				Slot4.GetComponent<SaveInfo> ().LevelName = ""; 
+			}
+			if (SelectSlot5) {
+				Slot5.GetComponent<SaveInfo> ().SaveName = "";
+
+				Slot5.GetComponent<SaveInfo> ().SaveObjects = null;
+
+				Slot5.GetComponent<SaveInfo> ().ObjectsHealth = null;
+				Slot5.GetComponent<SaveInfo> ().ObjectsShilds = null;
+				Slot5.GetComponent<SaveInfo> ().ObjectsGenerator = null;
+				Slot5.GetComponent<SaveInfo> ().ObjectsWeapon = null;
+				Slot5.GetComponent<SaveInfo> ().ObjectsEngings = null;
+
+				Slot5.GetComponent<SaveInfo> ().AI = null;
+				Slot5.GetComponent<SaveInfo> ().FriendAI = null;
+
+				Slot5.GetComponent<SaveInfo> ().CanAttack = null;
+
+				Slot5.GetComponent<SaveInfo> ().Build = null;
+				Slot5.GetComponent<SaveInfo> ().IsFlag = null;
+
+				Slot5.GetComponent<SaveInfo> ().Agrass = null;
+				Slot5.GetComponent<SaveInfo> ().Protact = null;
+				Slot5.GetComponent<SaveInfo> ().Idle = null;
+
+				Slot5.GetComponent<SaveInfo> ().ObjectTransform = null;
+
+				Slot5.GetComponent<SaveInfo> ().LevelName = ""; 
+			}	
+			GameObject.FindGameObjectWithTag ("MainUI").GetComponent<GameMenu> ().Delete = false;
+		}
+	}
+
+	public void Save(){
+		if (SelectSlot1) {
+			Slot1.GetComponent<SaveInfo> ().SaveName = curSaveName;
+
+			Slot1.GetComponent<SaveInfo> ().SaveObjects = SaveObjects;
+
+			Slot1.GetComponent<SaveInfo> ().ObjectsHealth = ObjectsHealth;
+			Slot1.GetComponent<SaveInfo> ().ObjectsShilds = ObjectsShilds;
+			Slot1.GetComponent<SaveInfo> ().ObjectsGenerator = ObjectsGenerator;
+			Slot1.GetComponent<SaveInfo> ().ObjectsWeapon = ObjectsWeapon;
+			Slot1.GetComponent<SaveInfo> ().ObjectsEngings = ObjectsEngings;
+
+			Slot1.GetComponent<SaveInfo> ().AI = AI;
+			Slot1.GetComponent<SaveInfo> ().FriendAI = FriendAI;
+
+			Slot1.GetComponent<SaveInfo> ().CanAttack = CanAttack;
+
+			Slot1.GetComponent<SaveInfo> ().Build = Build;
+			Slot1.GetComponent<SaveInfo> ().IsFlag = IsFlag;
+
+			Slot1.GetComponent<SaveInfo> ().Agrass = Agrass;
+			Slot1.GetComponent<SaveInfo> ().Protact = Protact;
+			Slot1.GetComponent<SaveInfo> ().Idle = Idle;
+
+			Slot1.GetComponent<SaveInfo> ().ObjectTransform = SaveObjectsTransforms;
+
+			Slot1.GetComponent<SaveInfo> ().LevelName = Application.loadedLevelName; 
+		}
+		if (SelectSlot2) {
+			Slot2.GetComponent<SaveInfo> ().SaveName = curSaveName;
+
+			Slot2.GetComponent<SaveInfo> ().SaveObjects = SaveObjects;
+
+			Slot2.GetComponent<SaveInfo> ().ObjectsHealth = ObjectsHealth;
+			Slot2.GetComponent<SaveInfo> ().ObjectsShilds = ObjectsShilds;
+			Slot2.GetComponent<SaveInfo> ().ObjectsGenerator = ObjectsGenerator;
+			Slot2.GetComponent<SaveInfo> ().ObjectsWeapon = ObjectsWeapon;
+			Slot2.GetComponent<SaveInfo> ().ObjectsEngings = ObjectsEngings;
+
+			Slot2.GetComponent<SaveInfo> ().AI = AI;
+			Slot2.GetComponent<SaveInfo> ().FriendAI = FriendAI;
+
+			Slot2.GetComponent<SaveInfo> ().CanAttack = CanAttack;
+
+			Slot2.GetComponent<SaveInfo> ().Build = Build;
+			Slot2.GetComponent<SaveInfo> ().IsFlag = IsFlag;
+
+			Slot2.GetComponent<SaveInfo> ().Agrass = Agrass;
+			Slot2.GetComponent<SaveInfo> ().Protact = Protact;
+			Slot2.GetComponent<SaveInfo> ().Idle = Idle;
+
+			Slot2.GetComponent<SaveInfo> ().ObjectTransform = SaveObjectsTransforms;
+
+			Slot2.GetComponent<SaveInfo> ().LevelName = Application.loadedLevelName; 
+		}
+		if (SelectSlot3) {
+			Slot3.GetComponent<SaveInfo> ().SaveName = curSaveName;
+
+			Slot3.GetComponent<SaveInfo> ().SaveObjects = SaveObjects;
+
+			Slot3.GetComponent<SaveInfo> ().ObjectsHealth = ObjectsHealth;
+			Slot3.GetComponent<SaveInfo> ().ObjectsShilds = ObjectsShilds;
+			Slot3.GetComponent<SaveInfo> ().ObjectsGenerator = ObjectsGenerator;
+			Slot3.GetComponent<SaveInfo> ().ObjectsWeapon = ObjectsWeapon;
+			Slot3.GetComponent<SaveInfo> ().ObjectsEngings = ObjectsEngings;
+
+			Slot3.GetComponent<SaveInfo> ().AI = AI;
+			Slot3.GetComponent<SaveInfo> ().FriendAI = FriendAI;
+
+			Slot3.GetComponent<SaveInfo> ().CanAttack = CanAttack;
+
+			Slot3.GetComponent<SaveInfo> ().Build = Build;
+			Slot3.GetComponent<SaveInfo> ().IsFlag = IsFlag;
+
+			Slot3.GetComponent<SaveInfo> ().Agrass = Agrass;
+			Slot3.GetComponent<SaveInfo> ().Protact = Protact;
+			Slot3.GetComponent<SaveInfo> ().Idle = Idle;
+
+			Slot3.GetComponent<SaveInfo> ().ObjectTransform = SaveObjectsTransforms;
+
+			Slot3.GetComponent<SaveInfo> ().LevelName = Application.loadedLevelName; 
+		}
+		if (SelectSlot4) {
+			Slot4.GetComponent<SaveInfo> ().SaveName = curSaveName;
+
+			Slot4.GetComponent<SaveInfo> ().SaveObjects = SaveObjects;
+
+			Slot4.GetComponent<SaveInfo> ().ObjectsHealth = ObjectsHealth;
+			Slot4.GetComponent<SaveInfo> ().ObjectsShilds = ObjectsShilds;
+			Slot4.GetComponent<SaveInfo> ().ObjectsGenerator = ObjectsGenerator;
+			Slot4.GetComponent<SaveInfo> ().ObjectsWeapon = ObjectsWeapon;
+			Slot4.GetComponent<SaveInfo> ().ObjectsEngings = ObjectsEngings;
+
+			Slot4.GetComponent<SaveInfo> ().AI = AI;
+			Slot4.GetComponent<SaveInfo> ().FriendAI = FriendAI;
+
+			Slot4.GetComponent<SaveInfo> ().CanAttack = CanAttack;
+
+			Slot4.GetComponent<SaveInfo> ().Build = Build;
+			Slot4.GetComponent<SaveInfo> ().IsFlag = IsFlag;
+
+			Slot4.GetComponent<SaveInfo> ().Agrass = Agrass;
+			Slot4.GetComponent<SaveInfo> ().Protact = Protact;
+			Slot4.GetComponent<SaveInfo> ().Idle = Idle;
+
+			Slot4.GetComponent<SaveInfo> ().ObjectTransform = SaveObjectsTransforms;
+
+			Slot4.GetComponent<SaveInfo> ().LevelName = Application.loadedLevelName; 
+		}
+		if (SelectSlot5) {
+			Slot5.GetComponent<SaveInfo> ().SaveName = curSaveName;
+
+			Slot5.GetComponent<SaveInfo> ().SaveObjects = SaveObjects;
+
+			Slot5.GetComponent<SaveInfo> ().ObjectsHealth = ObjectsHealth;
+			Slot5.GetComponent<SaveInfo> ().ObjectsShilds = ObjectsShilds;
+			Slot5.GetComponent<SaveInfo> ().ObjectsGenerator = ObjectsGenerator;
+			Slot5.GetComponent<SaveInfo> ().ObjectsWeapon = ObjectsWeapon;
+			Slot5.GetComponent<SaveInfo> ().ObjectsEngings = ObjectsEngings;
+
+			Slot5.GetComponent<SaveInfo> ().AI = AI;
+			Slot5.GetComponent<SaveInfo> ().FriendAI = FriendAI;
+
+			Slot5.GetComponent<SaveInfo> ().CanAttack = CanAttack;
+
+			Slot5.GetComponent<SaveInfo> ().Build = Build;
+			Slot5.GetComponent<SaveInfo> ().IsFlag = IsFlag;
+
+			Slot5.GetComponent<SaveInfo> ().Agrass = Agrass;
+			Slot5.GetComponent<SaveInfo> ().Protact = Protact;
+			Slot5.GetComponent<SaveInfo> ().Idle = Idle;
+
+			Slot5.GetComponent<SaveInfo> ().ObjectTransform = SaveObjectsTransforms;
+
+			Slot5.GetComponent<SaveInfo> ().LevelName = Application.loadedLevelName; 
+		}
+	}
+
+	public void Load(){
+		
+	}
+
+	public void Delete(){
+		
+	}
+}
