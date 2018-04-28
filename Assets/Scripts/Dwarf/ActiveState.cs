@@ -50,6 +50,8 @@ public class ActiveState: MonoBehaviour {
 	public bool GizmosActive;
 
 	private SensorModule _es;
+
+private bool setwaytotarget;
 	// Use this for initialization
 	void Start () {
 		_es = gameObject.GetComponent<SensorModule> ();
@@ -77,9 +79,27 @@ public class ActiveState: MonoBehaviour {
 			Gizmos.DrawSphere (transform.position, _es.VisionRadius);
 		}
 	}
-
+	void GuartShip()
+	{
+		if (Vector3.Distance(gameObject.transform.position, _st.GuartTarget.transform.position) > (_h.NormalSensors / 4)*2)
+		{
+			setwaytotarget = true;
+			_agent.Movement(_st.GuartTarget.transform.position);
+		}
+		else
+		{
+			if (setwaytotarget) {
+				_agent.Stop();
+				setwaytotarget = false;
+			}
+		}
+	}
 	void Update () 
     {
+		if (_st.GuartTarget != null) {
+			GuartShip();
+		}
+
 		if (_st.Warp) {
 			Agrass = false;
 			Protact = false;

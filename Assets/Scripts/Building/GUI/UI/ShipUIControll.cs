@@ -90,6 +90,8 @@ public class ShipUIControll : MonoBehaviour
 	public bool GreenAlertButton;
 
 	public bool SelfDestructionButton;
+
+	public bool GuardOrder;
 	// Use this for initialization
 	void Start()
 	{
@@ -866,6 +868,17 @@ public class ShipUIControll : MonoBehaviour
 			if (SelfDestructionButton)
 			{
 				if (_h.SelfDestructActive)
+				{
+					TargetImage.sprite = OrderActive;
+				}
+				else
+				{
+					TargetImage.sprite = OrderDeActive;
+				}
+			}
+			if (GuardOrder)
+			{
+				if (_st.GuartTarget != null)
 				{
 					TargetImage.sprite = OrderActive;
 				}

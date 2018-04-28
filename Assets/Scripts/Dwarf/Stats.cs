@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class Stats : MonoBehaviour {
+public class Stats : MonoBehaviour
+{
 	public bool AI;
 	public bool FreandAI;
 	public bool NeutralAgrass;
@@ -30,20 +31,21 @@ public class Stats : MonoBehaviour {
 	public GameObject target;
 
 	public GameObject MeshFOW;
-    public enum enInstruction
-    {
-        idle,
-        move,
-        attack,
+	public enum enInstruction
+	{
+		idle,
+		move,
+		attack,
 		derth
-    }
-    public enInstruction instruction;
-    public Transform targetTransform;
-    public Vector3 targetVector;
+	}
+	public enInstruction instruction;
+	public Transform targetTransform;
+	public Transform GuartTarget;
+	public Vector3 targetVector;
 
 	public bool Transport;
 	public bool miner;
-	
+
 	private GlobalDB _GDB;
 	//private Enemy _ey;
 	private ActiveState _AS;
@@ -117,77 +119,95 @@ public class Stats : MonoBehaviour {
 
 	public bool Order;
 	// Use this for initialization
-	void Awake(){
+	void Awake()
+	{
 		//CountTag = CountPrefeb.name;
-		CountPrefeb = GameObject.Find (CountTag);
-		if (gameObject.GetComponent<ObjectTypeVisible> ()) {
-			_otv = gameObject.GetComponent<ObjectTypeVisible> ();
+		CountPrefeb = GameObject.Find(CountTag);
+		if (gameObject.GetComponent<ObjectTypeVisible>())
+		{
+			_otv = gameObject.GetComponent<ObjectTypeVisible>();
 		}
-		_HP = gameObject.GetComponent<HealthModule> ();
-		if (!NonPhysicalMovement) {
-			_agent = gameObject.GetComponent<MoveComponent> ();
+		_HP = gameObject.GetComponent<HealthModule>();
+		if (!NonPhysicalMovement)
+		{
+			_agent = gameObject.GetComponent<MoveComponent>();
 		}
-		GameObject SenObj = Instantiate (SensorsLine, gameObject.transform.position, gameObject.transform.rotation);
+		GameObject SenObj = Instantiate(SensorsLine, gameObject.transform.position, gameObject.transform.rotation);
 		SensorsLine = SenObj;
-		_scr = SenObj.GetComponent<CircleRenderer> ();
-		_sespa = SenObj.GetComponent<EnterSelectPlaneActive> ();
-		GameObject WepObj = Instantiate (WeaponLine, gameObject.transform.position, gameObject.transform.rotation);
+		_scr = SenObj.GetComponent<CircleRenderer>();
+		_sespa = SenObj.GetComponent<EnterSelectPlaneActive>();
+		GameObject WepObj = Instantiate(WeaponLine, gameObject.transform.position, gameObject.transform.rotation);
 		WeaponLine = WepObj;
-		_wcr = WepObj.GetComponent<CircleRenderer> ();
-		_wespa = WepObj.GetComponent<EnterSelectPlaneActive> ();
+		_wcr = WepObj.GetComponent<CircleRenderer>();
+		_wespa = WepObj.GetComponent<EnterSelectPlaneActive>();
 
 		_sespa.Owner = gameObject;
 
 		_wespa.Owner = gameObject;
 
-		_es = gameObject.GetComponent<SensorModule> ();
+		_es = gameObject.GetComponent<SensorModule>();
 	}
-	void Start () 
+	void Start()
 	{
 		Camera = GameObject.FindGameObjectWithTag("MainCamera");
-		Box = GameObject.FindGameObjectWithTag ("UnclickedBox");
+		Box = GameObject.FindGameObjectWithTag("UnclickedBox");
 		_select = GameObject.FindGameObjectWithTag("MainUI").GetComponent<Select>();
 		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
 		_GDB.dwarfList.Add(gameObject);
-		if (StartLocation == null) {
+		if (StartLocation == null)
+		{
 			targetVector = transform.position;
-		} else {
-			_agent.Movement (StartLocation.transform.position);
+		}
+		else
+		{
+			_agent.Movement(StartLocation.transform.position);
 		}
 		_AS = gameObject.GetComponent<ActiveState>();
-		if(GameObject.FindGameObjectWithTag("Enemy")){
-		//_ey = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
+		if (GameObject.FindGameObjectWithTag("Enemy"))
+		{
+			//_ey = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
 		}
 		//if (AI) {
 		//	gameObject.AddComponent<ShipAI>();
 		//}
-		if (_AS.Build) {
-			if (CountPrefeb != null) {
-				CountPrefeb.GetComponent<NameCounter> ().CurShips -= 1;
-			} else {
-				CountPrefeb = GameObject.FindGameObjectWithTag (CountTag);
+		if (_AS.Build)
+		{
+			if (CountPrefeb != null)
+			{
+				CountPrefeb.GetComponent<NameCounter>().CurShips -= 1;
+			}
+			else
+			{
+				CountPrefeb = GameObject.FindGameObjectWithTag(CountTag);
 			}
 		}
 		_agent.MovementSpeed = NormalSpeed;
 	}
 	// Update is called once per frame
-	void LateUpdate(){
-		if (FindInSelectList (gameObject)) {
+	void LateUpdate()
+	{
+		if (FindInSelectList(gameObject))
+		{
 			WasSelect = true;
 			isSelect = true;
-			if (Proector.active == false) {
-				Proector.SetActive (true);
+			if (Proector.active == false)
+			{
+				Proector.SetActive(true);
 			}
-		} else {
+		}
+		else
+		{
 			WasSelect = false;
 			isSelect = false;
-			Proector.SetActive (false);
-			if (BoxSelected) {
+			Proector.SetActive(false);
+			if (BoxSelected)
+			{
 				BoxSelected = false;
 			}
 		}
 	}
-	void Update () {
+	void Update()
+	{
 		if (IsFix)
 		{
 			_agent.SensorBlocking = true;
@@ -196,82 +216,112 @@ public class Stats : MonoBehaviour {
 		{
 			_agent.SensorBlocking = false;
 		}
-		if (Neutral) {
-			if (Owner != null) {
-				gameObject.GetComponent<ShipAI> ().ShipIsСaptured ();
+		if (Neutral)
+		{
+			if (Owner != null)
+			{
+				gameObject.GetComponent<ShipAI>().ShipIsСaptured();
 				Owner = null;
 			}
 		}
-		if (Assimilated) {
-			gameObject.GetComponent<Captan> ().Race = "Borg";
-			gameObject.GetComponent<Captan> ().CaptanNum = 0;
+		if (Assimilated)
+		{
+			gameObject.GetComponent<Captan>().Race = "Borg";
+			gameObject.GetComponent<Captan>().CaptanNum = 0;
 		}
-		if (FindInSelectList (gameObject)) {
-			Proector.GetComponent<MeshRenderer> ().enabled = true;
-		} else {
-			Proector.GetComponent<MeshRenderer> ().enabled = false;
+		if (FindInSelectList(gameObject))
+		{
+			Proector.GetComponent<MeshRenderer>().enabled = true;
 		}
-		if (orderstoptimer > 0) {
+		else
+		{
+			Proector.GetComponent<MeshRenderer>().enabled = false;
+		}
+		if (orderstoptimer > 0)
+		{
 			orderstoptimer -= Time.deltaTime;
-		} else {
+		}
+		else
+		{
 			StopOrder = false;
 			orderstoptimer = 0.5f;
 		}
-		if (AI || FreandAI) {
-			gameObject.GetComponent<ShipAI> ().enabled = true;
-		} else {
-			gameObject.GetComponent<ShipAI> ().enabled = false;
+		if (AI || FreandAI)
+		{
+			gameObject.GetComponent<ShipAI>().enabled = true;
 		}
-		if(targetTransform == gameObject.transform){
+		else
+		{
+			gameObject.GetComponent<ShipAI>().enabled = false;
+		}
+		if (targetTransform == gameObject.transform)
+		{
 			targetTransform = null;
 		}
-		if (!SelectLock) {
+		if (!SelectLock)
+		{
 
-			if (TimerDown) {
-				if (Timer > 0) {
+			if (TimerDown)
+			{
+				if (Timer > 0)
+				{
 					Timer -= Time.deltaTime;
 				}
-				if (Timer <= 0) {
-					if (isSelect) {
+				if (Timer <= 0)
+				{
+					if (isSelect)
+					{
 						WasSelect = true;
 					}
 					Timer = 0.1f;
 					TimerDown = false;
 				}
 			}
-			if (Selected) {
-				Camera.GetComponent<CameraRay> ().Locker = false;
+			if (Selected)
+			{
+				Camera.GetComponent<CameraRay>().Locker = false;
 				//_select.Lock = false;
-			} else {
-				Camera.GetComponent<CameraRay> ().Locker = true;
+			}
+			else
+			{
+				Camera.GetComponent<CameraRay>().Locker = true;
 				//elect.Lock = true;
 			}
-			if (HoverCursore) {
-				GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().IdleBool = false;
-				GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().HoverBool = true;
-				GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().GoBool = false;
-				GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().AttackBool = false;
-				GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().BaseBool = false;
+			if (HoverCursore)
+			{
+				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
+				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().HoverBool = true;
+				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
+				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
+				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
 			}
-		} else {
+		}
+		else
+		{
 			//BoxSelected = false;
 			//MeshLock = false;
 		}
-		if (AI) {
+		if (AI)
+		{
 			gameObject.tag = "Enemy";
 		}
-		if (!AI) {
-			if (FreandAI && !Neutral && !NeutralAgrass) {
+		if (!AI)
+		{
+			if (FreandAI && !Neutral && !NeutralAgrass)
+			{
 				gameObject.tag = "Freand";
 			}
-			if(!FreandAI && !Neutral && !NeutralAgrass){
-			gameObject.tag = "Dwarf";
+			if (!FreandAI && !Neutral && !NeutralAgrass)
+			{
+				gameObject.tag = "Dwarf";
 			}
 		}
-		if (Neutral) {
+		if (Neutral)
+		{
 			gameObject.tag = "Neutral";
 		}
-		if (NeutralAgrass) {
+		if (NeutralAgrass)
+		{
 			gameObject.tag = "NeutralAgrass";
 		}
 		if (_HP.curTractorBeamSystemHealth > 0)
@@ -605,67 +655,82 @@ public class Stats : MonoBehaviour {
 				}
 			}
 		}
-		
-		if (!isSelect) {
+
+		if (!isSelect)
+		{
 			AttackStations = false;
 			DefenceStations = false;
 			NatralStations = false;
 		}
-		if (Name == System.String.Empty) {
-			if (classname == "Galactica") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().GalactiucaNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().GalactiucaNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().GalactiucaNames.Remove (Name);
+		if (Name == System.String.Empty)
+		{
+			if (classname == "Galactica")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().GalactiucaNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().GalactiucaNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().GalactiucaNames.Remove(Name);
 			}
 
-			if (classname == "Defiant") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().DefiantNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().DefiantNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().DefiantNames.Remove (Name);
+			if (classname == "Defiant")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().DefiantNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().DefiantNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().DefiantNames.Remove(Name);
 			}
-			if (classname == "Nova") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().NovaNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().NovaNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().NovaNames.Remove (Name);
+			if (classname == "Nova")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().NovaNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().NovaNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().NovaNames.Remove(Name);
 			}
-			if (classname == "Saber") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().SaberNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().SaberNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().SaberNames.Remove (Name);
-			}
-
-			if (classname == "Akira") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().AkiraNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().AkiraNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().AkiraNames.Remove (Name);
-			}
-			if (classname == "Intrepid") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().IntrepidNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().IntrepidNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().IntrepidNames.Remove (Name);
-			}
-			if (classname == "SteamRunner") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().SteamRunnerNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().SteamRunnerNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().SteamRunnerNames.Remove (Name);
+			if (classname == "Saber")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().SaberNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().SaberNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().SaberNames.Remove(Name);
 			}
 
-			if (classname == "Luna") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().LunaNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().LunaNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().LunaNames.Remove (Name);
+			if (classname == "Akira")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().AkiraNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().AkiraNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().AkiraNames.Remove(Name);
 			}
-			if (classname == "Prometheus") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().PrometheuseNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().PrometheuseNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().PrometheuseNames.Remove (Name);
+			if (classname == "Intrepid")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().IntrepidNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().IntrepidNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().IntrepidNames.Remove(Name);
 			}
-			if (classname == "Nebula") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().NebulaNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().NebulaNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().NebulaNames.Remove (Name);
+			if (classname == "SteamRunner")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().SteamRunnerNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().SteamRunnerNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().SteamRunnerNames.Remove(Name);
 			}
-			if (classname == "Galaxy") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().GalaxyNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().GalaxyNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().GalaxyNames.Remove (Name);
+
+			if (classname == "Luna")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().LunaNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().LunaNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().LunaNames.Remove(Name);
 			}
-			if (classname == "Sovereign") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().SovereignNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().SovereignNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().SovereignNames.Remove (Name);
+			if (classname == "Prometheus")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().PrometheuseNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().PrometheuseNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().PrometheuseNames.Remove(Name);
 			}
-			if (classname == "Excalibur") {
-				Name = _GDB.gameObject.GetComponent<NameSelectScript> ().ExcaliburNames [Random.Range (0, _GDB.gameObject.GetComponent<NameSelectScript> ().ExcaliburNames.Count)];
-				_GDB.gameObject.GetComponent<NameSelectScript> ().ExcaliburNames.Remove (Name);
+			if (classname == "Nebula")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().NebulaNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().NebulaNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().NebulaNames.Remove(Name);
+			}
+			if (classname == "Galaxy")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().GalaxyNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().GalaxyNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().GalaxyNames.Remove(Name);
+			}
+			if (classname == "Sovereign")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().SovereignNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().SovereignNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().SovereignNames.Remove(Name);
+			}
+			if (classname == "Excalibur")
+			{
+				Name = _GDB.gameObject.GetComponent<NameSelectScript>().ExcaliburNames[Random.Range(0, _GDB.gameObject.GetComponent<NameSelectScript>().ExcaliburNames.Count)];
+				_GDB.gameObject.GetComponent<NameSelectScript>().ExcaliburNames.Remove(Name);
 			}
 		}
 		SensorsLine.transform.position = gameObject.transform.position;
@@ -674,20 +739,23 @@ public class Stats : MonoBehaviour {
 		WeaponLine.transform.position = gameObject.transform.position;
 		_wcr.radius = _AS.radiuse;
 	}
-	bool FindInSelectList (GameObject obj)
+	bool FindInSelectList(GameObject obj)
 	{
-		foreach (GameObject selObj in _GDB.selectList) {
-				if (selObj == obj)
-					return true;
-			}
-			return false;
+		foreach (GameObject selObj in _GDB.selectList)
+		{
+			if (selObj == obj)
+				return true;
+		}
+		return false;
 	}
 
-	void OnDestroy(){
-		if (_HP.curHealth <= 0) {
-			CountPrefeb.GetComponent<NameCounter> ().CurShips += 1;
+	void OnDestroy()
+	{
+		if (_HP.curHealth <= 0)
+		{
+			CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
 		}
-		Destroy (SensorsLine);
-		Destroy (WeaponLine);
+		Destroy(SensorsLine);
+		Destroy(WeaponLine);
 	}
 }

@@ -1,34 +1,19 @@
-﻿<Properties StartupConfiguration="{83D8D934-8DD1-E9EB-9F77-FE620544F9A3}|Unit Tests">
+﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Dwarf\NameSelectScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Dwarf\MoveComponent.cs">
     <Files>
-      <File FileName="Assets\Scripts\Dwarf\Tractor.cs" Line="125" Column="103" />
-      <File FileName="Assets\Scripts\Dwarf\Skill.cs" Line="170" Column="44" />
-      <File FileName="Assets\Lightbeam\Scripts\Lightbeam.cs" Line="11" Column="2" />
-      <File FileName="Assets\Scripts\SaveSystem\ObjectID.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ModuleSystem\ShipBuildModule.cs" Line="256" Column="28" />
-      <File FileName="Assets\Scripts\Dwarf\Builder.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Dwarf\Phaser.cs" Line="95" Column="5" />
-      <File FileName="Assets\Scripts\Dwarf\Stats.cs" Line="226" Column="19" />
-      <File FileName="Assets\Scripts\ModuleSystem\WeaponModule.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ModuleSystem\Station.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ModuleSystem\UpgradeModule.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ModuleSystem\HealthModule.cs" Line="541" Column="10" />
-      <File FileName="Assets\Scripts\Building\GUI\UI\InterFaceControlScript.cs" Line="2161" Column="25" />
-      <File FileName="Assets\Scripts\Select\Select.cs" Line="528" Column="40" />
-      <File FileName="Assets\Scripts\Abilites\Assimilated.cs" Line="250" Column="25" />
-      <File FileName="Assets\Scripts\Dwarf\DamageEffect.cs" Line="24" Column="1" />
-      <File FileName="Assets\Scripts\MiniMap\MiniMap.cs" Line="65" Column="4" />
-      <File FileName="Assets\Scripts\Building\GUI\UI\CanvasControlScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Building\GUI\UI\ShipUIControll.cs" Line="822" Column="5" />
-      <File FileName="Assets\Scripts\Dwarf\ActiveState.cs" Line="47" Column="2" />
-      <File FileName="Assets\Scripts\Dwarf\NameSelectScript.cs" Line="20" Column="34" />
-      <File FileName="Assets\Scripts\Camera\SaveScreen.cs" Line="14" Column="3" />
+      <File FileName="Assets\Scripts\Select\Select.cs" Line="1110" Column="24" />
+      <File FileName="Assets\Scripts\Dwarf\ActiveState.cs" Line="93" Column="28" />
+      <File FileName="Assets\Scripts\Dwarf\Stats.cs" Line="769" Column="2" />
+      <File FileName="Assets\Scripts\ModuleSystem\HealthModule.cs" Line="209" Column="46" />
+      <File FileName="Assets\Scripts\Dwarf\Maneuvers.cs" Line="2" Column="31" />
+      <File FileName="Assets\Scripts\Building\GUI\UI\InterFaceControlScript.cs" Line="2163" Column="26" />
+      <File FileName="Assets\Scripts\Building\GUI\UI\ShipUIControll.cs" Line="153" Column="17" />
+      <File FileName="Assets\Scripts\Dwarf\MoveComponent.cs" Line="518" Column="83" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />

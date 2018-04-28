@@ -871,6 +871,8 @@ public class MoveComponent : MonoBehaviour {
 	public void Stop(){
 		gameObject.GetComponent<Stats>().instruction = Stats.enInstruction.idle;
 		gameObject.GetComponent<Stats> ().targetVector = gameObject.transform.position;
+		FullStop();
+		RotationStop();
 		Move = false;
 	}
 	public void Movement(Vector3 MovementPosition){

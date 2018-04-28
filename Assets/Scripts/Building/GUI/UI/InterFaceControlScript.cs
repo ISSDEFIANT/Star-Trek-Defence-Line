@@ -2155,16 +2155,10 @@ public class InterFaceControlScript : MonoBehaviour {
 	}
 	public void AttackOrder()
 	{
-		foreach (GameObject obj in _GDB.selectList)
-		{
-			_sel.SetOrder("Attack");
-		}	}
+		_sel.SetOrder("Attack");	}
 	public void GuardOrder()
 	{
-		foreach (GameObject obj in _GDB.selectList)
-		{
-
-		}	}
+		_sel.SetOrder("Guard");	}
 	public void PatrolOrder()
 	{
 		foreach (GameObject obj in _GDB.selectList)
