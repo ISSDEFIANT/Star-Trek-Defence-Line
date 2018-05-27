@@ -146,14 +146,7 @@ public class Stats : MonoBehaviour
 		_wespa.Owner = gameObject;
 
 		_es = gameObject.GetComponent<SensorModule>();
-	}
-	void Start()
-	{
-		Camera = GameObject.FindGameObjectWithTag("MainCamera");
-		Box = GameObject.FindGameObjectWithTag("UnclickedBox");
-		_select = GameObject.FindGameObjectWithTag("MainUI").GetComponent<Select>();
-		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
-		_GDB.dwarfList.Add(gameObject);
+
 		if (StartLocation == null)
 		{
 			targetVector = transform.position;
@@ -162,6 +155,15 @@ public class Stats : MonoBehaviour
 		{
 			_agent.Movement(StartLocation.transform.position);
 		}
+	}
+	void Start()
+	{
+		Camera = GameObject.FindGameObjectWithTag("MainCamera");
+		Box = GameObject.FindGameObjectWithTag("UnclickedBox");
+		_select = GameObject.FindGameObjectWithTag("MainUI").GetComponent<Select>();
+		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
+		_GDB.dwarfList.Add(gameObject);
+
 		_AS = gameObject.GetComponent<ActiveState>();
 		if (GameObject.FindGameObjectWithTag("Enemy"))
 		{
@@ -210,11 +212,11 @@ public class Stats : MonoBehaviour
 	{
 		if (IsFix)
 		{
-			_agent.SensorBlocking = true;
+		//	_agent.SensorBlocking = true;
 		}
 		else
 		{
-			_agent.SensorBlocking = false;
+		//	_agent.SensorBlocking = false;
 		}
 		if (Neutral)
 		{
@@ -338,9 +340,7 @@ public class Stats : MonoBehaviour
 							{
 								if (!_agent.CUBETYPE)
 								{
-									if (!_agent.ForwardBlocked && Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed))
-									{
-										if (WarpEffectDelay > 0)
+									if (WarpEffectDelay > 0)
 										{
 											WarpEffect = true;
 											WarpEffectDelay -= Time.deltaTime;
@@ -351,14 +351,6 @@ public class Stats : MonoBehaviour
 											WarpEffect = false;
 											_agent.Warp = false;
 										}
-									}
-									else
-									{
-										Warp = false;
-										WarpEffect = false;
-										_agent.Warp = false;
-										WarpEffectDelay = 0.5f;
-									}
 								}
 								else
 								{
@@ -503,9 +495,7 @@ public class Stats : MonoBehaviour
 						{
 							if (!_agent.CUBETYPE)
 							{
-								if (!_agent.ForwardBlocked && Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed))
-								{
-									if (WarpEffectDelay > 0)
+								if (WarpEffectDelay > 0)
 									{
 										WarpEffect = true;
 										WarpEffectDelay -= Time.deltaTime;
@@ -516,14 +506,6 @@ public class Stats : MonoBehaviour
 										WarpEffect = false;
 										_agent.Warp = false;
 									}
-								}
-								else
-								{
-									Warp = false;
-									WarpEffect = false;
-									_agent.Warp = false;
-									WarpEffectDelay = 0.5f;
-								}
 							}
 							else
 							{

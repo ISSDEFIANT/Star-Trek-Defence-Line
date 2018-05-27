@@ -143,14 +143,22 @@ public class Select : MonoBehaviour
 	}
 	void GuardEvent(Transform GTarget)
 	{
+		HealthModule _gthm = GTarget.GetComponent<HealthModule>();
+		Quaternion rotation = GTarget.transform.rotation;
+
+		int i = _gthm.ShipsForDefence.Count;
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
 			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 			{
 				_ost.GuartTarget = GTarget.transform;
-				_ost.instruction = Stats.enInstruction.attack;
-				Instantiate(GuardMark, GTarget.transform.position, MoveMark.transform.rotation);
+				_gthm.ShipsForDefence.Add(obj);
+				if (i <= _gthm.ShipsForDefence.Count - 1)
+				{
+					Instantiate(GuardMark, GTarget.transform.position + (rotation * new Vector3(_gthm.ProtectPosition[i].x, 0, _gthm.ProtectPosition[i].y)), MoveMark.transform.rotation);
+				}
+				i++;
 				if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 				{
 					if (!gameObject.GetComponent<AudioSource>().isPlaying)
@@ -219,7 +227,16 @@ public class Select : MonoBehaviour
 						{
 							if (_CurHoveredShip.tag != "Enemy")
 							{
-								GuardEvent(_CurHoveredShip.transform);
+								if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+								{
+									GuardEvent(_CurHoveredShip.transform);
+								}
+								else
+								{
+									OrderActive = false;
+									AttackOrder = false;
+									GuardOrder = false;
+								}
 							}
 						}
 						OrderActive = false;
@@ -314,7 +331,16 @@ public class Select : MonoBehaviour
 										{
 											if (_CurHoveredShip.tag != "Enemy")
 											{
-												GuardEvent(_CurHoveredShip.transform);
+												if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+												{
+													GuardEvent(_CurHoveredShip.transform);
+												}
+												else
+												{
+													OrderActive = false;
+													AttackOrder = false;
+													GuardOrder = false;
+												}
 											}
 										}
 										OrderActive = false;

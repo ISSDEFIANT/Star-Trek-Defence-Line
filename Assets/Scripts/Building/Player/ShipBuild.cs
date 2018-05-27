@@ -108,7 +108,7 @@ public class ShipBuild : MonoBehaviour
 			GameObject Ship;
 			Ship = (GameObject)Instantiate(Корабль[0], _sbm.startPoint.transform.position, _sbm.startPoint.transform.rotation);
 
-			Ship.GetComponent<MoveComponent>().ShipIsBuilt = true;
+			//Ship.GetComponent<MoveComponent>().ShipIsBuilt = true;
 
 			if (HaveAnimation)
 			{

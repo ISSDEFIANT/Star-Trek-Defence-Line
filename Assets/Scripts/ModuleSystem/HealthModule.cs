@@ -59,7 +59,7 @@ public class HealthModule : MonoBehaviour
 	public bool Station;
 	private Station _sb;
 	public bool Ship;
-[HideInInspector]
+	[HideInInspector]
 	public Stats _st;
 
 	public bool CM;
@@ -133,68 +133,98 @@ public class HealthModule : MonoBehaviour
 	[HideInInspector]
 	public bool SelfDestructActive;
 
+	public Vector2[] ProtectPosition;
+	public List<GameObject> ShipsForDefence;
+
+	private List<float> radius;
+	public float MaxDefenceRadius;
+
 	// Use this for initialization
-	void Start () {
-		_GDB = GameObject.FindGameObjectWithTag ("MainUI").GetComponent<GlobalDB> ();
-		_es = gameObject.GetComponent<SensorModule> ();
-		if (Ship) {
-			_st = gameObject.GetComponent<Stats> ();
-			_as = gameObject.GetComponent<ActiveState> ();
-			if (_st.Name != System.String.Empty) {
-				if (_st.classname == "Galactica") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().GalactiucaNames.Remove (_st.Name);
+	void Start()
+	{
+		ProtectPosition = new Vector2[12];
+		radius = new List<float>();
+
+		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
+		_es = gameObject.GetComponent<SensorModule>();
+		if (Ship)
+		{
+			_st = gameObject.GetComponent<Stats>();
+			_as = gameObject.GetComponent<ActiveState>();
+			if (_st.Name != System.String.Empty)
+			{
+				if (_st.classname == "Galactica")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().GalactiucaNames.Remove(_st.Name);
 				}
 
-				if (_st.classname == "Defiant") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().DefiantNames.Remove (_st.Name);
+				if (_st.classname == "Defiant")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().DefiantNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Nova") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().NovaNames.Remove (_st.Name);
+				if (_st.classname == "Nova")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().NovaNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Saber") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().SaberNames.Remove (_st.Name);
-				}
-
-				if (_st.classname == "Akira") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().AkiraNames.Remove (_st.Name);
-				}
-				if (_st.classname == "Intrepid") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().IntrepidNames.Remove (_st.Name);
-				}
-				if (_st.classname == "SteamRunner") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().SteamRunnerNames.Remove (_st.Name);
+				if (_st.classname == "Saber")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().SaberNames.Remove(_st.Name);
 				}
 
-				if (_st.classname == "Luna") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().LunaNames.Remove (_st.Name);
+				if (_st.classname == "Akira")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().AkiraNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Prometheus") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().PrometheuseNames.Remove (_st.Name);
+				if (_st.classname == "Intrepid")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().IntrepidNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Nebula") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().NebulaNames.Remove (_st.Name);
+				if (_st.classname == "SteamRunner")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().SteamRunnerNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Galaxy") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().GalaxyNames.Remove (_st.Name);
+
+				if (_st.classname == "Luna")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().LunaNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Sovereign") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().SovereignNames.Remove (_st.Name);
+				if (_st.classname == "Prometheus")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().PrometheuseNames.Remove(_st.Name);
 				}
-				if (_st.classname == "Excalibur") {
-					_GDB.gameObject.GetComponent<NameSelectScript> ().ExcaliburNames.Remove (_st.Name);
+				if (_st.classname == "Nebula")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().NebulaNames.Remove(_st.Name);
+				}
+				if (_st.classname == "Galaxy")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().GalaxyNames.Remove(_st.Name);
+				}
+				if (_st.classname == "Sovereign")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().SovereignNames.Remove(_st.Name);
+				}
+				if (_st.classname == "Excalibur")
+				{
+					_GDB.gameObject.GetComponent<NameSelectScript>().ExcaliburNames.Remove(_st.Name);
 				}
 			}
 		}
-		if (Station) {
+		if (Station)
+		{
 			_sb = gameObject.GetComponent<Station>();
 		}
-		timer = Random.Range (0.01f, 10);
+		timer = Random.Range(0.01f, 10);
 	}
-	void LateUpdate () {
-		if (CatchTimer > 0) {
+	void LateUpdate()
+	{
+		if (CatchTimer > 0)
+		{
 			CatchTimer -= Time.deltaTime;
-		} else {
-		Catched = false;
+		}
+		else
+		{
+			Catched = false;
 			CatchTimer = 2;
 		}
 		LateRotation = gameObject.transform.root.eulerAngles;
@@ -659,112 +689,221 @@ public class HealthModule : MonoBehaviour
 				SelfDestructTimer = 5;
 			}
 		}
+
+		List<GameObject> OldDefenceList = new List<GameObject>();
+
+		float OldMaxRadius = 0;
+
+		if (_GDB.selectList.Count == 0)
+		{
+			if (radius.Count > 0)
+			{
+				radius.Clear();
+			}
+		}
+		if (OldDefenceList != _GDB.selectList)
+		{
+			radius.Clear();
+			OldDefenceList = _GDB.selectList;
+		}
+		if (radius.Count < _GDB.selectList.Count)
+		{
+			foreach (GameObject obj in ShipsForDefence)
+			{
+				radius.Add(obj.GetComponent<HealthModule>().ShipRadius);
+			}
+		}
+		if (radius.Count != 0)
+		{
+			MaxDefenceRadius = radius.Max();
+		}
+
+		if ((int)OldMaxRadius != (int)MaxDefenceRadius)
+		{
+			ProtectPosition[0].x = 0;
+			ProtectPosition[0].y = (MaxDefenceRadius * 10) + ShipRadius;
+
+			ProtectPosition[1].x = 0;
+			ProtectPosition[1].y = -1 * ((MaxDefenceRadius * 10) + ShipRadius);
+
+			ProtectPosition[2].x = (MaxDefenceRadius * 8) + ShipRadius;
+			ProtectPosition[2].y = 0;
+
+			ProtectPosition[3].x = -1 * ((MaxDefenceRadius * 8) + ShipRadius);
+			ProtectPosition[3].y = 0;
+
+			ProtectPosition[4].x = ProtectPosition[0].x - (MaxDefenceRadius * 3f);
+			ProtectPosition[4].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
+
+			ProtectPosition[5].x = ProtectPosition[0].x + (MaxDefenceRadius * 3f);
+			ProtectPosition[5].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
+
+			ProtectPosition[6].x = ProtectPosition[1].x - (MaxDefenceRadius * 3f);
+			ProtectPosition[6].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
+
+			ProtectPosition[7].x = ProtectPosition[1].x + (MaxDefenceRadius * 3f);
+			ProtectPosition[7].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
+
+			ProtectPosition[8].x = ProtectPosition[2].x;
+			ProtectPosition[8].y = ProtectPosition[2].y + (MaxDefenceRadius * 5);
+
+			ProtectPosition[9].x = ProtectPosition[3].x;
+			ProtectPosition[9].y = ProtectPosition[3].y + (MaxDefenceRadius * 5);
+
+			ProtectPosition[10].x = ProtectPosition[2].x;
+			ProtectPosition[10].y = ProtectPosition[2].y - (MaxDefenceRadius * 5);
+
+			ProtectPosition[11].x = ProtectPosition[3].x;
+			ProtectPosition[11].y = ProtectPosition[3].y - (MaxDefenceRadius * 5);
+
+			OldMaxRadius = MaxDefenceRadius;
+		}
+
+		if (ShipsForDefence.Count > 0)
+		{
+			foreach (GameObject obj in ShipsForDefence)
+			{
+				if (obj.GetComponent<Stats>().GuartTarget != gameObject.transform)
+				{
+					ShipsForDefence.Remove(obj);
+				}
+			}
+		}
 	}
-	void OnDestroy(){
-		if (timer > 0) {
+
+	void OnDestroy()
+	{
+		if (timer > 0)
+		{
 			timer -= Time.deltaTime;
 		}
-		if (Ship) {
-			_GDB.selectList.Remove (gameObject);
-			_GDB.dwarfList.Remove (gameObject);
+		if (Ship)
+		{
+			_GDB.selectList.Remove(gameObject);
+			_GDB.dwarfList.Remove(gameObject);
 		}
-		if (Ship) {
-			if (!_st.AI) {
+		if (Ship)
+		{
+			if (!_st.AI)
+			{
 				_GDB.СилаИгрока -= _st.приоритет;
 			}
-			if (_st.AI) {
+			if (_st.AI)
+			{
 				_GDB.СилаВрага -= _st.приоритет;
 			}
 		}
-		if (timer < 0) {
-			if (Ship) {
+		if (timer < 0)
+		{
+			if (Ship)
+			{
 				CtrlNum _CNC = _GDB.gameObject.GetComponent<CtrlNum>();
-				if (Team0) {
-					_CNC.Num0.Remove (gameObject);
+				if (Team0)
+				{
+					_CNC.Num0.Remove(gameObject);
 				}
-				if (Team1) {
-					_CNC.Num1.Remove (gameObject);
+				if (Team1)
+				{
+					_CNC.Num1.Remove(gameObject);
 				}
-				if (Team2) {
+				if (Team2)
+				{
 					_CNC.Num2.Remove(gameObject);
 				}
-				if (Team3) {
-					_CNC.Num3.Remove (gameObject);
+				if (Team3)
+				{
+					_CNC.Num3.Remove(gameObject);
 				}
-				if (Team4) {
-					_CNC.Num4.Remove (gameObject);
+				if (Team4)
+				{
+					_CNC.Num4.Remove(gameObject);
 				}
-				if (Team5) {
-					_CNC.Num5.Remove (gameObject);
+				if (Team5)
+				{
+					_CNC.Num5.Remove(gameObject);
 				}
-				if (Team6) {
-					_CNC.Num6.Remove (gameObject);
+				if (Team6)
+				{
+					_CNC.Num6.Remove(gameObject);
 				}
-				if (Team7) {
-					_CNC.Num7.Remove (gameObject);
+				if (Team7)
+				{
+					_CNC.Num7.Remove(gameObject);
 				}
-				if (Team8) {
-					_CNC.Num8.Remove (gameObject);
+				if (Team8)
+				{
+					_CNC.Num8.Remove(gameObject);
 				}
-				if (Team9) {
-					_CNC.Num9.Remove (gameObject);
+				if (Team9)
+				{
+					_CNC.Num9.Remove(gameObject);
 				}
 
 				NameSelectScript _NSS = _GDB.gameObject.GetComponent<NameSelectScript>();
 
-				if (_st.classname == "Galactica") {
-					_NSS.GalactiucaNames.Add (_st.Name);
+				if (_st.classname == "Galactica")
+				{
+					_NSS.GalactiucaNames.Add(_st.Name);
 				}
-				if (_st.classname == "Defiant") {
+				if (_st.classname == "Defiant")
+				{
 					_NSS.DefiantNames.Add(_st.Name);
 				}
-				if (_st.classname == "Nova") {
-					_NSS.NovaNames.Add (_st.Name);
+				if (_st.classname == "Nova")
+				{
+					_NSS.NovaNames.Add(_st.Name);
 				}
-				if (_st.classname == "Saber") {
-					_NSS.SaberNames.Add (_st.Name);
-				}
-
-				if (_st.classname == "Akira") {
-					_NSS.AkiraNames.Add (_st.Name);
-				}
-				if (_st.classname == "Intrepid") {
-					_NSS.IntrepidNames.Add (_st.Name);
-				}
-				if (_st.classname == "SteamRunner") {
-					_NSS.SteamRunnerNames.Add (_st.Name);
+				if (_st.classname == "Saber")
+				{
+					_NSS.SaberNames.Add(_st.Name);
 				}
 
-				if (_st.classname == "Luna") {
-					_NSS.LunaNames.Add (_st.Name);
+				if (_st.classname == "Akira")
+				{
+					_NSS.AkiraNames.Add(_st.Name);
 				}
-				if (_st.classname == "Prometheus") {
-					_NSS.PrometheuseNames.Add (_st.Name);
+				if (_st.classname == "Intrepid")
+				{
+					_NSS.IntrepidNames.Add(_st.Name);
 				}
-				if (_st.classname == "Nebula") {
-					_NSS.NebulaNames.Add (_st.Name);
+				if (_st.classname == "SteamRunner")
+				{
+					_NSS.SteamRunnerNames.Add(_st.Name);
 				}
-				if (_st.classname == "Galaxy") {
-					_NSS.GalaxyNames.Add (_st.Name);
+
+				if (_st.classname == "Luna")
+				{
+					_NSS.LunaNames.Add(_st.Name);
 				}
-				if (_st.classname == "Sovereign") {
-					_NSS.SovereignNames.Add (_st.Name);
+				if (_st.classname == "Prometheus")
+				{
+					_NSS.PrometheuseNames.Add(_st.Name);
 				}
-				if (_st.classname == "Excalibur") {
-					_NSS.ExcaliburNames.Add (_st.Name);
+				if (_st.classname == "Nebula")
+				{
+					_NSS.NebulaNames.Add(_st.Name);
+				}
+				if (_st.classname == "Galaxy")
+				{
+					_NSS.GalaxyNames.Add(_st.Name);
+				}
+				if (_st.classname == "Sovereign")
+				{
+					_NSS.SovereignNames.Add(_st.Name);
+				}
+				if (_st.classname == "Excalibur")
+				{
+					_NSS.ExcaliburNames.Add(_st.Name);
 				}
 			}
 		}
 	}
-	public void TeamActivate(){
-		if (Station) {
+	public void TeamActivate()
+	{
+		if (Station)
+		{
 			_sb.visible = true;
 			GameObject.FindGameObjectWithTag("MainUI").GetComponent<BackgroudUI>().pictureSelectObject = gameObject.GetComponent<Station>().tex;
 		}
-	}
-
-	internal static void ToLocal(ref Vector3 worldVector, ref Quaternion worldRotation, out Vector3 localVector)
-	{
-		localVector = Quaternion.Inverse(worldRotation)*worldVector;
 	}
 }

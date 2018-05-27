@@ -477,8 +477,6 @@
      <Compile Include="Assets\Ultimate Game Tools\Fracturing\Scripts\SupportPlane.cs" />
      <Compile Include="Assets\Ultimate Game Tools\Fracturing\Scripts\Triangulate.cs" />
      <Compile Include="Assets\Ultimate Game Tools\MeshCombiner\Scripts\CombinedMesh.cs" />
-     <Compile Include="Assets\XXX\Asset\Scripts\cameraRotate.cs" />
-     <Compile Include="Assets\XXX\Asset\Scripts\earthRotate.cs" />
      <Compile Include="Assets\Анимации\Видео\VIDEOWarpCameraEffect.cs" />
      <Compile Include="Assets\Музыка\Epic Adventure Orchestral Background Music\audio.cs" />
      <Compile Include="Assets\Музыка\MusicPlayer.cs" />
@@ -558,7 +556,6 @@
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmosphereOuterSpecularPlanetShadow.shader" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmosphereOuterNormalSpecularRingShadow.shader" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmosphereOuterNormalRingShadowDetail.shader" />
-     <None Include="Assets\XXX\Asset\Shaders\Clouds.shader" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmospherePlanetShadow.shader" />
      <None Include="Assets\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmosphereNormal.shader" />
@@ -642,7 +639,6 @@
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantRingShadowDetail.shader" />
      <None Include="Assets\StixGames - DirectX 11 Grass Shader\GrassGeom.cginc" />
      <None Include="Assets\ParticleSystemsPacks\Ian&apos;s Explosion Pack\Shaders\Particle Alpha Blend-.shader" />
-     <None Include="Assets\XXX\Asset\Shaders\Planet.shader" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\PlanetSurface\VariantAtmosphereOuterNormal.shader" />
      <None Include="Assets\SovereignNames.txt" />
      <None Include="Assets\Models\Корабли\Федерация\1701D\Readme.txt" />

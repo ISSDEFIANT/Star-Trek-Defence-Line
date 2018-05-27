@@ -51,7 +51,11 @@ public class ActiveState: MonoBehaviour {
 
 	private SensorModule _es;
 
-private bool setwaytotarget;
+	private bool setwaytotarget;
+
+	public int DefenceNumber;
+
+	private float correct = 0;
 	// Use this for initialization
 	void Start () {
 		_es = gameObject.GetComponent<SensorModule> ();
@@ -81,23 +85,83 @@ private bool setwaytotarget;
 	}
 	void GuartShip()
 	{
-		if (Vector3.Distance(gameObject.transform.position, _st.GuartTarget.transform.position) > (_h.NormalSensors / 4)*2)
+		bool IsShip;
+
+		if (_st.GuartTarget.GetComponent<MoveComponent>())
 		{
-			setwaytotarget = true;
-			_agent.Movement(_st.GuartTarget.transform.position);
+			IsShip = true;
 		}
 		else
 		{
-			if (setwaytotarget) {
-				_agent.Stop();
-				setwaytotarget = false;
+			IsShip = false;
+		}
+
+		if (IsShip)
+		{
+			MoveComponent _gtmc = _st.GuartTarget.GetComponent<MoveComponent>();
+			HealthModule _gthm = _st.GuartTarget.GetComponent<HealthModule>();
+
+			if (_st.targetTransform == null)
+			{
+				Quaternion rotation = _st.GuartTarget.transform.rotation;
+				Vector3 rotateVector = _st.GuartTarget.transform.position + (rotation * new Vector3(_gthm.ProtectPosition[DefenceNumber].x, 0, _gthm.ProtectPosition[DefenceNumber].y));
+
+				if (Vector3.Distance(gameObject.transform.position, _st.GuartTarget.transform.position) > 1)
+				{
+					_agent.Movement(new Vector3(rotateVector.x, _st.GuartTarget.transform.position.y, rotateVector.z));
+				}
+
+				if (!_agent.Move)
+				{
+					if (correct < 1)
+					{
+						correct += 0.01f;
+					}
+					else
+					{
+						correct = 1;
+					}
+					//gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(_st.GuartTarget.transform.rotation.eulerAngles), Quaternion.Euler(_st.GuartTarget.transform.rotation.eulerAngles), correct);
+				}
+				else
+				{
+					correct = 0;
+				}
+			}
+			else
+			{
+				if (Vector3.Distance(gameObject.transform.position, _st.GuartTarget.transform.position) > (_h.NormalSensors / 4) * 2)
+				{
+					setwaytotarget = true;
+					_agent.Movement(new Vector3(_st.GuartTarget.transform.position.x + _gthm.ProtectPosition[DefenceNumber].x, _st.GuartTarget.transform.position.y, _st.GuartTarget.transform.position.z + _gthm.ProtectPosition[DefenceNumber].y));
+				}
+				else
+				{
+					if (setwaytotarget)
+					{
+						_agent.Stop();
+						setwaytotarget = false;
+					}
+				}
 			}
 		}
 	}
+
 	void Update () 
     {
-		if (_st.GuartTarget != null) {
+		if (_st.GuartTarget != null)
+		{
 			GuartShip();
+
+
+			HealthModule _gthm = _st.GuartTarget.GetComponent<HealthModule>();
+			for (int i = 0; i <= _gthm.ShipsForDefence.Count - 1; i++)
+			{
+				if (_gthm.ShipsForDefence[i] == gameObject)
+				{
+					DefenceNumber = i;
+				}
+			}
 		}
 
 		if (_st.Warp) {
@@ -168,7 +232,7 @@ private bool setwaytotarget;
 					_agent.Movement (_st.targetVector);
 				}
 			}else{
-                _agent.Stop();
+                //_agent.Stop();
 				_st.Order = false;
                 _st.instruction = Stats.enInstruction.idle;
             }
