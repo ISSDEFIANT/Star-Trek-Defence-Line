@@ -212,11 +212,11 @@ public class Stats : MonoBehaviour
 	{
 		if (IsFix)
 		{
-		//	_agent.SensorBlocking = true;
+			_agent.SensorBlocking = true;
 		}
 		else
 		{
-		//	_agent.SensorBlocking = false;
+			_agent.SensorBlocking = false;
 		}
 		if (Neutral)
 		{
@@ -340,7 +340,9 @@ public class Stats : MonoBehaviour
 							{
 								if (!_agent.CUBETYPE)
 								{
-									if (WarpEffectDelay > 0)
+									if (!_agent.ForwardBlocked && Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed))
+									{
+										if (WarpEffectDelay > 0)
 										{
 											WarpEffect = true;
 											WarpEffectDelay -= Time.deltaTime;
@@ -351,6 +353,14 @@ public class Stats : MonoBehaviour
 											WarpEffect = false;
 											_agent.Warp = false;
 										}
+									}
+									else
+									{
+										Warp = false;
+										WarpEffect = false;
+										_agent.Warp = false;
+										WarpEffectDelay = 0.5f;
+									}
 								}
 								else
 								{
@@ -495,7 +505,9 @@ public class Stats : MonoBehaviour
 						{
 							if (!_agent.CUBETYPE)
 							{
-								if (WarpEffectDelay > 0)
+								if (!_agent.ForwardBlocked && Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.LeftSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.RightSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed) && Vector3.Distance(_agent.DownSensor.transform.position, _agent.TargetVector) < Vector3.Distance(_agent.UpSensor.transform.position, _agent.TargetVector) + (0.1f * _agent.RotationSpeed))
+								{
+									if (WarpEffectDelay > 0)
 									{
 										WarpEffect = true;
 										WarpEffectDelay -= Time.deltaTime;
@@ -506,6 +518,14 @@ public class Stats : MonoBehaviour
 										WarpEffect = false;
 										_agent.Warp = false;
 									}
+								}
+								else
+								{
+									Warp = false;
+									WarpEffect = false;
+									_agent.Warp = false;
+									WarpEffectDelay = 0.5f;
+								}
 							}
 							else
 							{

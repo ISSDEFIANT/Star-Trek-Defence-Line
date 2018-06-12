@@ -605,6 +605,7 @@
      <None Include="Assets\Музыка\Epic Adventure Orchestral Background Music\README FIRST.txt" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\CGInclude\PlanetClouds.cginc" />
      <None Include="Assets\ExcaliburNames.txt" />
+     <None Include="Assets\Текстуры\JR_AlphaSamplePack\Discount Code.txt" />
      <None Include="Assets\UGUI\UPause Menu\Example\Level\pine1_Textures\Resources\TreeVertexLit.cginc" />
      <None Include="Assets\StixGames - DirectX 11 Grass Shader\GrassDefinitionsAndFunctions.cginc" />
      <None Include="Assets\SpaceGraphicsToolkit\Required\Shaders\Resources\GasGiant\VariantOuterPlanetShadow.shader" />
