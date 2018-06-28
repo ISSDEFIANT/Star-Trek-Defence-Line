@@ -389,21 +389,31 @@ public float RotationBraking;
 			UpBlocked = false;
 			DownBlocked = false;
 
-			if (Vector3.Distance(LeftSensor.transform.position, TargetVector) > Vector3.Distance(RightSensor.transform.position, TargetVector))
+
+			if (Vector3.Distance(LeftSensor.transform.position, TargetVector) > Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
 			{
 				angleL = 1;
 			}
-			if (Vector3.Distance(RightSensor.transform.position, TargetVector) > Vector3.Distance(LeftSensor.transform.position, TargetVector))
+			if (Vector3.Distance(RightSensor.transform.position, TargetVector) > Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
 			{
 				angleL = -1;
 			}
-			if (Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector))
+			if (Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
+			{
+				angleL = 0;
+			}
+
+			if (Vector3.Distance(UpSensor.transform.position, TargetVector) > Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
+			{
+				angleYL = 1;
+			}
+			if (Vector3.Distance(DownSensor.transform.position, TargetVector) > Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
 			{
 				angleYL = -1;
 			}
-			if (Vector3.Distance(UpSensor.transform.position, TargetVector) > Vector3.Distance(DownSensor.transform.position, TargetVector))
+			if (Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
 			{
-				angleYL = 1;
+				angleYL = 0;
 			}
 		}
 		else
@@ -442,16 +452,28 @@ public float RotationBraking;
 				}
 			}
 		}
+		ApplyRotation(RAcceleration);
+	}
+	void ApplyRotation (float RAcceleration){
 		Vector3 targetDir = TargetVector - transform.position;
-		float Wedge = Vector3.Angle(targetDir, transform.forward);
-		Debug.Log(Wedge);
-		if (Wedge < RotationBraking)
+		float WedgeY = Vector3.Angle(new Vector3(targetDir.x, 0, targetDir.z), new Vector3(transform.forward.x, 0, transform.forward.z));
+		float WedgeX = Vector3.Angle(new Vector3(0, targetDir.y, targetDir.z), new Vector3(0, transform.forward.y, transform.forward.z));
+		Debug.Log(WedgeX + " " + WedgeY);
+		if (WedgeX<RotationBraking)
 		{
-			_rb.AddRelativeTorque(new Vector3(angleYL * -RAcceleration, angleL * -RAcceleration, 0) * _rb.mass);
+			_rb.AddRelativeTorque(new Vector3(-angleL* RAcceleration, 0, 0) * _rb.mass * WedgeX);
 		}
 		else
 		{
-			_rb.AddRelativeTorque(new Vector3(angleYL * RAcceleration, angleL * RAcceleration, 0) * _rb.mass);
+			_rb.AddRelativeTorque(new Vector3(angleL* RAcceleration, 0, 0) * _rb.mass);
+		}
+		if (WedgeY<RotationBraking)
+		{
+			_rb.AddRelativeTorque(new Vector3(0, angleYL* RAcceleration, 0) * _rb.mass * WedgeY);
+		}
+		else
+		{
+			_rb.AddRelativeTorque(new Vector3(0, angleYL* RAcceleration, 0) * _rb.mass);
 		}
 	}
 
