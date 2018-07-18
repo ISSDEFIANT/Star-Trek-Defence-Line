@@ -305,32 +305,51 @@ public class ActiveState: MonoBehaviour {
 		}
 		if (Agrass) {
 			if (_st.targetTransform != null) {
-				if (_st.Order) {
-					if (Vector3.Distance (_st.targetTransform.position, gameObject.transform.position) > radiuse + _h.ShipRadius + _st.targetTransform.gameObject.GetComponent<HealthModule> ().ShipRadius) {
-						if (!gameObject.GetComponent<Maneuvers> ()) {
-							_agent.Movement (_st.targetTransform.position);
+				if (_st.Order)
+				{
+					if (Vector3.Distance(_st.targetTransform.position, gameObject.transform.position) > radiuse + _h.ShipRadius + _st.targetTransform.gameObject.GetComponent<HealthModule>().ShipRadius)
+					{
+						if (!gameObject.GetComponent<Maneuvers>())
+						{
+							_agent.Movement(_st.targetTransform.position);
 						}
 						isAttack = false;
-					} else {
-						if (CanAttack) {
+					}
+					else
+					{
+						if (CanAttack)
+						{
 							isAttack = true;
 						}
 					}
-				} else {
-					if (Vector3.Distance (gameObject.transform.position, _st.targetTransform.position) < _es.VisionRadius + _h.ShipRadius + _es.Target.GetComponent<HealthModule> ().ShipRadius) {
-						if (Vector3.Distance (_st.targetTransform.position, gameObject.transform.position) > radiuse + _h.ShipRadius + _st.targetTransform.gameObject.GetComponent<HealthModule> ().ShipRadius) {
-							if (!gameObject.GetComponent<Maneuvers> ()) {
-								_agent.Movement (_st.targetTransform.position);
+				}
+				else
+				{
+					if (_es.Target != null)
+					{
+						if (Vector3.Distance(gameObject.transform.position, _st.targetTransform.position) < _es.VisionRadius + _h.ShipRadius + _es.Target.GetComponent<HealthModule>().ShipRadius)
+						{
+							if (Vector3.Distance(_st.targetTransform.position, gameObject.transform.position) > radiuse + _h.ShipRadius + _st.targetTransform.gameObject.GetComponent<HealthModule>().ShipRadius)
+							{
+								if (!gameObject.GetComponent<Maneuvers>())
+								{
+									_agent.Movement(_st.targetTransform.position);
+								}
+								isAttack = false;
 							}
-							isAttack = false;
-						} else {
-							if (CanAttack) {
-								isAttack = true;
+							else
+							{
+								if (CanAttack)
+								{
+									isAttack = true;
+								}
 							}
 						}
-					} else {
-						isAttack = false;
-						_st.targetTransform = null;
+						else
+						{
+							isAttack = false;
+							_st.targetTransform = null;
+						}
 					}
 				}
 			} else {

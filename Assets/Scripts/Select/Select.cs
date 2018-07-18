@@ -121,6 +121,8 @@ public class Select : MonoBehaviour
 	}
 	void StateInSelectTarget(Transform targetGO)
 	{
+		Debug.Log("!");
+
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
@@ -138,6 +140,7 @@ public class Select : MonoBehaviour
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 				}
+				obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
 			}
 		}
 	}
@@ -173,6 +176,8 @@ public class Select : MonoBehaviour
 
 	void StateInSelect(Vector3 targetVec)
 	{
+		Debug.Log("!");
+
 		int i = 0;
 		foreach (GameObject obj in _GDB.selectList)
 		{
@@ -193,6 +198,7 @@ public class Select : MonoBehaviour
 					gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
 					gameObject.GetComponent<AudioSource>().Play();
 				}
+				obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
 			}
 		}
 	}

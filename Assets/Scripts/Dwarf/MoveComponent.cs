@@ -12,11 +12,9 @@ public class MoveComponent : MonoBehaviour
 
 	public float RotationSpeed;
 	public float RotationAcceleration;
-public float RotationBraking;
 
 	public float MovementSpeed;
 	public float MaxAcceleration;
-	public float BrakingDistance;
 
 	public float WarpMovementSpeed;
 
@@ -90,15 +88,15 @@ public float RotationBraking;
 	private bool UpStab;
 	[HideInInspector]
 	private bool DownStab;
-[HideInInspector]
+	[HideInInspector]
 	public GameObject ForwardRayStart;
-[HideInInspector]
+	[HideInInspector]
 	public GameObject LeftRayStart;
-[HideInInspector]
+	[HideInInspector]
 	public GameObject RightRayStart;
-[HideInInspector]
+	[HideInInspector]
 	public GameObject UpRayStart;
-[HideInInspector]
+	[HideInInspector]
 	public GameObject DownRayStart;
 
 	public string CollisionObject;
@@ -131,6 +129,17 @@ public float RotationBraking;
 	private float m_OriginalAngularDrag;
 
 	private float m_OriginalMaxAngular;
+
+	private float RollAngle;
+	private float PitchAngle;
+	private float ForwardSpeed;
+
+	public float pitchInput = 0;
+	public float yawInput = 0;
+	public float rollInput = 0;
+	private float m_BankedTurnAmount;
+
+	public List<GameObject> CurFleet;
 
 	// Use this for initialization
 	void Awake()
@@ -201,9 +210,24 @@ public float RotationBraking;
 	}
 
 	// Update is called once per frame
-	void LateUpdate()
+	void Update()
 	{
+		if (_hm.Team0 || _hm.Team1 || _hm.Team2 || _hm.Team3 || _hm.Team4 || _hm.Team5 || _hm.Team6 || _hm.Team7 || _hm.Team8 || _hm.Team9)
+		{
+			SetCurFleet(false, null);
+		}
 
+		if (CurFleet.Count > 0)
+		{
+			if (CurFleet[0].GetComponent<MoveComponent>().CurFleet != CurFleet)
+			{
+				CurFleet.RemoveAt(0);
+			}
+
+			if (_st.GuartTarget != null)
+			{				CurFleet.Clear();
+			}
+		}
 	}
 	void FixedUpdate()
 	{
@@ -230,78 +254,46 @@ public float RotationBraking;
 		{
 			if (Move)
 			{
-                ShipRotation(RotationSpeed, RotationAcceleration);
+				CalculateInput(TargetVector);
+				ClampInputs();
+				CalculateRollAndPitchAngles();
+				ShipRotation(RotationSpeed, RotationAcceleration);
 				ForwardMovement(MovementSpeed, MaxAcceleration);
-			}
-			if (Vector3.Distance(gameObject.transform.position, TargetVector) > 1)
-			{
-				Move = true;
 			}
 			else
 			{
-				Move = false;
+				StabilizeShip();
 			}
-			//_rb.AddRelativeTorque(new Vector3(0, 0, RotationVelocity.z) * _rb.mass);
 		}
-		if (Warp)
+		else
 		{
-			if (Move)
+			if (!ForwardBlocked && Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)))
 			{
-				if (!ForwardBlocked && Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
+				if (Vector3.Dot(_rb.velocity, transform.forward) < WarpMovementSpeed * MovementSpeed)
 				{
-					if (Vector3.Dot(_rb.velocity, transform.forward) < WarpMovementSpeed * MovementSpeed)
-					{
-						_rb.velocity += gameObject.transform.forward * (MaxAcceleration * WarpMovementSpeed);
-					}
+					_rb.velocity += gameObject.transform.forward * (MaxAcceleration * WarpMovementSpeed);
 				}
-				else
-				{
-					if (!LeftStab && !RightStab && !UpStab && !DownStab)
-					{
-						_rb.maxAngularVelocity = CurRotSpeed;
-					}
-					if (Vector3.Distance(gameObject.transform.position, TargetVector) > 1)
-					{
-						ForwardMovement(MovementSpeed, MaxAcceleration);
-						if (angleL != 0 || angleYL != 0)
-						{
-							_rb.drag = Vector3.Dot(_rb.velocity, transform.forward);
-						}
-						else
-						{
-							_rb.drag = 0.5f;
-						}
-						if (angleL > 0)
-						{
-							if (angleL != 0)
-							{
-								if (_rb.angularVelocity.y < CurRotSpeed)
-								{
-									_rb.AddRelativeTorque(new Vector3(0, RotationVelocity.y, 0) * _rb.mass);
-									//_rb.angularVelocity += new Vector3 (0, RotationVelocity.y, 0);
-								}
-							}
-						}
-						else
-						{
-							if (angleL != 0)
-							{
-								if (_rb.angularVelocity.y > -CurRotSpeed)
-								{
-									_rb.AddRelativeTorque(new Vector3(0, RotationVelocity.y, 0) * _rb.mass);
-								}
-							}
-						}
-						_rb.AddRelativeTorque(new Vector3(RotationVelocity.x, 0, 0) * _rb.mass);
-					}
-					else
-					{
-						ForwardMovement(MovementSpeed, MaxAcceleration);
-						//Move = false;
-					}
-					_rb.AddRelativeTorque(new Vector3(0, 0, RotationVelocity.z) * _rb.mass);
-				}
+				CalculateInput(TargetVector);
+				ClampInputs();
+				CalculateRollAndPitchAngles();
+				ShipRotation(1, 1);
 			}
+			else
+			{
+				CalculateInput(TargetVector);
+				ClampInputs();
+				CalculateRollAndPitchAngles();
+				ShipRotation(RotationSpeed, RotationAcceleration);
+				ForwardMovement(MovementSpeed, MaxAcceleration);
+			}
+		}
+		if (Vector3.Distance(gameObject.transform.position, TargetVector) > _hm.ShipRadius)
+		{
+			Move = true;
+		}
+		else
+		{
+			Move = false;
 		}
 		if (active)
 		{
@@ -323,10 +315,6 @@ public float RotationBraking;
 			{
 				ZStabTimer = 3;
 			}
-		}
-		if (ZStabActive)
-		{
-		//	gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(gameObject.transform.localRotation.eulerAngles), Quaternion.Euler(new Vector3(gameObject.transform.localRotation.eulerAngles.x, gameObject.transform.localRotation.eulerAngles.y, 0)), CurRotSpeed / 100);
 		}
 		if (!Move && !Warp)
 		{
@@ -355,7 +343,14 @@ public float RotationBraking;
 
 	void ForwardMovement(float MaxSpeed, float MaxAccelerationIE)
 	{
-		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > BrakingDistance)
+		if (_rb.velocity.magnitude > MovementSpeed)
+		{
+			_rb.velocity = _rb.velocity.normalized * MovementSpeed;
+		}
+
+		Vector3 TargetVec = TargetVector - transform.position;
+
+		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (MaxSpeed * MaxSpeed / 2) / MaxAccelerationIE)
 		{
 			if (Vector3.Dot(_rb.velocity, transform.forward) < MaxSpeed)
 			{
@@ -366,116 +361,107 @@ public float RotationBraking;
 		{
 			if (Vector3.Dot(_rb.velocity, transform.forward) > 0)
 			{
-				float f = (_rb.mass * (Vector3.Dot(_rb.velocity, transform.forward) * Vector3.Dot(_rb.velocity, transform.forward))) / 2 * BrakingDistance;
-				_rb.AddForce(-1 * transform.forward * f);
+				_rb.AddForce(transform.forward * MaxAccelerationIE * _rb.mass * -1);
+			}
+			else
+			{
+				float amount = 0;
+
+				Vector3 startvec = Vector3.zero;
+				if (amount < 1)
+				{
+					amount += Time.deltaTime / MovementSpeed;
+				}
+				else
+				{					amount = 1;
+				}
+				if (startvec == Vector3.zero)
+				{
+					startvec = transform.position;
+				}
+				gameObject.transform.position = Vector3.Lerp(startvec, TargetVector, amount);
 			}
 		}
 	}
 
+	void OnDrawGizmosSelected()
+	{
+		Gizmos.color = new Color32(0, 255, 0, 100);
+		Gizmos.DrawSphere(TargetVector, 5);	}
 	void ShipRotation(float Power, float RAcceleration)
 	{
-		_rb.maxAngularVelocity = Power;
-
-
 		var Factor = Vector3.Dot(transform.forward, _rb.velocity.normalized);
 		Factor *= Factor;
 		var newVelocity = Vector3.Lerp(_rb.velocity, transform.forward * Vector3.Dot(_rb.velocity, transform.forward), Factor * Vector3.Dot(_rb.velocity, transform.forward) * Time.deltaTime);
 		_rb.velocity = newVelocity;
 
-		if (!Maneuvers)
-		{
-			LeftBlocked = false;
-			RightBlocked = false;
-			UpBlocked = false;
-			DownBlocked = false;
+		_rb.rotation = Quaternion.Slerp(_rb.rotation, Quaternion.LookRotation(_rb.velocity, transform.up), 0.02f * Time.deltaTime);
 
+		var torque = Vector3.zero;
 
-			if (Vector3.Distance(LeftSensor.transform.position, TargetVector) > Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleL = 1;
-			}
-			if (Vector3.Distance(RightSensor.transform.position, TargetVector) > Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleL = -1;
-			}
-			if (Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleL = 0;
-			}
+		m_BankedTurnAmount = Mathf.Sin(RollAngle);
+		_rb.angularDrag = Mathf.Abs(_rb.angularVelocity.magnitude - ((pitchInput + rollInput) / 2));
 
-			if (Vector3.Distance(UpSensor.transform.position, TargetVector) > Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleYL = 1;
-			}
-			if (Vector3.Distance(DownSensor.transform.position, TargetVector) > Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleYL = -1;
-			}
-			if (Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
-			{
-				angleYL = 0;
-			}
-		}
-		else
-		{
-			if (!RightBlocked)
-			{
-				angleL = -1;
-			}
-			else
-			{
-				if (!LeftBlocked)
-				{
-					angleL = 1;
-				}
-			}
-			if (!UpBlocked)
-			{
-				angleYL = 1;
-			}
-			else
-			{
-				if (!DownBlocked)
-				{
-					angleYL = -1;
-				}
-			}
-			if (ManeuversTimer > 0)
-			{
-				ManeuversTimer -= Time.deltaTime;
-			}
-			else
-			{
-				if (!RightBlocked && !LeftBlocked && !UpBlocked && !DownBlocked && !ForwardBlocked)
-				{
-					Maneuvers = false;
-				}
-			}
-		}
-		ApplyRotation(RAcceleration);
+		torque += pitchInput * transform.right;
+		torque += yawInput * 0.1f * transform.up;
+		torque += -rollInput * transform.forward;
+		torque += m_BankedTurnAmount * 0.5f * transform.up;
+		_rb.AddTorque(torque * ForwardSpeed * Factor * _rb.mass);
 	}
-	void ApplyRotation (float RAcceleration){
-		Vector3 targetDir = TargetVector - transform.position;
-		float WedgeY = Vector3.Angle(new Vector3(targetDir.x, 0, targetDir.z), new Vector3(transform.forward.x, 0, transform.forward.z));
-		float WedgeX = Vector3.Angle(new Vector3(0, targetDir.y, targetDir.z), new Vector3(0, transform.forward.y, transform.forward.z));
-		Debug.Log(WedgeX + " " + WedgeY);
-		if (WedgeX<RotationBraking)
+
+	private void ClampInputs()
+	{
+		rollInput = Mathf.Clamp(rollInput, -1, 1);
+		pitchInput = Mathf.Clamp(pitchInput, -1, 1);
+		yawInput = Mathf.Clamp(yawInput, -1, 1);	}
+
+	private void CalculateRollAndPitchAngles()
+	{
+		// Calculate roll & pitch angles
+		// Calculate the flat forward direction (with no y component).
+		var flatForward = transform.forward;
+		flatForward.y = 0;
+		// If the flat forward vector is non-zero (which would only happen if the plane was pointing exactly straight upwards)
+		if (flatForward.sqrMagnitude > 0)
 		{
-			_rb.AddRelativeTorque(new Vector3(-angleL* RAcceleration, 0, 0) * _rb.mass * WedgeX);
-		}
-		else
-		{
-			_rb.AddRelativeTorque(new Vector3(angleL* RAcceleration, 0, 0) * _rb.mass);
-		}
-		if (WedgeY<RotationBraking)
-		{
-			_rb.AddRelativeTorque(new Vector3(0, angleYL* RAcceleration, 0) * _rb.mass * WedgeY);
-		}
-		else
-		{
-			_rb.AddRelativeTorque(new Vector3(0, angleYL* RAcceleration, 0) * _rb.mass);
+			flatForward.Normalize();
+			// calculate current pitch angle
+			var localFlatForward = transform.InverseTransformDirection(flatForward);
+			PitchAngle = Mathf.Atan2(localFlatForward.y, localFlatForward.z);
+			// calculate current roll angle
+			var flatRight = Vector3.Cross(Vector3.up, flatForward);
+			var localFlatRight = transform.InverseTransformDirection(flatRight);
+			RollAngle = Mathf.Atan2(localFlatRight.y, localFlatRight.x);
 		}
 	}
+
+	void CalculateInput(Vector3 Target)
+	{
+		Vector3 targetPos = Target;
+
+		Vector3 localTarget = transform.InverseTransformPoint(targetPos);
+		float targetAngleYaw = Mathf.Atan2(localTarget.x, localTarget.z);
+		float targetAnglePitch = -Mathf.Atan2(localTarget.y, localTarget.z);
+
+
+		targetAnglePitch = Mathf.Clamp(targetAnglePitch, -RotationSpeed * Mathf.Deg2Rad, RotationSpeed * Mathf.Deg2Rad);
+
+		float changePitch = targetAnglePitch - PitchAngle;
+
+		pitchInput = changePitch * RotationAcceleration;
+
+		float desiredRoll = Mathf.Clamp(targetAngleYaw, -RotationSpeed * Mathf.Deg2Rad, RotationSpeed * Mathf.Deg2Rad);
+
+		yawInput = targetAngleYaw;
+		rollInput = -(RollAngle - desiredRoll) * RotationAcceleration * 2;
+
+		var localVelocity = transform.InverseTransformDirection(_rb.velocity);
+		ForwardSpeed = Mathf.Max(0, localVelocity.z);
+
+		float currentSpeedEffect = 1 + ForwardSpeed * 0.01f;
+		rollInput *= currentSpeedEffect;
+		pitchInput *= currentSpeedEffect;
+		yawInput *= currentSpeedEffect;	}
 
 	void FedSensorSystem()
 	{
@@ -696,5 +682,93 @@ public float RotationBraking;
 	public void Movement(Vector3 MovementPosition)
 	{
 		gameObject.GetComponent<Stats>().targetVector = MovementPosition;
+	}
+
+	void StabilizeShip()
+	{
+		float Amount = 0;
+		if (Amount < 1)
+		{
+			Amount += Time.deltaTime / RotationAcceleration;
+		}
+		_rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Amount);
+		_rb.velocity = Vector3.Lerp(_rb.velocity, Vector3.zero, Amount);
+		_rb.angularDrag = 0;
+
+		Vector3 StartRot = Vector3.zero;
+
+		if (StartRot == Vector3.zero)
+		{
+			StartRot = gameObject.transform.localRotation.eulerAngles;
+		}
+
+		if (_st.GuartTarget != null)
+		{
+			gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(StartRot), Quaternion.Euler(new Vector3(0, _st.GuartTarget.transform.localEulerAngles.y, 0)), Amount);
+		}
+		else
+		{
+			if (CurFleet.Count <= 0)
+			{
+				gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(StartRot), Quaternion.Euler(new Vector3(0, StartRot.y, 0)), Amount);
+			}
+			else
+			{
+				gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(StartRot), Quaternion.Euler(new Vector3(0, CurFleet[0].transform.localRotation.eulerAngles.y, 0)), Amount);
+			}
+		}
+	}
+
+
+	public void SetCurFleet(bool NotStateFleet, List<GameObject> NotStateShips)
+	{
+		if (!NotStateFleet)
+		{
+			CtrlNum _CNS = FindObjectOfType<CtrlNum>().GetComponent<CtrlNum>();
+
+			if (_hm.Team0)
+			{
+				CurFleet = _CNS.Num0;
+			}
+			if (_hm.Team1)
+			{
+				CurFleet = _CNS.Num1;
+			}
+			if (_hm.Team2)
+			{
+				CurFleet = _CNS.Num2;
+			}
+			if (_hm.Team3)
+			{
+				CurFleet = _CNS.Num3;
+			}
+			if (_hm.Team4)
+			{
+				CurFleet = _CNS.Num4;
+			}
+			if (_hm.Team5)
+			{
+				CurFleet = _CNS.Num5;
+			}
+			if (_hm.Team6)
+			{
+				CurFleet = _CNS.Num6;
+			}
+			if (_hm.Team7)
+			{
+				CurFleet = _CNS.Num7;
+			}
+			if (_hm.Team8)
+			{
+				CurFleet = _CNS.Num8;
+			}
+			if (_hm.Team9)
+			{
+				CurFleet = _CNS.Num9;
+			}
+		}
+		else
+		{			CurFleet = NotStateShips;
+		}
 	}
 }

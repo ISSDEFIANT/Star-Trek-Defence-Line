@@ -17,9 +17,10 @@
       <File FileName="Assets\Scripts\Dwarf\Skill.cs" Line="220" Column="50" />
       <File FileName="Assets\Scripts\Dwarf\Stats.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Building\Player\ShipBuild.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Dwarf\ActiveState.cs" Line="235" Column="19" />
-      <File FileName="Assets\Scripts\Dwarf\MoveComponent.cs" Line="403" Column="15" />
-      <File FileName="Assets\Standard Assets\Vehicles\Aircraft\Scripts\AeroplaneController.cs" Line="201" Column="74" />
+      <File FileName="Assets\Scripts\Dwarf\ActiveState.cs" Line="329" Column="7" />
+      <File FileName="Assets\Scripts\Select\CtrlNum.cs" Line="285" Column="49" />
+      <File FileName="Assets\Scripts\Select\Select.cs" Line="201" Column="74" />
+      <File FileName="Assets\Scripts\Dwarf\MoveComponent.cs" Line="227" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />

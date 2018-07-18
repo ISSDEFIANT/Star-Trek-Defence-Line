@@ -131,172 +131,142 @@ public class CtrlNum : MonoBehaviour
 				Ccamera.transform.position = new Vector3(Num0[0].transform.position.x, Ccamera.transform.position.y, Num0[0].transform.position.z);
 			}
 		}
-		if (Input.GetKey(KeyCode.LeftControl))
+		if (Input.GetKey(KeyCode.LeftAlt))
 		{
 			foreach (GameObject obj in _GDB.selectList)
 			{
 				foreach (GameObject obj1 in _GDB.dwarfList)
 				{
-					if (Input.GetKeyDown("1"))
+					if (Input.GetKey("1"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num1 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team1 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num1.Clear();
+							Num1.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("2"))
+					if (Input.GetKey("2"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num2 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team2 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num2.Clear();
+							Num2.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("3"))
+					if (Input.GetKey("3"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num3 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team3 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num3.Clear();
+							Num3.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("4"))
+					if (Input.GetKey("4"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num4 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team4 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num4.Clear();
+							Num4.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("5"))
+					if (Input.GetKey("5"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num5 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team5 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num5.Clear();
+							Num5.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("6"))
+					if (Input.GetKey("6"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num6 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team6 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num6.Clear();
+							Num6.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("7"))
+					if (Input.GetKey("7"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num7 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team7 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num7.Clear();
+							Num7.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("8"))
+					if (Input.GetKey("8"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num8 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team8 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num8.Clear();
+							Num8.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("9"))
+					if (Input.GetKey("9"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num9 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team9 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num9.Clear();
+							Num9.Add(_GDB.activeObjectInterface);
+						}
 					}
-					if (Input.GetKeyDown("0"))
+					if (Input.GetKey("0"))
 					{
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num0 = _GDB.selectList.ToList();
 							obj1.GetComponent<HealthModule>().Team0 = false;
 						}
+						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
+						{
+							Num0.Clear();
+							Num0.Add(_GDB.activeObjectInterface);
+						}
 					}
-				}
-			}
-			if (Input.GetKeyDown("1"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num1.Clear();
-					Num1.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("2"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num2.Clear();
-					Num2.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("3"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num3.Clear();
-					Num3.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("4"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num4.Clear();
-					Num4.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("5"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num5.Clear();
-					Num5.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("6"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num6.Clear();
-					Num6.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("7"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num7.Clear();
-					Num7.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("8"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num8.Clear();
-					Num8.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("9"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num9.Clear();
-					Num9.Add(_GDB.activeObjectInterface);
-				}
-			}
-			if (Input.GetKeyDown("0"))
-			{
-				if (_GDB.activeObjectInterface != null)
-				{
-					Num0.Clear();
-					Num0.Add(_GDB.activeObjectInterface);
 				}
 			}
 		}
