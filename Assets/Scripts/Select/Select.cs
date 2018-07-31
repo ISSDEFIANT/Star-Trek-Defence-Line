@@ -103,6 +103,11 @@ public class Select : MonoBehaviour
 	public bool OrderActive;
 	public bool AttackOrder;
 	public bool GuardOrder;
+
+	public int LeftMClickCount = 0;
+	public float LeftMClickTimer = 0.3f;
+
+	public bool LockOnPatrolSetting;
 	// Use this for initialization
 	void Start()
 	{
@@ -121,8 +126,6 @@ public class Select : MonoBehaviour
 	}
 	void StateInSelectTarget(Transform targetGO)
 	{
-		Debug.Log("!");
-
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
@@ -131,6 +134,8 @@ public class Select : MonoBehaviour
 				_ost.Order = true;
 				_ost.targetTransform = targetGO;
 				_ost.instruction = Stats.enInstruction.attack;
+				obj.GetComponent<MoveComponent>().InPatrol = false;
+				obj.GetComponent<MoveComponent>().PatrolWay.Clear();
 				Instantiate(AttackMark, targetGO.transform.position, MoveMark.transform.rotation);
 				if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 				{
@@ -155,6 +160,8 @@ public class Select : MonoBehaviour
 			Stats _ost = obj.GetComponent<Stats>();
 			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 			{
+				obj.GetComponent<MoveComponent>().InPatrol = false;
+				obj.GetComponent<MoveComponent>().PatrolWay.Clear();
 				_ost.GuartTarget = GTarget.transform;
 				_gthm.ShipsForDefence.Add(obj);
 				if (i <= _gthm.ShipsForDefence.Count - 1)
@@ -176,29 +183,37 @@ public class Select : MonoBehaviour
 
 	void StateInSelect(Vector3 targetVec)
 	{
-		Debug.Log("!");
-
 		int i = 0;
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
+
 			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 			{
-				Instantiate(MoveMark, new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z), MoveMark.transform.rotation);
-				_ost.Order = true;
-				_ost.targetTransform = null;
-				_ost.GuartTarget = null;
-				_ost.instruction = Stats.enInstruction.move;
-				_ost.targetVector = new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z);
-				obj.GetComponent<MoveComponent>().Movement(new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z));
-				_ost.StopOrder = true;
-				i++;
-				if (!gameObject.GetComponent<AudioSource>().isPlaying)
+				if (!Input.GetKey(KeyCode.LeftShift))
 				{
-					gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
-					gameObject.GetComponent<AudioSource>().Play();
+					Instantiate(MoveMark, new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z), MoveMark.transform.rotation);
+					_ost.Order = true;
+					_ost.targetTransform = null;
+					_ost.GuartTarget = null;
+					_ost.instruction = Stats.enInstruction.move;
+					_ost.targetVector = new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z);
+					obj.GetComponent<MoveComponent>().Movement(new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z));
+					obj.GetComponent<MoveComponent>().InPatrol = false;
+					obj.GetComponent<MoveComponent>().PatrolWay.Clear();
+					_ost.StopOrder = true;
+					i++;
+					if (!gameObject.GetComponent<AudioSource>().isPlaying)
+					{
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
+						gameObject.GetComponent<AudioSource>().Play();
+					}
+					obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
 				}
-				obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
+				else
+				{					obj.GetComponent<MoveComponent>().AddPatrolPoint(new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z));
+					LockOnPatrolSetting = true;
+				}
 			}
 		}
 	}
@@ -476,6 +491,20 @@ public class Select : MonoBehaviour
 		X = Screen.width / 100;
 		Y = Screen.height / 100;
 		_rayShipHover = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		if (LeftMClickCount > 0)
+		{
+			if (LeftMClickTimer > 0)
+			{
+				LeftMClickTimer -= Time.deltaTime;
+			}
+			else
+			{
+				LeftMClickCount = 0;
+				LeftMClickTimer = 0.3f;
+			}
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			isSelect = true;
@@ -492,6 +521,7 @@ public class Select : MonoBehaviour
 					if (_hit.transform.gameObject.tag == "Dwarf" || _hit.transform.gameObject.tag == "Enemy" || _hit.transform.gameObject.tag == "Freand" || _hit.transform.gameObject.tag == "Neutral")
 					{
 						isSelect = false;
+						LeftMClickCount += 1;
 						if (_hit.transform.gameObject.GetComponent<Stats>().SelectLock == false)
 						{
 							if (_GDB.selectList.Count <= 0)
@@ -514,15 +544,22 @@ public class Select : MonoBehaviour
 							}
 							if (_GDB.selectList.Count == 1)
 							{
-								if (!Input.GetKey(KeyCode.LeftShift))
+								if (LeftMClickCount == 2)
 								{
-									_GDB.selectList[0] = _hit.transform.gameObject;
+									FindShipType(_hit.transform.gameObject.GetComponent<Stats>().classname);
 								}
 								else
 								{
-									if (!FindInSelectList(_hit.transform.gameObject))
+									if (!Input.GetKey(KeyCode.LeftShift))
 									{
-										_GDB.selectList.Add(_hit.transform.gameObject);
+										_GDB.selectList[0] = _hit.transform.gameObject;
+									}
+									else
+									{
+										if (!FindInSelectList(_hit.transform.gameObject))
+										{
+											_GDB.selectList.Add(_hit.transform.gameObject);
+										}
 									}
 								}
 							}
@@ -661,6 +698,7 @@ public class Select : MonoBehaviour
 				}
 			}
 		}
+
 		if (Input.GetMouseButtonUp(0))
 		{
 			isSelect = false;
@@ -873,6 +911,41 @@ public class Select : MonoBehaviour
 				}
 			}
 		}
+		if (LockOnPatrolSetting)
+		{
+			ActivatePatrol();
+		}
+	}
+
+	void ActivatePatrol()
+	{
+		int i = 0;
+		foreach (GameObject obj in _GDB.selectList)
+		{
+			Stats _ost = obj.GetComponent<Stats>();
+
+			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+			{
+				if (!Input.GetKey(KeyCode.LeftShift))
+				{
+					_ost.Order = true;
+					_ost.targetTransform = null;
+					_ost.GuartTarget = null;
+					_ost.instruction = Stats.enInstruction.move;
+					obj.GetComponent<MoveComponent>().InPatrol = true;
+					_ost.StopOrder = true;
+					i++;
+					if (!gameObject.GetComponent<AudioSource>().isPlaying)
+					{
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
+						gameObject.GetComponent<AudioSource>().Play();
+					}
+					obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
+
+					LockOnPatrolSetting = false;
+				}
+			}
+		}
 	}
 	void OnGUI()
 	{
@@ -922,6 +995,49 @@ public class Select : MonoBehaviour
 				_GDB.deactivationInterface();
 		}
 	}
+
+	void FindShipType(string Type)
+	{
+		foreach (GameObject obj in _GDB.dwarfList)
+		{
+			Stats _ost = obj.GetComponent<Stats>();
+
+			Vector2 objpos = Camera.main.WorldToScreenPoint(obj.transform.position);
+
+			if ((objpos.x > 0 && objpos.x < Screen.width) || (objpos.x < 0 && objpos.x > Screen.width))
+			{
+				if ((objpos.y > 0 && objpos.y < Screen.height) || (objpos.y < 0 && objpos.y > Screen.height))
+				{
+					if (!FindInSelectList(obj) && _GDB.selectList.Count < 12)
+					{
+						if (_ost.classname == Type)
+						{
+							if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+							{
+								if (_ost.SelectLock == false)
+								{
+									_ost.Proector.GetComponent<MeshRenderer>().enabled = true;
+									_GDB.selectList.Add(obj);
+								}
+							}
+							if (!_ost.AI && !_ost.FreandAI)
+							{
+								if (!gameObject.GetComponent<AudioSource>().isPlaying)
+								{
+									gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+									gameObject.GetComponent<AudioSource>().Play();
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (_GDB.selectList.Count != 0)
+		{
+			if (_GDB.activeObjectInterface != null)
+				_GDB.deactivationInterface();
+		}	}
 
 	// Проверяет присутствует-ли объект в списке selectList
 	bool FindInSelectList(GameObject obj)

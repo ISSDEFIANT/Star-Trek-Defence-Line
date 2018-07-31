@@ -183,7 +183,6 @@ public class Stats : MonoBehaviour
 				CountPrefeb = GameObject.FindGameObjectWithTag(CountTag);
 			}
 		}
-		_agent.MovementSpeed = NormalSpeed;
 	}
 	// Update is called once per frame
 	void LateUpdate()
@@ -210,6 +209,14 @@ public class Stats : MonoBehaviour
 	}
 	void Update()
 	{
+		if (Warp)
+		{
+			_agent.Warp = true;
+		}
+		else
+		{
+			_agent.Warp = false;
+		}
 		if (IsFix)
 		{
 			_agent.SensorBlocking = true;
@@ -351,14 +358,12 @@ public class Stats : MonoBehaviour
 										{
 											Warp = true;
 											WarpEffect = false;
-											_agent.Warp = false;
 										}
 									}
 									else
 									{
 										Warp = false;
 										WarpEffect = false;
-										_agent.Warp = false;
 										WarpEffectDelay = 0.5f;
 									}
 								}
@@ -373,7 +378,6 @@ public class Stats : MonoBehaviour
 									{
 										Warp = true;
 										WarpEffect = false;
-										_agent.Warp = false;
 									}
 								}
 							}
@@ -383,7 +387,6 @@ public class Stats : MonoBehaviour
 								{
 									Warp = false;
 									WarpEffect = false;
-									_agent.Warp = false;
 									WarpEffectDelay = 0.5f;
 								}
 							}
@@ -394,34 +397,7 @@ public class Stats : MonoBehaviour
 							{
 								Warp = false;
 								WarpEffect = false;
-								_agent.Warp = false;
 								WarpEffectDelay = 0.5f;
-							}
-						}
-						if (Warp)
-						{
-							if (_HP.curWarpEngingSystemHealth <= _HP.maxWarpEngingSystemHealth / 2)
-							{
-								_agent.Warp = true;
-								_agent.WarpMovementSpeed = WarpSpeed / 2;
-							}
-							if (_HP.curWarpEngingSystemHealth > _HP.maxWarpEngingSystemHealth / 2)
-							{
-								_agent.Warp = true;
-								_agent.WarpMovementSpeed = WarpSpeed;
-							}
-						}
-						else
-						{
-							if (_HP.curImpulseSystemHealth <= _HP.maxImpulseSystemHealth / 3)
-							{
-								Warp = false;
-								_agent.WarpMovementSpeed = 0;
-							}
-							if (_HP.curImpulseSystemHealth > _HP.maxImpulseSystemHealth / 3)
-							{
-								Warp = false;
-								_agent.WarpMovementSpeed = 0;
 							}
 						}
 					}
@@ -431,8 +407,6 @@ public class Stats : MonoBehaviour
 						WarpEffect = false;
 						WarpEffectDelay = 0.5f;
 						_agent.Warp = false;
-						_agent.WarpMovementSpeed = 0;
-						//	gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * _agent.MovementSpeed;
 					}
 				}
 				else
@@ -460,35 +434,10 @@ public class Stats : MonoBehaviour
 								Warp = false;
 							}
 						}
-						if (Warp)
-						{
-							if (_HP.curWarpEngingSystemHealth <= _HP.maxWarpEngingSystemHealth / 2)
-							{
-								_agent.MovementSpeed = WarpSpeed / 2;
-							}
-							if (_HP.curWarpEngingSystemHealth > _HP.maxWarpEngingSystemHealth / 2)
-							{
-								_agent.MovementSpeed = WarpSpeed;
-							}
-						}
-						else
-						{
-							if (_HP.curImpulseSystemHealth <= _HP.maxImpulseSystemHealth / 3)
-							{
-								_agent.MovementSpeed = NormalSpeed / 2;
-							}
-							if (_HP.curImpulseSystemHealth > _HP.maxImpulseSystemHealth / 3)
-							{
-								_agent.MovementSpeed = NormalSpeed;
-							}
-						}
 					}
 					else
 					{
 						Warp = false;
-						_agent.Warp = false;
-						_agent.WarpMovementSpeed = 0;
-						gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * _agent.MovementSpeed;
 					}
 				}
 			}
@@ -516,14 +465,12 @@ public class Stats : MonoBehaviour
 									{
 										Warp = true;
 										WarpEffect = false;
-										_agent.Warp = false;
 									}
 								}
 								else
 								{
 									Warp = false;
 									WarpEffect = false;
-									_agent.Warp = false;
 									WarpEffectDelay = 0.5f;
 								}
 							}
@@ -538,7 +485,6 @@ public class Stats : MonoBehaviour
 								{
 									Warp = true;
 									WarpEffect = false;
-									_agent.Warp = false;
 								}
 							}
 						}
@@ -548,7 +494,6 @@ public class Stats : MonoBehaviour
 							{
 								Warp = false;
 								WarpEffect = false;
-								_agent.Warp = false;
 								WarpEffectDelay = 0.5f;
 							}
 						}
@@ -559,34 +504,7 @@ public class Stats : MonoBehaviour
 						{
 							Warp = false;
 							WarpEffect = false;
-							_agent.Warp = false;
 							WarpEffectDelay = 0.5f;
-						}
-					}
-					if (Warp)
-					{
-						if (_HP.curWarpEngingSystemHealth <= _HP.maxWarpEngingSystemHealth / 2)
-						{
-							_agent.Warp = true;
-							_agent.WarpMovementSpeed = WarpSpeed / 2;
-						}
-						if (_HP.curWarpEngingSystemHealth > _HP.maxWarpEngingSystemHealth / 2)
-						{
-							_agent.Warp = true;
-							_agent.WarpMovementSpeed = WarpSpeed;
-						}
-					}
-					else
-					{
-						if (_HP.curImpulseSystemHealth <= _HP.maxImpulseSystemHealth / 3)
-						{
-							Warp = false;
-							_agent.WarpMovementSpeed = 0;
-						}
-						if (_HP.curImpulseSystemHealth > _HP.maxImpulseSystemHealth / 3)
-						{
-							Warp = false;
-							_agent.WarpMovementSpeed = 0;
 						}
 					}
 				}
@@ -595,9 +513,6 @@ public class Stats : MonoBehaviour
 					Warp = false;
 					WarpEffect = false;
 					WarpEffectDelay = 0.5f;
-					_agent.Warp = false;
-					_agent.WarpMovementSpeed = 0;
-					//	gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * _agent.MovementSpeed;
 				}
 			}
 			else
@@ -625,35 +540,11 @@ public class Stats : MonoBehaviour
 							Warp = false;
 						}
 					}
-					if (Warp)
-					{
-						if (_HP.curWarpEngingSystemHealth <= _HP.maxWarpEngingSystemHealth / 2)
-						{
-							_agent.MovementSpeed = WarpSpeed / 2;
-						}
-						if (_HP.curWarpEngingSystemHealth > _HP.maxWarpEngingSystemHealth / 2)
-						{
-							_agent.MovementSpeed = WarpSpeed;
-						}
-					}
-					else
-					{
-						if (_HP.curImpulseSystemHealth <= _HP.maxImpulseSystemHealth / 3)
-						{
-							_agent.MovementSpeed = NormalSpeed / 2;
-						}
-						if (_HP.curImpulseSystemHealth > _HP.maxImpulseSystemHealth / 3)
-						{
-							_agent.MovementSpeed = NormalSpeed;
-						}
-					}
 				}
 				else
 				{
 					Warp = false;
-					_agent.Warp = false;
-					_agent.WarpMovementSpeed = 0;
-					gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * _agent.MovementSpeed;
+				//	gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * _agent.MovementSpeed;
 				}
 			}
 		}

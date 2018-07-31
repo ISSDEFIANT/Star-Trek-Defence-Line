@@ -258,6 +258,7 @@
      <Compile Include="Assets\Scripts\ScrollDetailTexture.cs" />
      <Compile Include="Assets\Scripts\Select\CtrlNum.cs" />
      <Compile Include="Assets\Scripts\Select\EnterSelectPlaneActive.cs" />
+     <Compile Include="Assets\Scripts\Select\PatrolVisual.cs" />
      <Compile Include="Assets\Scripts\Select\Select.cs" />
      <Compile Include="Assets\Scripts\ShowSliderValue.cs" />
      <Compile Include="Assets\Scripts\TiltWindow.cs" />

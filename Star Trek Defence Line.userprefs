@@ -15,13 +15,15 @@
       <File FileName="Assets\Scripts\Dwarf\Builder.cs" Line="46" Column="14" />
       <File FileName="Assets\Scripts\Dwarf\Miner.cs" Line="48" Column="12" />
       <File FileName="Assets\Scripts\Dwarf\Skill.cs" Line="220" Column="50" />
-      <File FileName="Assets\Scripts\Dwarf\Stats.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Building\Player\ShipBuild.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Dwarf\ActiveState.cs" Line="329" Column="7" />
       <File FileName="Assets\Scripts\Select\CtrlNum.cs" Line="285" Column="49" />
-      <File FileName="Assets\Scripts\Select\Select.cs" Line="201" Column="74" />
-      <File FileName="Assets\Scripts\Dwarf\MoveComponent.cs" Line="227" Column="32" />
+      <File FileName="Assets\Scripts\Select\Select.cs" Line="203" Column="58" />
+      <File FileName="Assets\Scripts\Dwarf\Stats.cs" Line="255" Column="13" />
+      <File FileName="Assets\Scripts\Dwarf\MoveComponent.cs" Line="251" Column="81" />
+      <File FileName="Assets\Scripts\Select\PatrolVisual.cs" Line="6" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>

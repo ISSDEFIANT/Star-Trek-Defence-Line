@@ -14,6 +14,8 @@ public class MoveComponent : MonoBehaviour
 	public float RotationAcceleration;
 
 	public float MovementSpeed;
+
+	public float NormalSoloMoveSpeed;
 	public float MaxAcceleration;
 
 	public float WarpMovementSpeed;
@@ -141,6 +143,12 @@ public class MoveComponent : MonoBehaviour
 
 	public List<GameObject> CurFleet;
 
+	public List<Vector3> PatrolWay;
+
+	public bool InPatrol;
+
+	public int PatrolCurTarget = 0;
+
 	// Use this for initialization
 	void Awake()
 	{
@@ -171,12 +179,12 @@ public class MoveComponent : MonoBehaviour
 		ForwardSensor.transform.parent = gameObject.transform;
 		BackSensor.transform.parent = gameObject.transform;
 
-		LeftSensor.transform.localPosition = new Vector3(-1, 0, 0);
-		RightSensor.transform.localPosition = new Vector3(1, 0, 0);
-		UpSensor.transform.localPosition = new Vector3(0, 1, 0);
-		DownSensor.transform.localPosition = new Vector3(0, -1, 0);
-		ForwardSensor.transform.localPosition = new Vector3(0, 0, 1);
-		BackSensor.transform.localPosition = new Vector3(0, 0, -1);
+		LeftSensor.transform.localPosition = new Vector3(-10, 0, 0);
+		RightSensor.transform.localPosition = new Vector3(10, 0, 0);
+		UpSensor.transform.localPosition = new Vector3(0, 10, 0);
+		DownSensor.transform.localPosition = new Vector3(0, -10, 0);
+		ForwardSensor.transform.localPosition = new Vector3(0, 0, 10);
+		BackSensor.transform.localPosition = new Vector3(0, 0, -10);
 
 		LeftSensor.name = "LeftSensor";
 		RightSensor.name = "RightSensor";
@@ -219,13 +227,38 @@ public class MoveComponent : MonoBehaviour
 
 		if (CurFleet.Count > 0)
 		{
-			if (CurFleet[0].GetComponent<MoveComponent>().CurFleet != CurFleet)
+			float minSpeed = CurFleet.Select(shipGO => shipGO.GetComponent<MoveComponent>()).Min(moveComp => moveComp.NormalSoloMoveSpeed);
+
+			MovementSpeed = minSpeed;
+
+			if (CurFleet[0].GetComponent<MoveComponent>().CurFleet.ToString() != CurFleet.ToString())
 			{
 				CurFleet.RemoveAt(0);
 			}
 
 			if (_st.GuartTarget != null)
 			{				CurFleet.Clear();
+			}
+		}
+		else
+		{
+			MovementSpeed = NormalSoloMoveSpeed;
+		}
+
+		if (InPatrol)
+		{			if (Vector3.Distance(gameObject.transform.position, PatrolWay[PatrolCurTarget]) > (_hm.ShipRadius + 2) + (MovementSpeed * MovementSpeed / 2) / MaxAcceleration)
+			{				Movement(PatrolWay[PatrolCurTarget]);
+			}
+			else
+			{
+				if (PatrolCurTarget < PatrolWay.Count)
+				{
+					PatrolCurTarget++;
+				}
+				else
+				{
+					PatrolCurTarget = 0;
+				}
 			}
 		}
 	}
@@ -258,7 +291,7 @@ public class MoveComponent : MonoBehaviour
 				ClampInputs();
 				CalculateRollAndPitchAngles();
 				ShipRotation(RotationSpeed, RotationAcceleration);
-				ForwardMovement(MovementSpeed, MaxAcceleration);
+				ForwardMovement(MaxAcceleration);
 			}
 			else
 			{
@@ -267,24 +300,9 @@ public class MoveComponent : MonoBehaviour
 		}
 		else
 		{
-			if (!ForwardBlocked && Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)) && Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (RotationSpeed * (1 / _rb.angularVelocity.magnitude)))
+			if (!ForwardBlocked && Vector3.Distance(RightSensor.transform.position, TargetVector) < Vector3.Distance(LeftSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(LeftSensor.transform.position, TargetVector) < Vector3.Distance(RightSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(UpSensor.transform.position, TargetVector) < Vector3.Distance(DownSensor.transform.position, TargetVector) + (0.1f * RotationSpeed) && Vector3.Distance(DownSensor.transform.position, TargetVector) < Vector3.Distance(UpSensor.transform.position, TargetVector) + (0.1f * RotationSpeed))
 			{
-				if (Vector3.Dot(_rb.velocity, transform.forward) < WarpMovementSpeed * MovementSpeed)
-				{
-					_rb.velocity += gameObject.transform.forward * (MaxAcceleration * WarpMovementSpeed);
-				}
-				CalculateInput(TargetVector);
-				ClampInputs();
-				CalculateRollAndPitchAngles();
-				ShipRotation(1, 1);
-			}
-			else
-			{
-				CalculateInput(TargetVector);
-				ClampInputs();
-				CalculateRollAndPitchAngles();
-				ShipRotation(RotationSpeed, RotationAcceleration);
-				ForwardMovement(MovementSpeed, MaxAcceleration);
+				WarpMovement();
 			}
 		}
 		if (Vector3.Distance(gameObject.transform.position, TargetVector) > _hm.ShipRadius)
@@ -324,6 +342,11 @@ public class MoveComponent : MonoBehaviour
 			}
 		}
 	}
+
+	public void AddPatrolPoint(Vector3 Point)
+	{		PatrolWay.Add(Point);
+	}
+
 	public void FullStop()
 	{
 		_rb.velocity = Vector3.Slerp(_rb.velocity, new Vector3(0, 0, 0), 0.1f);
@@ -341,18 +364,28 @@ public class MoveComponent : MonoBehaviour
 		Move = false;
 	}
 
-	void ForwardMovement(float MaxSpeed, float MaxAccelerationIE)
+	void ForwardMovement(float MaxAccelerationIE)
 	{
+		float LMoveSpeed;
+		if (_hm.curImpulseSystemHealth <= _hm.maxImpulseSystemHealth / 3)
+		{
+			LMoveSpeed = MovementSpeed / 2;
+		}
+		else
+		{
+			LMoveSpeed = MovementSpeed;
+		}
+
 		if (_rb.velocity.magnitude > MovementSpeed)
 		{
-			_rb.velocity = _rb.velocity.normalized * MovementSpeed;
+			_rb.velocity = _rb.velocity.normalized * LMoveSpeed;
 		}
 
 		Vector3 TargetVec = TargetVector - transform.position;
 
-		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (MaxSpeed * MaxSpeed / 2) / MaxAccelerationIE)
+		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (MovementSpeed * MovementSpeed / 2) / MaxAccelerationIE)
 		{
-			if (Vector3.Dot(_rb.velocity, transform.forward) < MaxSpeed)
+			if (Vector3.Dot(_rb.velocity, transform.forward) < LMoveSpeed)
 			{
 				_rb.AddForce(transform.forward * MaxAccelerationIE * _rb.mass);
 			}
@@ -370,7 +403,7 @@ public class MoveComponent : MonoBehaviour
 				Vector3 startvec = Vector3.zero;
 				if (amount < 1)
 				{
-					amount += Time.deltaTime / MovementSpeed;
+					amount += Time.deltaTime / LMoveSpeed;
 				}
 				else
 				{					amount = 1;
@@ -382,6 +415,29 @@ public class MoveComponent : MonoBehaviour
 				gameObject.transform.position = Vector3.Lerp(startvec, TargetVector, amount);
 			}
 		}
+	}
+
+	void WarpMovement()
+	{
+		float LWarpSpeed;
+
+		if (_hm.curWarpEngingSystemHealth <= _hm.maxWarpEngingSystemHealth / 2)
+		{
+			LWarpSpeed = WarpMovementSpeed / 2;
+		}
+		else
+		{
+			LWarpSpeed = WarpMovementSpeed;
+		}
+		if (Vector3.Dot(_rb.velocity, transform.forward) < LWarpSpeed)
+		{
+			_rb.velocity += gameObject.transform.forward * LWarpSpeed;
+		}
+		_rb.angularVelocity = Vector3.zero;
+
+		Vector3 relativePos = TargetVector - transform.position;
+		Quaternion rotation = Quaternion.LookRotation(relativePos);
+		transform.rotation = rotation;
 	}
 
 	void OnDrawGizmosSelected()
@@ -463,220 +519,98 @@ public class MoveComponent : MonoBehaviour
 		pitchInput *= currentSpeedEffect;
 		yawInput *= currentSpeedEffect;	}
 
-	void FedSensorSystem()
+	void ApplySensor(GameObject Start, Vector3 Vector, string Direction, bool ManeuversActive = false)
 	{
 		RaycastHit _rh;
-		RaycastHit _rh2;
-		RaycastHit _rh3;
 
-		RaycastHit _rh4;
-		RaycastHit _rh5;
-
-		RaycastHit _rh6;
-		RaycastHit _rh7;
-
-		Vector3 ForwardR = gameObject.transform.TransformDirection(Vector3.forward);
-		Vector3 LeftR = gameObject.transform.TransformDirection(Vector3.left);
-		Vector3 RightR = gameObject.transform.TransformDirection(Vector3.right);
-
-		Vector3 FLeftR = Quaternion.AngleAxis(-25, transform.up) * gameObject.transform.TransformDirection(Vector3.forward);
-		Vector3 FRightR = Quaternion.AngleAxis(25, transform.up) * gameObject.transform.TransformDirection(Vector3.forward);
-
-		Vector3 UpR = gameObject.transform.TransformDirection(Vector3.up);
-		Vector3 DownR = gameObject.transform.TransformDirection(Vector3.down);
-
-		if (Physics.Raycast(ForwardRayStart.transform.position + RayCastBugDestroyer, ForwardR, out _rh, (_hm.ShipRadius + (MovementSpeed * 2))))
+		if (Physics.Raycast(Start.transform.position + RayCastBugDestroyer, Vector, out _rh, (_hm.ShipRadius + (MovementSpeed * 2))))
 		{
 			if (_rh.transform.gameObject != gameObject)
 			{
 				if (_rh.transform.gameObject.GetComponent<HealthModule>())
 				{
-					ForwardBlocked = true;
-					Maneuvers = true;
-					ManeuversTimer = 0.2f;
+					switch (Direction)
+					{
+						case "Forward":
+							ForwardBlocked = true;
+							break;
+						case "Left":
+							LeftBlocked = true;
+							break;
+						case "Right":
+							RightBlocked = true;
+							break;
+						case "FLeft":
+							LeftBlocked = true;
+							break;
+						case "FRight":
+							RightBlocked = true;
+							break;
+						case "Up":
+							UpBlocked = true;
+							break;
+						case "Down":
+							DownBlocked = true;
+							break;
+					}
+					if (ManeuversActive)
+					{
+						Maneuvers = true;
+						ManeuversTimer = 0.2f;
+					}
 					CollisionObject = _rh.transform.name;
-					Debug.DrawRay(ForwardRayStart.transform.position + RayCastBugDestroyer, ForwardR * (_hm.ShipRadius + (MovementSpeed * 2)), Color.red);
+					Debug.DrawRay(Start.transform.position + RayCastBugDestroyer, Vector * (_hm.ShipRadius + (MovementSpeed * 2)), Color.red);
 				}
 				else
 				{
-					Debug.DrawRay(ForwardRayStart.transform.position + RayCastBugDestroyer, ForwardR * (_hm.ShipRadius + (MovementSpeed * 2)), Color.yellow);
+					Debug.DrawRay(Start.transform.position + RayCastBugDestroyer, Vector * (_hm.ShipRadius + (MovementSpeed * 2)), Color.yellow);
 				}
 			}
 			else
 			{
-				Debug.DrawRay(ForwardRayStart.transform.position + RayCastBugDestroyer, ForwardR * (_hm.ShipRadius + (MovementSpeed * 2)), Color.yellow);
+				Debug.DrawRay(Start.transform.position + RayCastBugDestroyer, Vector * (_hm.ShipRadius + (MovementSpeed * 2)), Color.yellow);
 			}
 		}
 		else
 		{
-			ForwardBlocked = false;
-			Debug.DrawRay(ForwardRayStart.transform.position + RayCastBugDestroyer, ForwardR * (_hm.ShipRadius + (MovementSpeed * 2)), Color.green);
-		}
-		if (Physics.Raycast(LeftRayStart.transform.position + RayCastBugDestroyer, LeftR, out _rh2, (_hm.ShipRadius + 3)))
-		{
-			if (_rh2.transform.gameObject != gameObject)
+			switch (Direction)
 			{
-				if (_rh2.transform.gameObject.GetComponent<HealthModule>())
-				{
-					LeftBlocked = true;
-					//Maneuvers = true;
-					//ManeuversTimer = 0.2f;
-					CollisionObject = _rh2.transform.name;
-					Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, LeftR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, LeftR * (_hm.ShipRadius + 3), Color.yellow);
-				}
+				case "Forward":
+					ForwardBlocked = false;
+					break;
+				case "Left":
+					LeftBlocked = false;
+					break;
+				case "Right":
+					RightBlocked = false;
+					break;
+				case "FLeft":
+					LeftBlocked = false;
+					break;
+				case "FRight":
+					RightBlocked = false;
+					break;
+				case "Up":
+					UpBlocked = false;
+					break;
+				case "Down":
+					DownBlocked = false;
+					break;
 			}
-			else
-			{
-				LeftBlocked = false;
-				Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, LeftR * (_hm.ShipRadius + 3), Color.yellow);
-			}
+			Debug.DrawRay(Start.transform.position + RayCastBugDestroyer, Vector * (_hm.ShipRadius + (MovementSpeed * 2)), Color.green);
 		}
-		else
-		{
-			Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, LeftR * (_hm.ShipRadius + 3), Color.green);
-		}
+	}
 
-		if (Physics.Raycast(RightRayStart.transform.position + RayCastBugDestroyer, RightR, out _rh3, (_hm.ShipRadius + 3)))
-		{
-			if (_rh3.transform.gameObject != gameObject)
-			{
-				if (_rh3.transform.gameObject.GetComponent<HealthModule>())
-				{
-					RightBlocked = true;
-					//Maneuvers = true;
-					//ManeuversTimer = 0.2f;
-					CollisionObject = _rh3.transform.name;
-					Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, RightR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, RightR * (_hm.ShipRadius + 3), Color.yellow);
-				}
-			}
-			else
-			{
-				Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, RightR * (_hm.ShipRadius + 3), Color.yellow);
-			}
-		}
-		else
-		{
-			RightBlocked = false;
-			Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, RightR * (_hm.ShipRadius + 3), Color.green);
-		}
-
-		if (Physics.Raycast(LeftRayStart.transform.position + RayCastBugDestroyer, FLeftR, out _rh4, (_hm.ShipRadius + 3)))
-		{
-			if (_rh4.transform.gameObject != gameObject)
-			{
-				if (_rh4.transform.gameObject.GetComponent<HealthModule>())
-				{
-					LeftBlocked = true;
-					Maneuvers = true;
-					ManeuversTimer = 0.2f;
-					CollisionObject = _rh4.transform.name;
-					Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, FLeftR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, FLeftR * (_hm.ShipRadius + 3), Color.yellow);
-				}
-			}
-			else
-			{
-				Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, FLeftR * (_hm.ShipRadius + 3), Color.yellow);
-			}
-		}
-		else
-		{
-			//LeftBlocked = false;
-			Debug.DrawRay(LeftRayStart.transform.position + RayCastBugDestroyer, FLeftR * (_hm.ShipRadius + 3), Color.green);
-		}
-		if (Physics.Raycast(RightRayStart.transform.position + RayCastBugDestroyer, FRightR, out _rh5, (_hm.ShipRadius + 3)))
-		{
-			if (_rh5.transform.gameObject != gameObject)
-			{
-				if (_rh5.transform.gameObject.GetComponent<HealthModule>())
-				{
-					RightBlocked = true;
-					Maneuvers = true;
-					ManeuversTimer = 0.2f;
-					CollisionObject = _rh5.transform.name;
-					Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, FRightR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, FRightR * (_hm.ShipRadius + 3), Color.yellow);
-				}
-			}
-			else
-			{
-				Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, FRightR * (_hm.ShipRadius + 3), Color.yellow);
-			}
-		}
-		else
-		{
-			//RightBlocked = false;
-			Debug.DrawRay(RightRayStart.transform.position + RayCastBugDestroyer, FRightR * (_hm.ShipRadius + 3), Color.green);
-		}
-
-		if (Physics.Raycast(UpRayStart.transform.position + RayCastBugDestroyer, UpR, out _rh6, (_hm.ShipRadius + 3)))
-		{
-			if (_rh6.transform.gameObject != gameObject)
-			{
-				if (_rh6.transform.gameObject.GetComponent<HealthModule>())
-				{
-					UpBlocked = true;
-					Maneuvers = true;
-					ManeuversTimer = 0.2f;
-					CollisionObject = _rh6.transform.name;
-					Debug.DrawRay(UpRayStart.transform.position + RayCastBugDestroyer, UpR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(UpRayStart.transform.position + RayCastBugDestroyer, UpR * (_hm.ShipRadius + 3), Color.yellow);
-				}
-			}
-			else
-			{
-				Debug.DrawRay(UpRayStart.transform.position + RayCastBugDestroyer, UpR * (_hm.ShipRadius + 3), Color.yellow);
-			}
-		}
-		else
-		{
-			UpBlocked = false;
-			Debug.DrawRay(UpRayStart.transform.position + RayCastBugDestroyer, UpR * (_hm.ShipRadius + 3), Color.green);
-		}
-		if (Physics.Raycast(DownRayStart.transform.position + RayCastBugDestroyer, DownR, out _rh7, (_hm.ShipRadius + 3)))
-		{
-			if (_rh7.transform.gameObject != gameObject)
-			{
-				if (_rh7.transform.gameObject.GetComponent<HealthModule>())
-				{
-					DownBlocked = true;
-					Maneuvers = true;
-					ManeuversTimer = 0.2f;
-					CollisionObject = _rh7.transform.name;
-					Debug.DrawRay(DownRayStart.transform.position + RayCastBugDestroyer, DownR * (_hm.ShipRadius + 3), Color.red);
-				}
-				else
-				{
-					Debug.DrawRay(DownRayStart.transform.position + RayCastBugDestroyer, DownR * (_hm.ShipRadius + 3), Color.yellow);
-				}
-			}
-			else
-			{
-				Debug.DrawRay(DownRayStart.transform.position + RayCastBugDestroyer, DownR * (_hm.ShipRadius + 3), Color.yellow);
-			}
-		}
-		else
-		{
-			DownBlocked = false;
-			Debug.DrawRay(DownRayStart.transform.position + RayCastBugDestroyer, DownR * (_hm.ShipRadius + 3), Color.green);
-		}
+	void FedSensorSystem()
+	{
+		ApplySensor(ForwardRayStart, gameObject.transform.TransformDirection(Vector3.forward), "Forward", true);
+        ApplySensor(LeftRayStart, gameObject.transform.TransformDirection(Vector3.left), "Left");
+        ApplySensor(RightRayStart, gameObject.transform.TransformDirection(Vector3.right), "Right");
+        ApplySensor(UpRayStart, gameObject.transform.TransformDirection(Vector3.up), "Up", true);
+		ApplySensor(DownRayStart, gameObject.transform.TransformDirection(Vector3.down), "Down", true);
+		ApplySensor(LeftRayStart, Quaternion.AngleAxis(-25, transform.up) * gameObject.transform.TransformDirection(Vector3.forward), "FLeft", true);
+		ApplySensor(RightRayStart, Quaternion.AngleAxis(25, transform.up) * gameObject.transform.TransformDirection(Vector3.forward), "FRight", true);
+       
 	}
 
 	public void Movement(Vector3 MovementPosition)
@@ -768,7 +702,7 @@ public class MoveComponent : MonoBehaviour
 			}
 		}
 		else
-		{			CurFleet = NotStateShips;
+		{			CurFleet = NotStateShips.ToList();
 		}
 	}
 }
