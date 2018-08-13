@@ -2161,10 +2161,7 @@ public class InterFaceControlScript : MonoBehaviour {
 		_sel.SetOrder("Guard");	}
 	public void PatrolOrder()
 	{
-		foreach (GameObject obj in _GDB.selectList)
-		{
-
-		}
+		_sel.SetOrder("Patrol");
 	}
 	public void StopOrder()
 	{

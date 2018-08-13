@@ -134,7 +134,8 @@ public class MoveComponent : MonoBehaviour
 
 	private float RollAngle;
 	private float PitchAngle;
-	private float ForwardSpeed;
+	[HideInInspector]
+	public float ForwardSpeed;
 
 	public float pitchInput = 0;
 	public float yawInput = 0;
@@ -220,11 +221,6 @@ public class MoveComponent : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (_hm.Team0 || _hm.Team1 || _hm.Team2 || _hm.Team3 || _hm.Team4 || _hm.Team5 || _hm.Team6 || _hm.Team7 || _hm.Team8 || _hm.Team9)
-		{
-			SetCurFleet(false, null);
-		}
-
 		if (CurFleet.Count > 0)
 		{
 			float minSpeed = CurFleet.Select(shipGO => shipGO.GetComponent<MoveComponent>()).Min(moveComp => moveComp.NormalSoloMoveSpeed);
@@ -246,16 +242,16 @@ public class MoveComponent : MonoBehaviour
 		}
 
 		if (InPatrol)
-		{			if (Vector3.Distance(gameObject.transform.position, PatrolWay[PatrolCurTarget]) > (_hm.ShipRadius + 2) + (MovementSpeed * MovementSpeed / 2) / MaxAcceleration)
+		{			if (Vector3.Distance(gameObject.transform.position, PatrolWay[PatrolCurTarget]) > (_hm.ShipRadius + 2) + (ForwardSpeed * ForwardSpeed / 2) / MaxAcceleration)
 			{				Movement(PatrolWay[PatrolCurTarget]);
 			}
 			else
 			{
-				if (PatrolCurTarget < PatrolWay.Count)
+				if (PatrolCurTarget < PatrolWay.Count-1)
 				{
 					PatrolCurTarget++;
 				}
-				else
+				else if (PatrolCurTarget >= PatrolWay.Count-1)
 				{
 					PatrolCurTarget = 0;
 				}
@@ -383,7 +379,7 @@ public class MoveComponent : MonoBehaviour
 
 		Vector3 TargetVec = TargetVector - transform.position;
 
-		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (MovementSpeed * MovementSpeed / 2) / MaxAccelerationIE)
+		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (ForwardSpeed * ForwardSpeed / 2) / MaxAccelerationIE)
 		{
 			if (Vector3.Dot(_rb.velocity, transform.forward) < LMoveSpeed)
 			{
@@ -459,7 +455,7 @@ public class MoveComponent : MonoBehaviour
 		_rb.angularDrag = Mathf.Abs(_rb.angularVelocity.magnitude - ((pitchInput + rollInput) / 2));
 
 		torque += pitchInput * transform.right;
-		torque += yawInput * 0.1f * transform.up;
+		torque += yawInput * 0.01f * transform.up;
 		torque += -rollInput * transform.forward;
 		torque += m_BankedTurnAmount * 0.5f * transform.up;
 		_rb.AddTorque(torque * ForwardSpeed * Factor * _rb.mass);
@@ -653,56 +649,45 @@ public class MoveComponent : MonoBehaviour
 		}
 	}
 
-
-	public void SetCurFleet(bool NotStateFleet, List<GameObject> NotStateShips)
+	public void RotateShipAndMoveToTarget(Vector3 Target, Vector3 MoveTarget, bool move = false, bool rotate = false)
 	{
-		if (!NotStateFleet)
+		float Amount = 0;
+		if (Amount < 1)
 		{
-			CtrlNum _CNS = FindObjectOfType<CtrlNum>().GetComponent<CtrlNum>();
+			Amount += Time.deltaTime / RotationAcceleration;
+		}
+		_rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Amount);
+		_rb.velocity = Vector3.Lerp(_rb.velocity, Vector3.zero, Amount);
+		_rb.angularDrag = 0;
 
-			if (_hm.Team0)
+		if (rotate)
+		{
+			Vector3 StartRot = Vector3.zero;
+
+			if (StartRot == Vector3.zero)
 			{
-				CurFleet = _CNS.Num0;
+				StartRot = gameObject.transform.localRotation.eulerAngles;
 			}
-			if (_hm.Team1)
-			{
-				CurFleet = _CNS.Num1;
-			}
-			if (_hm.Team2)
-			{
-				CurFleet = _CNS.Num2;
-			}
-			if (_hm.Team3)
-			{
-				CurFleet = _CNS.Num3;
-			}
-			if (_hm.Team4)
-			{
-				CurFleet = _CNS.Num4;
-			}
-			if (_hm.Team5)
-			{
-				CurFleet = _CNS.Num5;
-			}
-			if (_hm.Team6)
-			{
-				CurFleet = _CNS.Num6;
-			}
-			if (_hm.Team7)
-			{
-				CurFleet = _CNS.Num7;
-			}
-			if (_hm.Team8)
-			{
-				CurFleet = _CNS.Num8;
-			}
-			if (_hm.Team9)
-			{
-				CurFleet = _CNS.Num9;
-			}
+
+			gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(StartRot), Quaternion.Euler(Target), Amount);
 		}
-		else
-		{			CurFleet = NotStateShips.ToList();
+
+		if (move)
+		{
+			Vector3 StartPos = Vector3.zero;
+
+			if (StartPos == Vector3.zero)
+			{
+				StartPos = gameObject.transform.position;
+			}
+
+			gameObject.transform.position = Vector3.Slerp(StartPos, MoveTarget, Amount);
 		}
+	}
+
+
+	public void SetCurFleet(List<GameObject> NotStateShips)
+	{
+		CurFleet = NotStateShips.ToList();
 	}
 }

@@ -906,4 +906,17 @@ public class HealthModule : MonoBehaviour
 			GameObject.FindGameObjectWithTag("MainUI").GetComponent<BackgroudUI>().pictureSelectObject = gameObject.GetComponent<Station>().tex;
 		}
 	}
+
+	public void ResetTeam() {
+		Team0 = false;
+		Team1 = false;
+		Team2 = false;
+		Team3 = false;
+		Team4 = false;
+		Team5 = false;
+		Team6 = false;
+		Team7 = false;
+		Team8 = false;
+		Team9 = false;
+	}
 }

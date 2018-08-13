@@ -14,6 +14,8 @@ public class PatrolVisual : MonoBehaviour {
 	private Select _sel;
 	private GlobalDB _GDB;
 	private MoveComponent _CSMC;
+
+	private GameObject OldShip;
 	// Use this for initialization
 	void Start () {
 		_sel = gameObject.GetComponent<Select>();
@@ -54,6 +56,15 @@ public class PatrolVisual : MonoBehaviour {
 						}
 					}
 				}
+			}
+			else
+			{				foreach (GameObject obj in Points) { obj.SetActive(false);}
+				PatrolLine.gameObject.SetActive(false);
+			}
+
+			if (OldShip != _GDB.selectList[0])
+			{				PatrolWay.Clear();
+				OldShip = _GDB.selectList[0];
 			}
 		}
 		else

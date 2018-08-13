@@ -142,7 +142,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num1 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team1 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -155,7 +165,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num2 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team2 = false;
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -168,7 +188,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num3 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team3 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -181,7 +211,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num4 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team4 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -194,7 +234,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num5 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team5 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -207,7 +257,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num6 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team6 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -220,7 +280,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num7 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team7 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -233,7 +303,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num8 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team8 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -246,7 +326,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num9 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team9 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+							if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -259,7 +349,17 @@ public class CtrlNum : MonoBehaviour
 						if (_GDB.selectList.Count > 0 && _GDB.activeObjectInterface == null)
 						{
 							Num0 = _GDB.selectList.ToList();
-							obj1.GetComponent<HealthModule>().Team0 = false;
+							if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+							if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+							if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+							if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+							if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+							if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+							if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+							if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+							if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+
+							obj1.GetComponent<HealthModule>().ResetTeam();
 						}
 						else if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface != null)
 						{
@@ -554,4 +654,13 @@ public class CtrlNum : MonoBehaviour
 			}
 		}
 	}
+
+	bool FindInFleetList(GameObject obj, List<GameObject> Fleet)
+	{
+		foreach (GameObject selObj in Fleet)
+		{
+			if (selObj == obj)
+				return true;
+		}
+		return false;	}
 }

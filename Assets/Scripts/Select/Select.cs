@@ -108,6 +108,11 @@ public class Select : MonoBehaviour
 	public float LeftMClickTimer = 0.3f;
 
 	public bool LockOnPatrolSetting;
+
+	public bool LockSelection;
+
+	[HideInInspector]
+	public bool SettingPatrolWay;
 	// Use this for initialization
 	void Start()
 	{
@@ -145,7 +150,7 @@ public class Select : MonoBehaviour
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 				}
-				obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
+				obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
 			}
 		}
 	}
@@ -208,7 +213,7 @@ public class Select : MonoBehaviour
 						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
-					obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
+					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
 				}
 				else
 				{					obj.GetComponent<MoveComponent>().AddPatrolPoint(new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z));
@@ -224,105 +229,94 @@ public class Select : MonoBehaviour
 
 	void ShipOrder()
 	{
-		if (_GDB.selectList.Count != 0)
+		if (!LockSelection)
 		{
-			if (Input.mousePosition.y < 250 & Input.mousePosition.y > 0 & Input.mousePosition.x < 250 & Input.mousePosition.x > 0)
+			if (_GDB.selectList.Count != 0)
 			{
-				_ray = gameObject.GetComponent<MiniMap>().itsMinimapCamera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-			}
-			else
-			{
-				_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			}
-			if (Physics.Raycast(_ray, out _hit, 10000.0f))
-			{
-				if (OrderActive)
+				if (Input.mousePosition.y < 250 & Input.mousePosition.y > 0 & Input.mousePosition.x < 250 & Input.mousePosition.x > 0)
 				{
-					if (_hit.transform.tag == "Enemy" || _hit.transform.tag == "Dwarf" || _hit.transform.tag == "Freand" || _hit.transform.tag == "Neutral")
+					_ray = gameObject.GetComponent<MiniMap>().itsMinimapCamera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+				}
+				else
+				{
+					_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				}
+				if (Physics.Raycast(_ray, out _hit, 10000.0f))
+				{
+					if (OrderActive)
 					{
-						if (AttackOrder)
+						if (_hit.transform.tag == "Enemy" || _hit.transform.tag == "Dwarf" || _hit.transform.tag == "Freand" || _hit.transform.tag == "Neutral")
 						{
-							StateInSelectTarget(_CurHoveredShip.transform);
-						}
-						if (GuardOrder)
-						{
-							if (_CurHoveredShip.tag != "Enemy")
+							if (AttackOrder)
 							{
-								if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+								StateInSelectTarget(_CurHoveredShip.transform);
+							}
+							if (GuardOrder)
+							{
+								if (_CurHoveredShip.tag != "Enemy")
 								{
-									GuardEvent(_CurHoveredShip.transform);
-								}
-								else
-								{
-									OrderActive = false;
-									AttackOrder = false;
-									GuardOrder = false;
+									if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+									{
+										GuardEvent(_CurHoveredShip.transform);
+									}
+									else
+									{
+										OrderActive = false;
+										AttackOrder = false;
+										GuardOrder = false;
+									}
 								}
 							}
+							OrderActive = false;
+							AttackOrder = false;
+							GuardOrder = false;
 						}
-						OrderActive = false;
-						AttackOrder = false;
-						GuardOrder = false;
-					}
-					else
-					{
-						OrderActive = false;
-						AttackOrder = false;
-						GuardOrder = false;
-					}
-				}
-				if (_hit.transform.gameObject.tag == "Enemy")
-				{
-					foreach (GameObject obj in _GDB.selectList)
-					{
-						if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
+						else
 						{
-							StateInSelectTarget(_hit.transform);
+							OrderActive = false;
+							AttackOrder = false;
+							GuardOrder = false;
 						}
 					}
-				}
-				if (_hit.transform.gameObject.tag == "Terrain")
-				{
-					if (_CurHoveredShip == null)
+					if (_hit.transform.gameObject.tag == "Enemy")
 					{
 						foreach (GameObject obj in _GDB.selectList)
 						{
 							if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
 							{
-								StateInSelect(_hit.point);
+								StateInSelectTarget(_hit.transform);
 							}
 						}
 					}
-					else
+					if (_hit.transform.gameObject.tag == "Terrain")
 					{
-						if (!OrderActive)
+						if (_CurHoveredShip == null)
 						{
-							if (_CurHoveredShip.tag == "Enemy")
+							foreach (GameObject obj in _GDB.selectList)
 							{
-								foreach (GameObject obj in _GDB.selectList)
+								if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
 								{
-									if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
-									{
-										StateInSelectTarget(_CurHoveredShip.transform);
-									}
+									StateInSelect(_hit.point);
 								}
 							}
-							if (_hit.transform.gameObject.tag != "Enemy" && _hit.transform.gameObject.tag != "Terrain")
+						}
+						else
+						{
+							if (!OrderActive)
 							{
-								if (!_GDB.selectList[0].GetComponent<Stats>().miner)
+								if (_CurHoveredShip.tag == "Enemy")
 								{
-									if (!gameObject.GetComponent<AudioSource>().isPlaying)
+									foreach (GameObject obj in _GDB.selectList)
 									{
-										if (_GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count > 0)
+										if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
 										{
-											gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count)];
-											gameObject.GetComponent<AudioSource>().Play();
+											StateInSelectTarget(_CurHoveredShip.transform);
 										}
 									}
 								}
-								else
+								if (_hit.transform.gameObject.tag != "Enemy" && _hit.transform.gameObject.tag != "Terrain")
 								{
-									if (_hit.transform.gameObject.tag != "BuildingBuilding" && _hit.transform.gameObject.tag != "BuildingBuildingEnemy" && _hit.transform.gameObject.tag != "BuildingBuildingFreand")
+									if (!_GDB.selectList[0].GetComponent<Stats>().miner)
 									{
 										if (!gameObject.GetComponent<AudioSource>().isPlaying)
 										{
@@ -333,479 +327,541 @@ public class Select : MonoBehaviour
 											}
 										}
 									}
-								}
-							}
-						}
-						else
-						{
-							if (_CurHoveredShip.tag == "Enemy" || _CurHoveredShip.tag == "Dwarf" || _CurHoveredShip.tag == "Freand" || _CurHoveredShip.tag == "Neutral")
-							{
-								foreach (GameObject obj in _GDB.selectList)
-								{
-									if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
+									else
 									{
-										if (AttackOrder)
+										if (_hit.transform.gameObject.tag != "BuildingBuilding" && _hit.transform.gameObject.tag != "BuildingBuildingEnemy" && _hit.transform.gameObject.tag != "BuildingBuildingFreand")
 										{
-											StateInSelectTarget(_CurHoveredShip.transform);
-										}
-										if (GuardOrder)
-										{
-											if (_CurHoveredShip.tag != "Enemy")
+											if (!gameObject.GetComponent<AudioSource>().isPlaying)
 											{
-												if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+												if (_GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count > 0)
 												{
-													GuardEvent(_CurHoveredShip.transform);
-												}
-												else
-												{
-													OrderActive = false;
-													AttackOrder = false;
-													GuardOrder = false;
+													gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count)];
+													gameObject.GetComponent<AudioSource>().Play();
 												}
 											}
 										}
-										OrderActive = false;
-										AttackOrder = false;
-										GuardOrder = false;
-									}
-									else
-									{
-										OrderActive = false;
-										AttackOrder = false;
-										GuardOrder = false;
 									}
 								}
 							}
 							else
 							{
-								OrderActive = false;
-								AttackOrder = false;
-								GuardOrder = false;
-							}
-						}
-					}
-				}
-			}
-		}
-		if (_GDB.activeObjectInterface)
-		{
-			if (Input.mousePosition.y < 250 & Input.mousePosition.y > 0 & Input.mousePosition.x < 250 & Input.mousePosition.x > 0)
-			{
-				_ray = gameObject.GetComponent<MiniMap>().itsMinimapCamera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-			}
-			else
-			{
-				_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			}
-			if (Physics.Raycast(_ray, out _hit, 10000.0f))
-			{
-				if (!OrderActive)
-				{
-					if (_hit.transform.gameObject.tag == "Enemy")
-					{
-						if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
-						{
-							_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
-						}
-					}
-					if (_hit.transform.gameObject.tag == "Terrain")
-					{
-						if (_CurHoveredShip == null)
-						{
-
-						}
-						else
-						{
-							if (_CurHoveredShip.tag == "Enemy")
-							{
-								if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
+								if (_CurHoveredShip.tag == "Enemy" || _CurHoveredShip.tag == "Dwarf" || _CurHoveredShip.tag == "Freand" || _CurHoveredShip.tag == "Neutral")
 								{
-									_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
+									foreach (GameObject obj in _GDB.selectList)
+									{
+										if (!obj.GetComponent<Stats>().AI && !obj.GetComponent<Stats>().FreandAI)
+										{
+											if (AttackOrder)
+											{
+												StateInSelectTarget(_CurHoveredShip.transform);
+											}
+											if (GuardOrder)
+											{
+												if (_CurHoveredShip.tag != "Enemy")
+												{
+													if (_CurHoveredShip.GetComponent<HealthModule>().ShipsForDefence.Count < 12)
+													{
+														GuardEvent(_CurHoveredShip.transform);
+													}
+													else
+													{
+														OrderActive = false;
+														AttackOrder = false;
+														GuardOrder = false;
+													}
+												}
+											}
+											OrderActive = false;
+											AttackOrder = false;
+											GuardOrder = false;
+										}
+										else
+										{
+											OrderActive = false;
+											AttackOrder = false;
+											GuardOrder = false;
+										}
+									}
+								}
+								else
+								{
+									OrderActive = false;
+									AttackOrder = false;
+									GuardOrder = false;
 								}
 							}
 						}
 					}
 				}
+			}
+			if (_GDB.activeObjectInterface)
+			{
+				if (Input.mousePosition.y < 250 & Input.mousePosition.y > 0 & Input.mousePosition.x < 250 & Input.mousePosition.x > 0)
+				{
+					_ray = gameObject.GetComponent<MiniMap>().itsMinimapCamera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+				}
 				else
 				{
-					if (_hit.transform.gameObject.tag == "Enemy" || _hit.transform.gameObject.tag == "Dwarf" || _hit.transform.gameObject.tag == "Freand" || _hit.transform.gameObject.tag == "Neutral")
+					_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				}
+				if (Physics.Raycast(_ray, out _hit, 10000.0f))
+				{
+					if (!OrderActive)
 					{
-
-						if (AttackOrder)
+						if (_hit.transform.gameObject.tag == "Enemy")
 						{
 							if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
 							{
 								_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
 							}
 						}
-						OrderActive = false;
-						AttackOrder = false;
-						GuardOrder = false;
-					}
-					else if (_hit.transform.gameObject.tag == "Terrain")
-					{
-						if (_CurHoveredShip == null)
+						if (_hit.transform.gameObject.tag == "Terrain")
 						{
-							OrderActive = false;
-							AttackOrder = false;
-							GuardOrder = false;
-						}
-						else
-						{
-							if (_CurHoveredShip.tag == "Enemy" || _CurHoveredShip.tag == "Dwarf" || _CurHoveredShip.tag == "Freand" || _CurHoveredShip.tag == "Neutral")
+							if (_CurHoveredShip == null)
 							{
-								if (AttackOrder)
+
+							}
+							else
+							{
+								if (_CurHoveredShip.tag == "Enemy")
 								{
 									if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
 									{
 										_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
 									}
 								}
-								OrderActive = false;
-								AttackOrder = false;
-								GuardOrder = false;
-							}
-							else
-							{
-								OrderActive = false;
-								AttackOrder = false;
-								GuardOrder = false;
 							}
 						}
 					}
 					else
 					{
-						OrderActive = false;
-						AttackOrder = false;
-						GuardOrder = false;
-					}
-				}
-			}
-		}
-	}
-
-	void Update()
-	{
-		float X;
-		float Y;
-		X = Screen.width / 100;
-		Y = Screen.height / 100;
-		_rayShipHover = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-		if (LeftMClickCount > 0)
-		{
-			if (LeftMClickTimer > 0)
-			{
-				LeftMClickTimer -= Time.deltaTime;
-			}
-			else
-			{
-				LeftMClickCount = 0;
-				LeftMClickTimer = 0.3f;
-			}
-		}
-
-		if (Input.GetMouseButtonDown(0))
-		{
-			isSelect = true;
-			_selXOld = Input.mousePosition.x;
-			_selYOld = Input.mousePosition.y;
-
-			_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			_rayWOTerrain = Camera.main.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast(_ray, out _hit, 10000.0f))
-			{
-				_startPoint = Input.mousePosition;
-				if (_hit.transform.gameObject.GetComponent<Stats>())
-				{
-					if (_hit.transform.gameObject.tag == "Dwarf" || _hit.transform.gameObject.tag == "Enemy" || _hit.transform.gameObject.tag == "Freand" || _hit.transform.gameObject.tag == "Neutral")
-					{
-						isSelect = false;
-						LeftMClickCount += 1;
-						if (_hit.transform.gameObject.GetComponent<Stats>().SelectLock == false)
+						if (_hit.transform.gameObject.tag == "Enemy" || _hit.transform.gameObject.tag == "Dwarf" || _hit.transform.gameObject.tag == "Freand" || _hit.transform.gameObject.tag == "Neutral")
 						{
-							if (_GDB.selectList.Count <= 0)
+
+							if (AttackOrder)
 							{
-								if (!FindInSelectList(_hit.transform.gameObject))
+								if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
 								{
-									_GDB.selectList.Add(_hit.transform.gameObject);
+									_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
 								}
 							}
-							if (_GDB.selectList.Count > 1)
-							{
-								if (!Input.GetKey(KeyCode.LeftShift))
-								{
-									_GDB.selectList.Clear();
-								}
-								if (!FindInSelectList(_hit.transform.gameObject))
-								{
-									_GDB.selectList.Add(_hit.transform.gameObject);
-								}
-							}
-							if (_GDB.selectList.Count == 1)
-							{
-								if (LeftMClickCount == 2)
-								{
-									FindShipType(_hit.transform.gameObject.GetComponent<Stats>().classname);
-								}
-								else
-								{
-									if (!Input.GetKey(KeyCode.LeftShift))
-									{
-										_GDB.selectList[0] = _hit.transform.gameObject;
-									}
-									else
-									{
-										if (!FindInSelectList(_hit.transform.gameObject))
-										{
-											_GDB.selectList.Add(_hit.transform.gameObject);
-										}
-									}
-								}
-							}
-							if (!_hit.transform.gameObject.GetComponent<Stats>().AI && !_hit.transform.gameObject.GetComponent<Stats>().FreandAI && !_hit.transform.gameObject.GetComponent<Stats>().Neutral && !_hit.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
-							{
-								if (!gameObject.GetComponent<AudioSource>().isPlaying)
-								{
-									gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
-									gameObject.GetComponent<AudioSource>().Play();
-								}
-							}
+							OrderActive = false;
+							AttackOrder = false;
+							GuardOrder = false;
 						}
-					}
-				}
-				if (_hit.transform.gameObject.GetComponent<Station>())
-				{
-					isSelect = false;
-					if (_hit.transform.gameObject.GetComponent<ObjectTypeVisible>().IsVisible)
-					{
-						if (_GDB.activeObjectInterface != null)
+						else if (_hit.transform.gameObject.tag == "Terrain")
 						{
-							_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = false;
-
-							if (_GDB.selectList.Count <= 0)
+							if (_CurHoveredShip == null)
 							{
-								_GDB.activeObjectInterface = _hit.transform.gameObject;
-								_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
+								OrderActive = false;
+								AttackOrder = false;
+								GuardOrder = false;
 							}
 							else
 							{
-								_GDB.selectList.Clear();
-
-								_GDB.activeObjectInterface = _hit.transform.gameObject;
-								_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
-							}
-							if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
-							{
-								if (!gameObject.GetComponent<AudioSource>().isPlaying)
+								if (_CurHoveredShip.tag == "Enemy" || _CurHoveredShip.tag == "Dwarf" || _CurHoveredShip.tag == "Freand" || _CurHoveredShip.tag == "Neutral")
 								{
-									gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
-									gameObject.GetComponent<AudioSource>().Play();
+									if (AttackOrder)
+									{
+										if (_GDB.activeObjectInterface.GetComponent<WeaponModule>())
+										{
+											_GDB.activeObjectInterface.GetComponent<WeaponModule>().target = _hit.transform.gameObject;
+										}
+									}
+									OrderActive = false;
+									AttackOrder = false;
+									GuardOrder = false;
+								}
+								else
+								{
+									OrderActive = false;
+									AttackOrder = false;
+									GuardOrder = false;
 								}
 							}
 						}
 						else
 						{
-							if (_GDB.selectList.Count <= 0)
-							{
-								_GDB.activeObjectInterface = _hit.transform.gameObject;
-								_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
-							}
-							else
-							{
-								_GDB.selectList.Clear();
+							OrderActive = false;
+							AttackOrder = false;
+							GuardOrder = false;
+						}
+					}
+				}
+			}
+		}
+	}
+	void SettingPatrol()
+	{
+		int i = 0;
 
-								_GDB.activeObjectInterface = _hit.transform.gameObject;
-								_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
-							}
-							if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
+		if (_GDB.selectList.Count > 0)
+		{
+			foreach (GameObject obj in _GDB.selectList)
+			{
+				Stats _ost = obj.GetComponent<Stats>();
+
+				if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+				{
+					if (Input.GetMouseButtonDown(0))
+					{
+						Ray STR = Camera.main.ScreenPointToRay(Input.mousePosition);
+						RaycastHit STRH;
+						if (Physics.Raycast(STR, out STRH, 10000.0f))
+						{
+							if (STRH.transform.gameObject.tag == "Terrain")
 							{
-								if (!gameObject.GetComponent<AudioSource>().isPlaying)
+								obj.GetComponent<MoveComponent>().AddPatrolPoint(new Vector3(STRH.point.x + pos[i].x, STRH.point.y, STRH.point.z + pos[i].z));
+								i++;
+							}
+						}
+					}
+					if (Input.GetMouseButtonUp(1))
+					{
+						ActivatePatrol();
+
+						LockSelection = false;
+						isSelect = false;
+						SettingPatrolWay = false;
+					}
+				}
+			}
+		}
+	}
+	void LateUpdate()
+	{
+
+	}
+	void Update()
+	{
+		if (SettingPatrolWay)
+		{
+			SettingPatrol();
+		}
+
+		if (!LockSelection)
+		{
+			float X;
+			float Y;
+			X = Screen.width / 100;
+			Y = Screen.height / 100;
+			_rayShipHover = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+			if (LeftMClickCount > 0)
+			{
+				if (LeftMClickTimer > 0)
+				{
+					LeftMClickTimer -= Time.deltaTime;
+				}
+				else
+				{
+					LeftMClickCount = 0;
+					LeftMClickTimer = 0.3f;
+				}
+			}
+
+			if (Input.GetMouseButtonDown(0))
+			{
+				isSelect = true;
+				_selXOld = Input.mousePosition.x;
+				_selYOld = Input.mousePosition.y;
+
+				_ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				_rayWOTerrain = Camera.main.ScreenPointToRay(Input.mousePosition);
+				if (Physics.Raycast(_ray, out _hit, 10000.0f))
+				{
+					_startPoint = Input.mousePosition;
+					if (_hit.transform.gameObject.GetComponent<Stats>())
+					{
+						if (_hit.transform.gameObject.tag == "Dwarf" || _hit.transform.gameObject.tag == "Enemy" || _hit.transform.gameObject.tag == "Freand" || _hit.transform.gameObject.tag == "Neutral")
+						{
+							isSelect = false;
+							LeftMClickCount += 1;
+							if (_hit.transform.gameObject.GetComponent<Stats>().SelectLock == false)
+							{
+								if (_GDB.selectList.Count <= 0)
 								{
-									gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
-									gameObject.GetComponent<AudioSource>().Play();
+									if (!FindInSelectList(_hit.transform.gameObject))
+									{
+										_GDB.selectList.Add(_hit.transform.gameObject);
+									}
+								}
+								if (_GDB.selectList.Count > 1)
+								{
+									if (!Input.GetKey(KeyCode.LeftShift))
+									{
+										_GDB.selectList.Clear();
+									}
+									if (!FindInSelectList(_hit.transform.gameObject))
+									{
+										_GDB.selectList.Add(_hit.transform.gameObject);
+									}
+								}
+								if (_GDB.selectList.Count == 1)
+								{
+									if (LeftMClickCount == 2)
+									{
+										FindShipType(_hit.transform.gameObject.GetComponent<Stats>().classname);
+									}
+									else
+									{
+										if (!Input.GetKey(KeyCode.LeftShift))
+										{
+											_GDB.selectList[0] = _hit.transform.gameObject;
+										}
+										else
+										{
+											if (!FindInSelectList(_hit.transform.gameObject))
+											{
+												_GDB.selectList.Add(_hit.transform.gameObject);
+											}
+										}
+									}
+								}
+								if (!_hit.transform.gameObject.GetComponent<Stats>().AI && !_hit.transform.gameObject.GetComponent<Stats>().FreandAI && !_hit.transform.gameObject.GetComponent<Stats>().Neutral && !_hit.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
+								{
+									if (!gameObject.GetComponent<AudioSource>().isPlaying)
+									{
+										gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+										gameObject.GetComponent<AudioSource>().Play();
+									}
 								}
 							}
 						}
 					}
-				}
-
-				if (_hit.transform.gameObject.tag == "Terrain")
-				{
-					_GDB.activeObjectInterface = null;
-
-					int layerMask = 1 << 17;
-					if (Physics.Raycast(_rayWOTerrain, out _hitWOTerrain, 10000.0f, layerMask))
+					if (_hit.transform.gameObject.GetComponent<Station>())
 					{
-						if (_hitWOTerrain.transform.gameObject.GetComponent<Stats>())
+						isSelect = false;
+						if (_hit.transform.gameObject.GetComponent<ObjectTypeVisible>().IsVisible)
 						{
-							if (_hitWOTerrain.transform.gameObject.tag == "Dwarf" || _hitWOTerrain.transform.gameObject.tag == "Enemy" || _hitWOTerrain.transform.gameObject.tag == "Freand" || _hitWOTerrain.transform.gameObject.tag == "Neutral")
+							if (_GDB.activeObjectInterface != null)
 							{
-								isSelect = false;
-								if (_hitWOTerrain.transform.gameObject.GetComponent<Stats>().SelectLock == false)
+								_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = false;
+
+								if (_GDB.selectList.Count <= 0)
 								{
-									if (_GDB.selectList.Count <= 0)
+									_GDB.activeObjectInterface = _hit.transform.gameObject;
+									_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
+								}
+								else
+								{
+									_GDB.selectList.Clear();
+
+									_GDB.activeObjectInterface = _hit.transform.gameObject;
+									_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
+								}
+								if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
+								{
+									if (!gameObject.GetComponent<AudioSource>().isPlaying)
 									{
-										if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
-										{
-											_GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
-										}
+										gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
+										gameObject.GetComponent<AudioSource>().Play();
 									}
-									if (_GDB.selectList.Count > 1)
+								}
+							}
+							else
+							{
+								if (_GDB.selectList.Count <= 0)
+								{
+									_GDB.activeObjectInterface = _hit.transform.gameObject;
+									_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
+								}
+								else
+								{
+									_GDB.selectList.Clear();
+
+									_GDB.activeObjectInterface = _hit.transform.gameObject;
+									_GDB.activeObjectInterface.gameObject.GetComponent<Station>().visible = true;
+								}
+								if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
+								{
+									if (!gameObject.GetComponent<AudioSource>().isPlaying)
 									{
-										if (!Input.GetKey(KeyCode.LeftShift))
-										{
-											_GDB.selectList.Clear();
-										}
-										if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
-										{
-											_GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
-										}
+										gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
+										gameObject.GetComponent<AudioSource>().Play();
 									}
-									if (_GDB.selectList.Count == 1)
+								}
+							}
+						}
+					}
+
+					if (_hit.transform.gameObject.tag == "Terrain")
+					{
+						_GDB.activeObjectInterface = null;
+
+						int layerMask = 1 << 17;
+						if (Physics.Raycast(_rayWOTerrain, out _hitWOTerrain, 10000.0f, layerMask))
+						{
+							if (_hitWOTerrain.transform.gameObject.GetComponent<Stats>())
+							{
+								if (_hitWOTerrain.transform.gameObject.tag == "Dwarf" || _hitWOTerrain.transform.gameObject.tag == "Enemy" || _hitWOTerrain.transform.gameObject.tag == "Freand" || _hitWOTerrain.transform.gameObject.tag == "Neutral")
+								{
+									isSelect = false;
+									if (_hitWOTerrain.transform.gameObject.GetComponent<Stats>().SelectLock == false)
 									{
-										if (!Input.GetKey(KeyCode.LeftShift))
-										{
-											_GDB.selectList[0] = _hitWOTerrain.transform.gameObject;
-										}
-										else
+										if (_GDB.selectList.Count <= 0)
 										{
 											if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
 											{
 												_GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
 											}
 										}
-									}
-									if (!_hitWOTerrain.transform.gameObject.GetComponent<Stats>().AI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().FreandAI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().Neutral && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
-									{
-										if (!gameObject.GetComponent<AudioSource>().isPlaying)
+										if (_GDB.selectList.Count > 1)
 										{
-											gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
-											gameObject.GetComponent<AudioSource>().Play();
+											if (!Input.GetKey(KeyCode.LeftShift))
+											{
+												_GDB.selectList.Clear();
+											}
+											if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
+											{
+												_GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
+											}
+										}
+										if (_GDB.selectList.Count == 1)
+										{
+											if (!Input.GetKey(KeyCode.LeftShift))
+											{
+												_GDB.selectList[0] = _hitWOTerrain.transform.gameObject;
+											}
+											else
+											{
+												if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
+												{
+													_GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
+												}
+											}
+										}
+										if (!_hitWOTerrain.transform.gameObject.GetComponent<Stats>().AI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().FreandAI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().Neutral && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
+										{
+											if (!gameObject.GetComponent<AudioSource>().isPlaying)
+											{
+												gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+												gameObject.GetComponent<AudioSource>().Play();
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-					else
-					{
-						if (!Input.GetKey(KeyCode.LeftShift))
+						else
 						{
-							_GDB.selectList.Clear();
+							if (!Input.GetKey(KeyCode.LeftShift))
+							{
+								_GDB.selectList.Clear();
+							}
 						}
 					}
 				}
 			}
-		}
 
-		if (Input.GetMouseButtonUp(0))
-		{
-			isSelect = false;
-			if (Input.mousePosition.y < Y * 25 & Input.mousePosition.y > Y * 0 & Input.mousePosition.x < X * 14 & Input.mousePosition.x > X * 0)
+			if (Input.GetMouseButtonUp(0))
 			{
+				isSelect = false;
+				if (Input.mousePosition.y < Y * 25 & Input.mousePosition.y > Y * 0 & Input.mousePosition.x < X * 14 & Input.mousePosition.x > X * 0)
+				{
+				}
+				else
+				{
+					_endPoint = Input.mousePosition;
+					FindSelect();
+				}
 			}
-			else
+
+			if (isSelect)
 			{
-				_endPoint = Input.mousePosition;
-				FindSelect();
+				_selX = Input.mousePosition.x;
+				_selY = Screen.height - Input.mousePosition.y;
+				_selWidth = _selXOld - Input.mousePosition.x;
+				_selHeight = Input.mousePosition.y - _selYOld;
 			}
-		}
+			if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface == null)
+			{
+				MSDActive = true;
+				OrdersActive = false;
+				SpecialActive = false;
+				BuildActive = false;
+			}
+			if (Input.GetMouseButtonDown(1))
+			{
+				ShipOrder();
+			}
+			if (_GDB.selectList.Count != 0)
+			{
+				gameObject.GetComponent<BackgroudUI>().pictureSelectObject = _GDB.selectList[0].GetComponent<Stats>().icon;
+			}
 
-		if (isSelect)
-		{
-			_selX = Input.mousePosition.x;
-			_selY = Screen.height - Input.mousePosition.y;
-			_selWidth = _selXOld - Input.mousePosition.x;
-			_selHeight = Input.mousePosition.y - _selYOld;
-		}
-		if (_GDB.selectList.Count == 0 && _GDB.activeObjectInterface == null)
-		{
-			MSDActive = true;
-			OrdersActive = false;
-			SpecialActive = false;
-			BuildActive = false;
-		}
-		if (Input.GetMouseButtonDown(1))
-		{
-			ShipOrder();
-		}
-		if (_GDB.selectList.Count != 0)
-		{
-			gameObject.GetComponent<BackgroudUI>().pictureSelectObject = _GDB.selectList[0].GetComponent<Stats>().icon;
-		}
+			List<GameObject> OldSelectList = new List<GameObject>();
 
-		List<GameObject> OldSelectList = new List<GameObject>();
-
-		if (_GDB.selectList.Count == 0)
-		{
-			if (radius.Count > 0)
+			if (_GDB.selectList.Count == 0)
+			{
+				if (radius.Count > 0)
+				{
+					radius.Clear();
+				}
+			}
+			if (OldSelectList != _GDB.selectList)
 			{
 				radius.Clear();
+				OldSelectList = _GDB.selectList;
 			}
-		}
-		if (OldSelectList != _GDB.selectList)
-		{
-			radius.Clear();
-			OldSelectList = _GDB.selectList;
-		}
-		if (radius.Count < _GDB.selectList.Count)
-		{
-			foreach (GameObject obj in _GDB.selectList)
+			if (radius.Count < _GDB.selectList.Count)
 			{
-				radius.Add(obj.GetComponent<HealthModule>().ShipRadius);
-			}
-		}
-		if (radius.Count != 0)
-		{
-			MaxRadius = radius.Max();
-		}
-		if (_GDB.selectList.Count > 0)
-		{
-			if (_GDB.selectList.Count > 1)
-			{
-				pos[1].x = -1 * MaxRadius * 4;
-				pos[1].z = 0;
-				if (_GDB.selectList.Count > 2)
+				foreach (GameObject obj in _GDB.selectList)
 				{
-					pos[2].x = 0;
-					pos[2].z = -1 * MaxRadius * 4;
-					if (_GDB.selectList.Count > 3)
+					radius.Add(obj.GetComponent<HealthModule>().ShipRadius);
+				}
+			}
+			if (radius.Count != 0)
+			{
+				MaxRadius = radius.Max();
+			}
+			if (_GDB.selectList.Count > 0)
+			{
+				if (_GDB.selectList.Count > 1)
+				{
+					pos[1].x = -1 * MaxRadius * 4;
+					pos[1].z = 0;
+					if (_GDB.selectList.Count > 2)
 					{
-						pos[3].x = -1 * MaxRadius * 4;
-						pos[3].z = -1 * MaxRadius * 4;
-						if (_GDB.selectList.Count > 4)
+						pos[2].x = 0;
+						pos[2].z = -1 * MaxRadius * 4;
+						if (_GDB.selectList.Count > 3)
 						{
-							pos[4].x = -1 * (MaxRadius * 4) * 2;
-							pos[4].z = 0;
-							if (_GDB.selectList.Count > 5)
+							pos[3].x = -1 * MaxRadius * 4;
+							pos[3].z = -1 * MaxRadius * 4;
+							if (_GDB.selectList.Count > 4)
 							{
-								pos[5].x = -1 * (MaxRadius * 4) * 2;
-								pos[5].z = -1 * MaxRadius * 4;
-								if (_GDB.selectList.Count > 6)
+								pos[4].x = -1 * (MaxRadius * 4) * 2;
+								pos[4].z = 0;
+								if (_GDB.selectList.Count > 5)
 								{
-									pos[6].x = 0;
-									pos[6].z = -1 * (MaxRadius * 4) * 2;
-									if (_GDB.selectList.Count > 7)
+									pos[5].x = -1 * (MaxRadius * 4) * 2;
+									pos[5].z = -1 * MaxRadius * 4;
+									if (_GDB.selectList.Count > 6)
 									{
-										pos[7].x = -1 * MaxRadius * 4;
-										pos[7].z = -1 * (MaxRadius * 4) * 2;
-										if (_GDB.selectList.Count > 8)
+										pos[6].x = 0;
+										pos[6].z = -1 * (MaxRadius * 4) * 2;
+										if (_GDB.selectList.Count > 7)
 										{
-											pos[8].x = -1 * (MaxRadius * 4) * 2;
-											pos[8].z = -1 * (MaxRadius * 4) * 2;
-											if (_GDB.selectList.Count > 9)
+											pos[7].x = -1 * MaxRadius * 4;
+											pos[7].z = -1 * (MaxRadius * 4) * 2;
+											if (_GDB.selectList.Count > 8)
 											{
-												pos[9].x = -1 * (MaxRadius * 4) * 3;
-												pos[9].z = 0;
-												if (_GDB.selectList.Count > 10)
+												pos[8].x = -1 * (MaxRadius * 4) * 2;
+												pos[8].z = -1 * (MaxRadius * 4) * 2;
+												if (_GDB.selectList.Count > 9)
 												{
-													pos[10].x = -1 * (MaxRadius * 4) * 3;
-													pos[10].z = -1 * MaxRadius * 4;
-													if (_GDB.selectList.Count > 11)
+													pos[9].x = -1 * (MaxRadius * 4) * 3;
+													pos[9].z = 0;
+													if (_GDB.selectList.Count > 10)
 													{
-														pos[11].x = -1 * (MaxRadius * 4) * 3;
-														pos[11].z = -1 * (MaxRadius * 4) * 2;
+														pos[10].x = -1 * (MaxRadius * 4) * 3;
+														pos[10].z = -1 * MaxRadius * 4;
+														if (_GDB.selectList.Count > 11)
+														{
+															pos[11].x = -1 * (MaxRadius * 4) * 3;
+															pos[11].z = -1 * (MaxRadius * 4) * 2;
+														}
 													}
 												}
 											}
@@ -817,51 +873,66 @@ public class Select : MonoBehaviour
 					}
 				}
 			}
-		}
 
 
-		if (Physics.Raycast(_rayShipHover, out _hitShipHover, 10000.0f, layerMaskForShipHover))
-		{
-			_CurHoveredShip = _hitShipHover.transform.gameObject;
-			if (_hitShipHover.transform.gameObject.GetComponent<Stats>())
+			if (Physics.Raycast(_rayShipHover, out _hitShipHover, 10000.0f, layerMaskForShipHover))
 			{
-				if (_hitShipHover.transform.gameObject.GetComponent<ObjectTypeVisible>().IsVisible)
+				_CurHoveredShip = _hitShipHover.transform.gameObject;
+				if (_hitShipHover.transform.gameObject.GetComponent<Stats>())
 				{
-
-					if (_LastHoveredShip != _CurHoveredShip)
+					if (_hitShipHover.transform.gameObject.GetComponent<ObjectTypeVisible>().IsVisible)
 					{
-						if (_LastHoveredShip != null)
+
+						if (_LastHoveredShip != _CurHoveredShip)
 						{
-							Stats _st2 = _LastHoveredShip.GetComponent<Stats>();
-							_st2.ShadowProjectorActive = false;
-							if (!_st2.SelectLock)
+							if (_LastHoveredShip != null)
 							{
-								_st2.HoverCursore = false;
-								_st2.Selected = false;
-								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().HoverBool = false;
+								Stats _st2 = _LastHoveredShip.GetComponent<Stats>();
+								_st2.ShadowProjectorActive = false;
+								if (!_st2.SelectLock)
+								{
+									_st2.HoverCursore = false;
+									_st2.Selected = false;
+									GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().HoverBool = false;
+								}
+								if (_GDB.selectList.Count >= 1)
+								{
+									GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
+								}
+								if (!_st2.ShadowProjectorActive)
+								{
+									_LastHoveredShip = _CurHoveredShip;
+								}
 							}
-							if (_GDB.selectList.Count >= 1)
-							{
-								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
-							}
-							if (!_st2.ShadowProjectorActive)
+							else
 							{
 								_LastHoveredShip = _CurHoveredShip;
 							}
 						}
-						else
+
+						Stats _st = _hitShipHover.transform.gameObject.GetComponent<Stats>();
+
+						_st.ShadowProjectorActive = true;
+
+						if (_st.AI)
 						{
-							_LastHoveredShip = _CurHoveredShip;
+							if (_GDB.selectList.Count == 0)
+							{
+								if (!_st.SelectLock)
+								{
+									_st.HoverCursore = true;
+									_st.Selected = true;
+								}
+							}
+							if (_GDB.selectList.Count >= 1 || _GDB.activeObjectInterface.GetComponent<WeaponModule>())
+							{
+								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = true;
+								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
+								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
+								GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
+							}
 						}
-					}
-
-					Stats _st = _hitShipHover.transform.gameObject.GetComponent<Stats>();
-
-					_st.ShadowProjectorActive = true;
-
-					if (_st.AI)
-					{
-						if (_GDB.selectList.Count == 0)
+						if (!_st.AI)
 						{
 							if (!_st.SelectLock)
 							{
@@ -869,51 +940,36 @@ public class Select : MonoBehaviour
 								_st.Selected = true;
 							}
 						}
-						if (_GDB.selectList.Count >= 1 || _GDB.activeObjectInterface.GetComponent<WeaponModule>())
-						{
-							GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = true;
-							GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-							GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-							GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-						}
-					}
-					if (!_st.AI)
-					{
-						if (!_st.SelectLock)
-						{
-							_st.HoverCursore = true;
-							_st.Selected = true;
-						}
 					}
 				}
 			}
-		}
-		else
-		{
-			_CurHoveredShip = null;
-			if (_LastHoveredShip != null)
+			else
 			{
-				Stats _st = _LastHoveredShip.GetComponent<Stats>();
-				_st.ShadowProjectorActive = false;
-				if (!_st.SelectLock)
+				_CurHoveredShip = null;
+				if (_LastHoveredShip != null)
 				{
-					_st.HoverCursore = false;
-					_st.Selected = false;
-					GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().HoverBool = false;
-				}
-				if (_GDB.selectList.Count >= 1)
-				{
-					GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
-				}
-				if (!_st.ShadowProjectorActive)
-				{
-					_LastHoveredShip = null;
+					Stats _st = _LastHoveredShip.GetComponent<Stats>();
+					_st.ShadowProjectorActive = false;
+					if (!_st.SelectLock)
+					{
+						_st.HoverCursore = false;
+						_st.Selected = false;
+						GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().HoverBool = false;
+					}
+					if (_GDB.selectList.Count >= 1)
+					{
+						GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
+					}
+					if (!_st.ShadowProjectorActive)
+					{
+						_LastHoveredShip = null;
+					}
 				}
 			}
-		}
-		if (LockOnPatrolSetting)
-		{
-			ActivatePatrol();
+			if (LockOnPatrolSetting)
+			{
+				ActivatePatrol();
+			}
 		}
 	}
 
@@ -940,7 +996,7 @@ public class Select : MonoBehaviour
 						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
-					obj.GetComponent<MoveComponent>().SetCurFleet(true, _GDB.selectList);
+					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
 
 					LockOnPatrolSetting = false;
 				}
@@ -1123,140 +1179,134 @@ public class Select : MonoBehaviour
 			ActiveState _as = selObj.GetComponent<ActiveState>();
 			Stats _st = selObj.GetComponent<Stats>();
 			MoveComponent _mc = selObj.GetComponent<MoveComponent>();
-			if (Order == "RedAlert")
+			switch (Order)
 			{
-				_as.Agrass = true;
-				_as.Protact = false;
-				_as.Idle = false;
-			}
-			if (Order == "YellowAlert")
-			{
-				_as.Protact = true;
-				_as.Agrass = false;
-				_as.Idle = false;
-			}
-			if (Order == "GreenAlert")
-			{
-				_as.Idle = true;
-				_as.Agrass = false;
-				_as.Protact = false;
-			}
-			if (Order == "ImpulsAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = true;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "WarpEngingAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = true;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "PrimaryWeaponAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = true;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "SecondaryWeaponAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = true;
-			}
-			if (Order == "LifeSupportAttack")
-			{
-				_as.LifeSupportSystemAttack = true;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "TractorAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = true;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "WarpCoreAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = true;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "SensorAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = true;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
-			if (Order == "NormalAttack")
-			{
-				_as.LifeSupportSystemAttack = false;
-				_as.ImpulseSystemAttack = false;
-				_as.PrimaryWeaponSystemAttack = false;
-				_as.SensorsSystemAttack = false;
-				_as.TractorBeamSystemAttack = false;
-				_as.WarpEngingSystemAttack = false;
-				_as.WarpCoreAttack = false;
-				_as.SecondaryWeaponSystemAttack = false;
-			}
+				case "RedAlert":
+					_as.Agrass = true;
+					_as.Protact = false;
+					_as.Idle = false;
+					break;
+				case "YellowAlert":
+					_as.Protact = true;
+					_as.Agrass = false;
+					_as.Idle = false;
+					break;
+				case "GreenAlert":
+					_as.Idle = true;
+					_as.Agrass = false;
+					_as.Protact = false;
+					break;
+				case "ImpulsAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = true;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "WarpEngingAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = true;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "PrimaryWeaponAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = true;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "SecondaryWeaponAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = true;
+					break;
+				case "LifeSupportAttack":
+					_as.LifeSupportSystemAttack = true;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "TractorAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = true;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "WarpCoreAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = true;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "SensorAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = true;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
+				case "NormalAttack":
+					_as.LifeSupportSystemAttack = false;
+					_as.ImpulseSystemAttack = false;
+					_as.PrimaryWeaponSystemAttack = false;
+					_as.SensorsSystemAttack = false;
+					_as.TractorBeamSystemAttack = false;
+					_as.WarpEngingSystemAttack = false;
+					_as.WarpCoreAttack = false;
+					_as.SecondaryWeaponSystemAttack = false;
+					break;
 
-			if (Order == "FullStop")
-			{
-				_as.isAttack = false;
-				_st.targetTransform = null;
-				_st.GuartTarget = null;
-				_mc.Stop();
-			}
-			if (Order == "Attack")
-			{
-				OrderActive = true;
-				AttackOrder = true;
-			}
-			if (Order == "Guard")
-			{
-				OrderActive = true;
-				GuardOrder = true;
+				case "FullStop":
+					_as.isAttack = false;
+					_st.targetTransform = null;
+					_st.GuartTarget = null;
+					_mc.Stop();
+					_mc.InPatrol = false;
+					_mc.PatrolWay.Clear();
+					break;
+				case "Attack":
+					OrderActive = true;
+					AttackOrder = true;
+					break;
+				case "Guard":
+					OrderActive = true;
+					GuardOrder = true;
+					break;
+				case "Patrol":
+					LockSelection = true;
+					SettingPatrolWay = true;
+					break;
 			}
 		}
 	}

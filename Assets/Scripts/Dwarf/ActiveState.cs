@@ -121,7 +121,6 @@ public class ActiveState: MonoBehaviour {
 					{
 						correct = 1;
 					}
-					//gameObject.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(_st.GuartTarget.transform.rotation.eulerAngles), Quaternion.Euler(_st.GuartTarget.transform.rotation.eulerAngles), correct);
 				}
 				else
 				{
