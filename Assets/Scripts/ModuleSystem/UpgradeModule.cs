@@ -30,7 +30,8 @@ public class UpgradeModule : MonoBehaviour
 	}
 
 	public void Upgrade()
-	{		if (lvl < MaxLvl)
+	{
+		if (lvl < MaxLvl)
 		{
 			if (!_sbm.AI && !_sbm.FreandAI)
 			{

@@ -24,7 +24,7 @@ public class ShipAI : MonoBehaviour {
 
 	public int AttackFleetNum;
 
-	private float StopTime = 1;
+	//private float StopTime = 1;
 	private float BuildCulDawn;
 
 	public Transform BuildingPlacePosition;

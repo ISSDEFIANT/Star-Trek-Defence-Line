@@ -135,5 +135,6 @@ public class GhostObjectColor : MonoBehaviour
 			}
 			Paint = false;
 		}
-		gameObject.GetComponent<MeshRenderer>().enabled = true;	}
+		gameObject.GetComponent<MeshRenderer>().enabled = true;
+	}
 }

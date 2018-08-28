@@ -200,37 +200,7 @@ public class Mining : MonoBehaviour
 			gameObject.tag = "NeutralAgrass";
 		}
 	}
-	void OnMouseEnter(){
-		if (!AI) {
-			if (_GDB.selectList.Count >= 1) {
-				if (_GDB.selectList [0].GetComponent<Stats> ().miner) {
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().AttackBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().GoBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().IdleBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().BaseBool = true;
-				}
-			}
-		}
-		if (AI) {
-			if (_GDB.selectList.Count >= 1) {
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = true;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-			}
-		}
-	}
-	void OnMouseExit(){
-		if (_GDB.selectList.Count >= 1) {
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-		}
-		if (AI) {
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-		}
-	}
+
 	void OnDestroy(){
 		if (FindInAI (gameObject)) {
 			Owner.GetComponent<GlobalAI> ().Mines.Remove (gameObject);

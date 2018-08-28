@@ -662,5 +662,6 @@ public class CtrlNum : MonoBehaviour
 			if (selObj == obj)
 				return true;
 		}
-		return false;	}
+		return false;
+	}
 }

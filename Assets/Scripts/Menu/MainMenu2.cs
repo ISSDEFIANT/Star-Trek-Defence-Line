@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MainMenu2 : MonoBehaviour {
@@ -83,7 +84,7 @@ public class MainMenu2 : MonoBehaviour {
 		if(Play){
 			LoadScreen.SetActive (true);
 			GameName.SetActive (false);
-			Application.LoadLevel(Level);
+			SceneManager.LoadScene(Level);
 		}
 	}
 		}
@@ -155,7 +156,7 @@ public class MainMenu2 : MonoBehaviour {
 	public void PlayButton(){
 		LoadScreen.SetActive (true);
 		GameName.SetActive (false);
-		Application.LoadLevel(Level);
+	    SceneManager.LoadScene(Level);
 	}
 
 	void OnMouseEnter(){

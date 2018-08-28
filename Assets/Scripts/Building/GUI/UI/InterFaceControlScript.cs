@@ -2149,23 +2149,27 @@ public class InterFaceControlScript : MonoBehaviour {
 	public void SelfDestruction()
 	{
 		foreach (GameObject obj in _GDB.selectList)
-		{			HealthModule targetHealth = obj.GetComponent<HealthModule>();
+		{
+			HealthModule targetHealth = obj.GetComponent<HealthModule>();
 			targetHealth.SelfDestructActive = !targetHealth.SelfDestructActive;
 		}
 	}
 	public void AttackOrder()
 	{
-		_sel.SetOrder("Attack");	}
+		_sel.SetOrder("Attack");
+	}
 	public void GuardOrder()
 	{
-		_sel.SetOrder("Guard");	}
+		_sel.SetOrder("Guard");
+	}
 	public void PatrolOrder()
 	{
 		_sel.SetOrder("Patrol");
 	}
 	public void StopOrder()
 	{
-		_sel.SetOrder("FullStop");	}
+		_sel.SetOrder("FullStop");
+	}
 	public void FixOrder()
 	{
 		foreach (GameObject obj in _GDB.selectList)
@@ -2178,7 +2182,8 @@ public class InterFaceControlScript : MonoBehaviour {
 		foreach (GameObject obj in _GDB.selectList)
 		{
 
-		}	}
+		}
+	}
 	public void SearchOrder()
 	{
 		foreach (GameObject obj in _GDB.selectList)
@@ -2191,7 +2196,8 @@ public class InterFaceControlScript : MonoBehaviour {
 		foreach (GameObject obj in _GDB.selectList)
 		{
 
-		}	}
+		}
+	}
 
 	public void GreenAlert()
 	{

@@ -90,40 +90,6 @@ public class ShopStation : MonoBehaviour {
 		visible = true;
 		GameObject.FindGameObjectWithTag("MainUI").GetComponent<BackgroudUI>().pictureSelectObject = tex;
 	}
-	void OnMouseEnter(){
-		if (!AI) {
-			if (_GDB.selectList.Count >= 1) {
-				if (_GDB.selectList [0].GetComponent<Stats> ().Transport) {
-					TransportController = true;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().AttackBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().GoBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().IdleBool = false;
-					GameObject.FindGameObjectWithTag ("Coursor").GetComponent<CursorController> ().BaseBool = true;
-				}
-			}
-		}
-		if (AI) {
-			if (_GDB.selectList.Count >= 1) {
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = true;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-			}
-		}
-	}
-	void OnMouseExit(){
-		TransportController = false;
-		if (_GDB.selectList.Count >= 1) {
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-		}
-		if (AI) {
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-
-		}
-	}
 	
 	// Update is called once per frame
 	void Update () {

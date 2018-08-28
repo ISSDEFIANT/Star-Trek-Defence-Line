@@ -428,7 +428,8 @@ public class FixModule : MonoBehaviour
 			}
 
 			waitingPointOffset = waitingPointOffset + rotationVector * (shipRadius + 5);    // отодвигаем границу ещё на один радиус ткущего корабля
-		}	}
+		}
+	}
 
 	void FindAndAddShips()
 	{

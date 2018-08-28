@@ -26,14 +26,16 @@ public class PatrolVisual : MonoBehaviour {
 	void Update()
 	{
 		if (_GDB.selectList.Count == 1)
-		{			_CSMC = _GDB.selectList[0].GetComponent<MoveComponent>();
+		{
+			_CSMC = _GDB.selectList[0].GetComponent<MoveComponent>();
 
 			PatrolWay = _CSMC.PatrolWay.ToList();
 
 			if (PatrolWay.Count > 0)
 			{
 				if (Points.Count < PatrolWay.Count)
-				{					GameObject inst = Instantiate(PointPref, Vector3.zero, Quaternion.Euler(Vector3.zero));
+				{
+					GameObject inst = Instantiate(PointPref, Vector3.zero, Quaternion.Euler(Vector3.zero));
 					Points.Add(inst);
 				}
 
@@ -58,18 +60,22 @@ public class PatrolVisual : MonoBehaviour {
 				}
 			}
 			else
-			{				foreach (GameObject obj in Points) { obj.SetActive(false);}
+			{
+				foreach (GameObject obj in Points) { obj.SetActive(false);}
 				PatrolLine.gameObject.SetActive(false);
 			}
 
 			if (OldShip != _GDB.selectList[0])
-			{				PatrolWay.Clear();
+			{
+				PatrolWay.Clear();
 				OldShip = _GDB.selectList[0];
 			}
 		}
 		else
-		{			foreach (GameObject obj in Points)
-			{				obj.SetActive(false);
+		{
+			foreach (GameObject obj in Points)
+			{
+				obj.SetActive(false);
 				PatrolLine.gameObject.SetActive(false);
 			}
 		}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Xml.Linq;
 using System.IO;
@@ -21,7 +22,7 @@ public class GameMenu : MonoBehaviour
 
     public GUIStyle _saveInfoStyle;
 
-	private float timer = 3;
+	//private float timer = 3;
 
 	public int SaveSystemSelect;
 	public GameObject SsP;
@@ -84,7 +85,7 @@ public class GameMenu : MonoBehaviour
 				if (GUI.Button(new Rect(X * 75, Y * 90, X * 10, Y * 8), System.String.Empty))
                 {
                     Time.timeScale = 1;
-                    Application.LoadLevel(Application.loadedLevel);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
 				if (GUI.Button(new Rect(X * 65, Y * 90, X * 10, Y * 8), System.String.Empty))
                 {
@@ -92,8 +93,8 @@ public class GameMenu : MonoBehaviour
                 }
 				if (GUI.Button(new Rect(X * 45, Y * 90, X * 10, Y * 8), System.String.Empty))
                 {
-                    Application.LoadLevel(1);
-					Time.timeScale = 1;
+                    SceneManager.LoadScene(1);
+                    Time.timeScale = 1;
                 }
 				if (GUI.Button(new Rect(X * 35, Y * 90, X * 10, Y * 8), System.String.Empty))
                 {
@@ -192,7 +193,7 @@ public class GameMenu : MonoBehaviour
     }
 	private void GenerateScene(XElement root){
 		foreach (XElement instance in root.Elements("instanceGDB")) {
-			Application.LoadLevel (int.Parse (instance.Attribute ("LvlNum").Value));
+		    SceneManager.LoadScene(int.Parse(instance.Attribute("LvlNum").Value));
 	//		GlobalLoadSystem.load = true;
 		}
 	}

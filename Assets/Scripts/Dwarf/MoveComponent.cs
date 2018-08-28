@@ -54,7 +54,6 @@ public class MoveComponent : MonoBehaviour
 	[HideInInspector]
 	public GameObject BackSensor;
 
-	private float Timer;
 	[HideInInspector]
 	public Vector3 OldTargetVector;
 
@@ -194,8 +193,6 @@ public class MoveComponent : MonoBehaviour
 		ForwardSensor.name = "ForwardSensor";
 		BackSensor.name = "BackSensor";
 
-		Timer = 3;
-
 		if (ForwardRayStart == null)
 		{
 			ForwardRayStart = gameObject;
@@ -233,7 +230,8 @@ public class MoveComponent : MonoBehaviour
 			}
 
 			if (_st.GuartTarget != null)
-			{				CurFleet.Clear();
+			{
+				CurFleet.Clear();
 			}
 		}
 		else
@@ -242,8 +240,10 @@ public class MoveComponent : MonoBehaviour
 		}
 
 		if (InPatrol)
-		{			if (Vector3.Distance(gameObject.transform.position, PatrolWay[PatrolCurTarget]) > (_hm.ShipRadius + 2) + (ForwardSpeed * ForwardSpeed / 2) / MaxAcceleration)
-			{				Movement(PatrolWay[PatrolCurTarget]);
+		{
+			if (Vector3.Distance(gameObject.transform.position, PatrolWay[PatrolCurTarget]) > (_hm.ShipRadius + 2) + (ForwardSpeed * ForwardSpeed / 2) / MaxAcceleration)
+			{
+				Movement(PatrolWay[PatrolCurTarget]);
 			}
 			else
 			{
@@ -340,7 +340,8 @@ public class MoveComponent : MonoBehaviour
 	}
 
 	public void AddPatrolPoint(Vector3 Point)
-	{		PatrolWay.Add(Point);
+	{
+		PatrolWay.Add(Point);
 	}
 
 	public void FullStop()
@@ -377,8 +378,6 @@ public class MoveComponent : MonoBehaviour
 			_rb.velocity = _rb.velocity.normalized * LMoveSpeed;
 		}
 
-		Vector3 TargetVec = TargetVector - transform.position;
-
 		if (Vector3.Distance(gameObject.transform.position, CurTargetVector) > _hm.ShipRadius + (ForwardSpeed * ForwardSpeed / 2) / MaxAccelerationIE)
 		{
 			if (Vector3.Dot(_rb.velocity, transform.forward) < LMoveSpeed)
@@ -402,7 +401,8 @@ public class MoveComponent : MonoBehaviour
 					amount += Time.deltaTime / LMoveSpeed;
 				}
 				else
-				{					amount = 1;
+				{
+					amount = 1;
 				}
 				if (startvec == Vector3.zero)
 				{
@@ -439,7 +439,8 @@ public class MoveComponent : MonoBehaviour
 	void OnDrawGizmosSelected()
 	{
 		Gizmos.color = new Color32(0, 255, 0, 100);
-		Gizmos.DrawSphere(TargetVector, 5);	}
+		Gizmos.DrawSphere(TargetVector, 5);
+	}
 	void ShipRotation(float Power, float RAcceleration)
 	{
 		var Factor = Vector3.Dot(transform.forward, _rb.velocity.normalized);
@@ -465,7 +466,8 @@ public class MoveComponent : MonoBehaviour
 	{
 		rollInput = Mathf.Clamp(rollInput, -1, 1);
 		pitchInput = Mathf.Clamp(pitchInput, -1, 1);
-		yawInput = Mathf.Clamp(yawInput, -1, 1);	}
+		yawInput = Mathf.Clamp(yawInput, -1, 1);
+	}
 
 	private void CalculateRollAndPitchAngles()
 	{
@@ -513,7 +515,8 @@ public class MoveComponent : MonoBehaviour
 		float currentSpeedEffect = 1 + ForwardSpeed * 0.01f;
 		rollInput *= currentSpeedEffect;
 		pitchInput *= currentSpeedEffect;
-		yawInput *= currentSpeedEffect;	}
+		yawInput *= currentSpeedEffect;
+	}
 
 	void ApplySensor(GameObject Start, Vector3 Vector, string Direction, bool ManeuversActive = false)
 	{

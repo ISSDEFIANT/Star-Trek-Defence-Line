@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Xml.Linq;
 using System.IO;
@@ -124,7 +125,7 @@ public class LoadMenu : MonoBehaviour {
 		}
 	private void GenerateScene(XElement root){
 		foreach (XElement instance in root.Elements("instanceGDB")) {
-			Application.LoadLevel (int.Parse (instance.Attribute ("LvlNum").Value));
+			SceneManager.LoadScene((int.Parse(instance.Attribute("LvlNum").Value)));
 			//GlobalLoadSystem.load = true;
 		}
 	}

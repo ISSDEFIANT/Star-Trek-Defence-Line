@@ -19,38 +19,31 @@ public class Distanser : MonoBehaviour
 		if (gameObject.GetComponent<Phaser>())
 		{
 			Phaser = true;
-		}
+		    if (gameObject.GetComponent<Phaser>().Owner.GetComponent<Stats>())
+		    {
+		        Ship = true;
+		        ShipStat = gameObject.GetComponent<Phaser>().Owner.GetComponent<Stats>();
+		    }
+		    if (gameObject.GetComponent<Phaser>().Owner.GetComponent<Station>())
+		    {
+		        Station = true;
+		        _wm = gameObject.GetComponent<Phaser>().Owner.GetComponent<WeaponModule>();
+		    }
+        }
 		if (gameObject.GetComponent<TopidoLounser>())
 		{
 			Torpedo = true;
-		}
-
-		if (Phaser)
-		{
-			if (gameObject.GetComponent<Phaser>().Owner.GetComponent<Stats>())
-			{
-				Ship = true;
-				ShipStat = gameObject.GetComponent<Phaser>().Owner.GetComponent<Stats>();
-			}
-			if (gameObject.GetComponent<Phaser>().Owner.GetComponent<Station>())
-			{
-				Station = true;
-				_wm = gameObject.GetComponent<Phaser>().Owner.GetComponent<WeaponModule>();
-			}
-		}
-		if (Torpedo)
-		{
-			if (gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Stats>())
-			{
-				Ship = true;
-				ShipStat = gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Stats>();
-			}
-			if (gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Station>())
-			{
-				Station = true;
-				_wm = gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<WeaponModule>();
-			}
-		}
+		    if (gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Stats>())
+		    {
+		        Ship = true;
+		        ShipStat = gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Stats>();
+		    }
+		    if (gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<Station>())
+		    {
+		        Station = true;
+		        _wm = gameObject.GetComponent<TopidoLounser>().Owner.GetComponent<WeaponModule>();
+		    }
+        }
 	}
 
 	// Update is called once per frame

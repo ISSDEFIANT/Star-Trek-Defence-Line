@@ -151,64 +151,6 @@ public class HealthModule : MonoBehaviour
 		{
 			_st = gameObject.GetComponent<Stats>();
 			_as = gameObject.GetComponent<ActiveState>();
-			if (_st.Name != System.String.Empty)
-			{
-				if (_st.classname == "Galactica")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().GalactiucaNames.Remove(_st.Name);
-				}
-
-				if (_st.classname == "Defiant")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().DefiantNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Nova")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().NovaNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Saber")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().SaberNames.Remove(_st.Name);
-				}
-
-				if (_st.classname == "Akira")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().AkiraNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Intrepid")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().IntrepidNames.Remove(_st.Name);
-				}
-				if (_st.classname == "SteamRunner")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().SteamRunnerNames.Remove(_st.Name);
-				}
-
-				if (_st.classname == "Luna")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().LunaNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Prometheus")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().PrometheuseNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Nebula")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().NebulaNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Galaxy")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().GalaxyNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Sovereign")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().SovereignNames.Remove(_st.Name);
-				}
-				if (_st.classname == "Excalibur")
-				{
-					_GDB.gameObject.GetComponent<NameSelectScript>().ExcaliburNames.Remove(_st.Name);
-				}
-			}
 		}
 		if (Station)
 		{
@@ -837,63 +779,6 @@ public class HealthModule : MonoBehaviour
 				if (Team9)
 				{
 					_CNC.Num9.Remove(gameObject);
-				}
-
-				NameSelectScript _NSS = _GDB.gameObject.GetComponent<NameSelectScript>();
-
-				if (_st.classname == "Galactica")
-				{
-					_NSS.GalactiucaNames.Add(_st.Name);
-				}
-				if (_st.classname == "Defiant")
-				{
-					_NSS.DefiantNames.Add(_st.Name);
-				}
-				if (_st.classname == "Nova")
-				{
-					_NSS.NovaNames.Add(_st.Name);
-				}
-				if (_st.classname == "Saber")
-				{
-					_NSS.SaberNames.Add(_st.Name);
-				}
-
-				if (_st.classname == "Akira")
-				{
-					_NSS.AkiraNames.Add(_st.Name);
-				}
-				if (_st.classname == "Intrepid")
-				{
-					_NSS.IntrepidNames.Add(_st.Name);
-				}
-				if (_st.classname == "SteamRunner")
-				{
-					_NSS.SteamRunnerNames.Add(_st.Name);
-				}
-
-				if (_st.classname == "Luna")
-				{
-					_NSS.LunaNames.Add(_st.Name);
-				}
-				if (_st.classname == "Prometheus")
-				{
-					_NSS.PrometheuseNames.Add(_st.Name);
-				}
-				if (_st.classname == "Nebula")
-				{
-					_NSS.NebulaNames.Add(_st.Name);
-				}
-				if (_st.classname == "Galaxy")
-				{
-					_NSS.GalaxyNames.Add(_st.Name);
-				}
-				if (_st.classname == "Sovereign")
-				{
-					_NSS.SovereignNames.Add(_st.Name);
-				}
-				if (_st.classname == "Excalibur")
-				{
-					_NSS.ExcaliburNames.Add(_st.Name);
 				}
 			}
 		}

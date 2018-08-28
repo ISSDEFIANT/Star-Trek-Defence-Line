@@ -42,7 +42,7 @@ public class SU_LaserImpact : MonoBehaviour {
 		// If the light exists...
 		if (_cacheLight != null) {
 			// Set the intensity depending on the number of particles visible
-			_cacheLight.GetComponent<Light>().intensity = (float) (transform.GetComponent<ParticleEmitter>().particleCount / 50.0f);
+			_cacheLight.GetComponent<Light>().intensity = (float) (transform.GetComponent<ParticleSystem>().particleCount / 50.0f);
 		}
 	}
 }

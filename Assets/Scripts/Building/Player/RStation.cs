@@ -75,25 +75,6 @@ public class RStation : MonoBehaviour {
 		style = _SEL.style;
 		gameObject.name = "RStation(Clone)";
 	}
-	void OnMouseEnter(){
-		if (AI) {
-			if (_GDB.selectList.Count >= 1) {
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = true;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-				GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-			}
-		}
-	}
-	void OnMouseExit(){
-		if (AI) {
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().AttackBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().GoBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().IdleBool = false;
-			GameObject.FindGameObjectWithTag("Coursor").GetComponent<CursorController>().BaseBool = false;
-			
-		}
-	}
 	void OnMouseDown ()
 	{
 		_SEL.ClearSelect();

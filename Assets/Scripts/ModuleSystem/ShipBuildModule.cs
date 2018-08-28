@@ -20,7 +20,7 @@ public class ShipBuildModule : MonoBehaviour
 
 	public bool Fixing;
 
-	public ShipInStationInterface[] Ships;
+	public ShipInInterface[] Ships;
 
 	private GlobalDB _GDB;
 	private Select _SEL;
@@ -77,173 +77,63 @@ public class ShipBuildModule : MonoBehaviour
 		}
 	}
 
-	void OnDestroy()
+    void OnDestroyShipRecover(int number)
+    {
+        if (number == 1)
+        {
+            Ships[0].ShipCount -= 1;
+            ReInitForShip(Ships[0].shipclassname);
+        }
+        if (number == 2)
+        {
+            Ships[1].ShipCount -= 1;
+            ReInitForShip(Ships[1].shipclassname);
+        }
+        if (number == 3)
+        {
+            Ships[2].ShipCount -= 1;
+            ReInitForShip(Ships[2].shipclassname);
+        }
+        if (number == 4)
+        {
+            Ships[3].ShipCount -= 1;
+            ReInitForShip(Ships[3].shipclassname);
+        }
+        if (number == 5)
+        {
+            Ships[4].ShipCount -= 1;
+            ReInitForShip(Ships[4].shipclassname);
+        }
+        if (number == 6)
+        {
+            Ships[5].ShipCount -= 1;
+            ReInitForShip(Ships[5].shipclassname);
+        }
+    }
+
+    void OnDestroy()
 	{
 		if (_SB.Корабль.Count >= 1)
 		{
-			if (_SB.ListofNumbers[0] == 1)
-			{
-				Ships[0].ShipCount -= 1;
-				Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[0] == 2)
-			{
-				Ships[1].ShipCount -= 1;
-				Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[0] == 3)
-			{
-				Ships[2].ShipCount -= 1;
-				Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[0] == 4)
-			{
-				Ships[3].ShipCount -= 1;
-				Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[0] == 5)
-			{
-				Ships[4].ShipCount -= 1;
-				Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[0] == 6)
-			{
-				Ships[5].ShipCount -= 1;
-				Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
+			OnDestroyShipRecover(_SB.ListofNumbers[0]);
 		}
 		if (_SB.Корабль.Count >= 2)
 		{
-			if (_SB.ListofNumbers[1] == 1)
-			{
-				Ships[0].ShipCount -= 1;
-				Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[1] == 2)
-			{
-				Ships[1].ShipCount -= 1;
-				Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[1] == 3)
-			{
-				Ships[2].ShipCount -= 1;
-				Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[1] == 4)
-			{
-				Ships[3].ShipCount -= 1;
-				Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[1] == 5)
-			{
-				Ships[4].ShipCount -= 1;
-				Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[1] == 6)
-			{
-				Ships[5].ShipCount -= 1;
-				Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
+		    OnDestroyShipRecover(_SB.ListofNumbers[1]);
 		}
 		if (_SB.Корабль.Count >= 3)
 		{
-			if (_SB.ListofNumbers[2] == 1)
-			{
-				Ships[0].ShipCount -= 1;
-				Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[2] == 2)
-			{
-				Ships[1].ShipCount -= 1;
-				Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[2] == 3)
-			{
-				Ships[2].ShipCount -= 1;
-				Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[2] == 4)
-			{
-				Ships[3].ShipCount -= 1;
-				Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[2] == 5)
-			{
-				Ships[4].ShipCount -= 1;
-				Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[2] == 6)
-			{
-				Ships[5].ShipCount -= 1;
-				Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-		}
+		    OnDestroyShipRecover(_SB.ListofNumbers[2]);
+        }
 		if (_SB.Корабль.Count >= 4)
 		{
-			if (_SB.ListofNumbers[3] == 1)
-			{
-				Ships[0].ShipCount -= 1;
-				Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[3] == 2)
-			{
-				Ships[1].ShipCount -= 1;
-				Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[3] == 3)
-			{
-				Ships[2].ShipCount -= 1;
-				Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[3] == 4)
-			{
-				Ships[3].ShipCount -= 1;
-				Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[3] == 5)
-			{
-				Ships[4].ShipCount -= 1;
-				Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[3] == 6)
-			{
-				Ships[5].ShipCount -= 1;
-				Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-		}
+		    OnDestroyShipRecover(_SB.ListofNumbers[3]);
+        }
 		if (_SB.Корабль.Count == 5)
 		{
-			if (_SB.ListofNumbers[4] == 1)
-			{
-				Ships[0].ShipCount -= 1;
-				Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[4] == 2)
-			{
-				Ships[1].ShipCount -= 1;
-				Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[4] == 3)
-			{
-				Ships[2].ShipCount -= 1;
-				Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[4] == 4)
-			{
-				Ships[3].ShipCount -= 1;
-				Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[4] == 5)
-			{
-				Ships[4].ShipCount -= 1;
-				Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-			if (_SB.ListofNumbers[4] == 6)
-			{
-				Ships[5].ShipCount -= 1;
-				Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-			}
-		}	}
+		    OnDestroyShipRecover(_SB.ListofNumbers[4]);
+        }
+	}
 
 	public void CansledShip(int SlotNumber)
 	{
@@ -271,95 +161,315 @@ public class ShipBuildModule : MonoBehaviour
 		if (_SB.ListofNumbers[SlotNumber-1] == 1)
 		{
 			Ships[0].ShipCount -= 1;
-			Ships[0].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[0].shipclassname);
+        }
 		if (_SB.ListofNumbers[SlotNumber-1] == 2)
 		{
 			Ships[1].ShipCount -= 1;
-			Ships[1].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[1].shipclassname);
+        }
 		if (_SB.ListofNumbers[SlotNumber-1] == 3)
 		{
 			Ships[2].ShipCount -= 1;
-			Ships[2].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[2].shipclassname);
+        }
 		if (_SB.ListofNumbers[SlotNumber-1] == 4)
 		{
 			Ships[3].ShipCount -= 1;
-			Ships[3].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[3].shipclassname);
+        }
 		if (_SB.ListofNumbers[SlotNumber-1] == 5)
 		{
 			Ships[4].ShipCount -= 1;
-			Ships[4].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[4].shipclassname);
+        }
 		if (_SB.ListofNumbers[SlotNumber-1] == 6)
 		{
 			Ships[5].ShipCount -= 1;
-			Ships[5].CountPrefeb.GetComponent<NameCounter>().CurShips += 1;
-		}
+		    ReInitForShip(Ships[5].shipclassname);
+        }
 
 		_SB.ListofNumbers.RemoveAt(SlotNumber-1);
 	}
 
-	public void BuildStarShip(int ShipNumber)
-	{
-		if (!Fixing)
-		{
-			if (Ships[ShipNumber - 1].CountPrefeb != null)
-			{
-				if (Ships[ShipNumber - 1].CountPrefeb.GetComponent<NameCounter>().CurShips > 0)
-				{
-					if (_SB.Корабль.Count < 5)
-					{
-						if (_GDB.Titanium >= Ships[ShipNumber - 1].TitaniumCost & _GDB.Dilithium >= Ships[ShipNumber - 1].DilithiumCost & _GDB.Humans >= Ships[ShipNumber - 1].CrewCost)
-						{
-							_GDB.Titanium -= Ships[ShipNumber - 1].TitaniumCost;
-							_GDB.Dilithium -= Ships[ShipNumber - 1].DilithiumCost;
-							_GDB.Humans -= Ships[ShipNumber - 1].CrewCost;
-							_SB.Корабль.Add(Ships[ShipNumber - 1].Ship);
-							_SB.Время.Add(Ships[ShipNumber - 1].BuildTime);
-							_SB.ListofNumbers.Add(ShipNumber);
-							Ships[ShipNumber - 1].CountPrefeb.GetComponent<NameCounter>().CurShips -= 1;
+    public void BuildStarShip(int ShipNumber)
+    {
+        if (!Fixing)
+        {
+            if (ShipAvaible(Ships[ShipNumber - 1].shipclassname))
+            {
+                if (_SB.Корабль.Count < 5)
+                {
+                    if (_GDB.Titanium >= Ships[ShipNumber - 1].TitaniumCost &
+                        _GDB.Dilithium >= Ships[ShipNumber - 1].DilithiumCost &
+                        _GDB.Humans >= Ships[ShipNumber - 1].CrewCost)
+                    {
+                        _GDB.Titanium -= Ships[ShipNumber - 1].TitaniumCost;
+                        _GDB.Dilithium -= Ships[ShipNumber - 1].DilithiumCost;
+                        _GDB.Humans -= Ships[ShipNumber - 1].CrewCost;
+                        _SB.Корабль.Add(Ships[ShipNumber - 1].Ship);
+                        _SB.Время.Add(Ships[ShipNumber - 1].BuildTime);
+                        _SB.ListofNumbers.Add(ShipNumber);
 
-							_SB.Titanium.Add(Ships[ShipNumber - 1].TitaniumCost);
-							_SB.Dilithium.Add(Ships[ShipNumber - 1].DilithiumCost);
-							_SB.Humans.Add(Ships[ShipNumber - 1].CrewCost);
-							_SB.Builder.Add(false);
-							_SB.Miner.Add(false);
-							_SB.BaseFleet.Add(false);
-							_SB.AttackFleet.Add(false);
-							_SB.ScoutFleet.Add(false);
-							_SB.OpenTime.Add(Ships[ShipNumber - 1].OpenTime);
+                        PreInitForShip(Ships[ShipNumber - 1].shipclassname);
 
-							Ships[ShipNumber - 1].ShipCount += 1;
-						}
-					}
-				}
-			}
-			else
-			{
-				if (_GDB.Titanium >= Ships[ShipNumber - 1].TitaniumCost & _GDB.Dilithium >= Ships[ShipNumber - 1].DilithiumCost & _GDB.Humans >= Ships[ShipNumber - 1].CrewCost)
-				{
-					_GDB.Titanium -= Ships[ShipNumber - 1].TitaniumCost;
-					_GDB.Dilithium -= Ships[ShipNumber - 1].DilithiumCost;
-					_GDB.Humans -= Ships[ShipNumber - 1].CrewCost;
-					_SB.Корабль.Add(Ships[ShipNumber - 1].Ship);
-					_SB.Время.Add(Ships[ShipNumber - 1].BuildTime);
-					_SB.ListofNumbers.Add(ShipNumber);
+                        _SB.Titanium.Add(Ships[ShipNumber - 1].TitaniumCost);
+                        _SB.Dilithium.Add(Ships[ShipNumber - 1].DilithiumCost);
+                        _SB.Humans.Add(Ships[ShipNumber - 1].CrewCost);
+                        _SB.Builder.Add(false);
+                        _SB.Miner.Add(false);
+                        _SB.BaseFleet.Add(false);
+                        _SB.AttackFleet.Add(false);
+                        _SB.ScoutFleet.Add(false);
+                        _SB.OpenTime.Add(Ships[ShipNumber - 1].OpenTime);
 
-					_SB.Titanium.Add(Ships[ShipNumber - 1].TitaniumCost);
-					_SB.Dilithium.Add(Ships[ShipNumber - 1].DilithiumCost);
-					_SB.Humans.Add(Ships[ShipNumber - 1].CrewCost);
-					_SB.Builder.Add(false);
-					_SB.Miner.Add(false);
-					_SB.BaseFleet.Add(false);
-					_SB.AttackFleet.Add(false);
-					_SB.ScoutFleet.Add(false);
-					_SB.OpenTime.Add(Ships[ShipNumber - 1].OpenTime);
+                        Ships[ShipNumber - 1].ShipCount += 1;
+                    }
+                }
+            }
+        }
+    }
 
-					Ships[ShipNumber - 1].ShipCount += 1;
-				}
-			}
-		}	}
+    bool ShipAvaible(string classname)
+    {
+        switch (classname)
+        {
+            case "Galactica":
+                if (NameCounter.Galactica.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            case "Defiant":
+                if (NameCounter.Defiant.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Nova":
+                if (NameCounter.Nova.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Saber":
+                if (NameCounter.Saber.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            case "Akira":
+                if (NameCounter.Akira.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Intrepid":
+                if (NameCounter.Intrepid.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "SteamRunner":
+                if (NameCounter.Steamrunner.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            case "Luna":
+                if (NameCounter.Luna.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Prometheus":
+                if (NameCounter.Prometheuse.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Nebula":
+                if (NameCounter.Nebula.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Galaxy":
+                if (NameCounter.Galaxy.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Sovereign":
+                if (NameCounter.Sovereign.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case "Excalibur":
+                if (NameCounter.Excalibur.CurShips > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+        }
+
+        return true;
+    }
+
+    void PreInitForShip(string classname)
+    {
+        switch (classname)
+        {
+            case "Galactica":
+              //  NameCounter.Galactica.CurShips -= 1;
+                break;
+
+            case "Defiant":
+                NameCounter.Defiant.CurShips -= 1;
+                break;
+            case "Nova":
+                NameCounter.Nova.CurShips -= 1;
+                break;
+            case "Saber":
+                NameCounter.Saber.CurShips -= 1;
+                break;
+
+            case "Akira":
+                NameCounter.Akira.CurShips -= 1;
+                break;
+            case "Intrepid":
+                NameCounter.Intrepid.CurShips -= 1;
+                break;
+            case "SteamRunner":
+                NameCounter.Steamrunner.CurShips -= 1;
+                break;
+
+            case "Luna":
+                NameCounter.Luna.CurShips -= 1;
+                break;
+            case "Prometheus":
+                NameCounter.Prometheuse.CurShips -= 1;
+                break;
+            case "Nebula":
+                NameCounter.Nebula.CurShips -= 1;
+                break;
+            case "Galaxy":
+                NameCounter.Galaxy.CurShips -= 1;
+                break;
+            case "Sovereign":
+                NameCounter.Sovereign.CurShips -= 1;
+                break;
+            case "Excalibur":
+                NameCounter.Excalibur.CurShips -= 1;
+                break;
+        }
+    }
+    void ReInitForShip(string classname)
+    {
+        switch (classname)
+        {
+            case "Galactica":
+                NameCounter.Galactica.CurShips += 1;
+                break;
+
+            case "Defiant":
+                NameCounter.Defiant.CurShips += 1;
+                break;
+            case "Nova":
+                NameCounter.Nova.CurShips += 1;
+                break;
+            case "Saber":
+                NameCounter.Saber.CurShips += 1;
+                break;
+
+            case "Akira":
+                NameCounter.Akira.CurShips += 1;
+                break;
+            case "Intrepid":
+                NameCounter.Intrepid.CurShips += 1;
+                break;
+            case "SteamRunner":
+                NameCounter.Steamrunner.CurShips += 1;
+                break;
+
+            case "Luna":
+                NameCounter.Luna.CurShips += 1;
+                break;
+            case "Prometheus":
+                NameCounter.Prometheuse.CurShips += 1;
+                break;
+            case "Nebula":
+                NameCounter.Nebula.CurShips += 1;
+                break;
+            case "Galaxy":
+                NameCounter.Galaxy.CurShips += 1;
+                break;
+            case "Sovereign":
+                NameCounter.Sovereign.CurShips += 1;
+                break;
+            case "Excalibur":
+                NameCounter.Excalibur.CurShips += 1;
+                break;
+        }
+    }
+
+    [System.Serializable]
+    public class ShipInInterface
+    {
+        public GameObject Ship;
+        public float BuildTime = 1;
+        public int CrewCost;
+        public int DilithiumCost;
+        public int TitaniumCost;
+        public int ShipCount;
+        public Sprite Icon;
+        public string Info;
+        public string shipclassname;
+        public float OpenTime;
+
+        public bool ShipLock;
+    }
 }
