@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using  UnityEngine.SceneManagement;
 
 public class USplashScreenUI : MonoBehaviour
 {
@@ -166,7 +167,7 @@ public class USplashScreenUI : MonoBehaviour
         }
         else
         {
-            Application.LoadLevel(NextLevel);
+            SceneManager.LoadScene(NextLevel);
         }
     }
     /// <summary>
@@ -206,7 +207,7 @@ public class USplashScreenUI : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LevelProgress()
     {
-        async = Application.LoadLevelAsync(NextLevel);
+        async = SceneManager.LoadSceneAsync(NextLevel);
         async.allowSceneActivation = false;
         yield return async;
     }

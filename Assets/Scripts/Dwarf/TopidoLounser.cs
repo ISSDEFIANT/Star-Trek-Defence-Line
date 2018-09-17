@@ -482,38 +482,34 @@ public class TopidoLounser : MonoBehaviour
 						Shell _s = AllTorpedose[i].GetComponent<Shell>();
 						_s.target = _st.targetTransform.transform;
 						_s.Ship = Owner;
-						if (_as.ImpulseSystemAttack)
-						{
-							_s.ImpulseSystemAttack = true;
-						}
-						if (_as.LifeSupportSystemAttack)
-						{
-							_s.LifeSupportSystemAttack = true;
-						}
-						if (_as.PrimaryWeaponSystemAttack)
-						{
-							_s.PrimaryWeaponSystemAttack = true;
-						}
-						if (_as.SensorsSystemAttack)
-						{
-							_s.SensorsSystemAttack = true;
-						}
-						if (_as.TractorBeamSystemAttack)
-						{
-							_s.TractorBeamSystemAttack = true;
-						}
-						if (_as.WarpEngingSystemAttack)
-						{
-							_s.WarpEngingSystemAttack = true;
-						}
-						if (_as.WarpCoreAttack)
-						{
-							_s.WarpCoreAttack = true;
-						}
-						if (_as.SecondaryWeaponSystemAttack)
-						{
-							_s.SecondaryWeaponSystemAttack = true;
-						}
+
+					    switch (_as.TargetingAt)
+					    {
+					        case ActiveState.AttackType.PrimaryWeaponSystemAttack:
+					            _s.PrimaryWeaponSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.SecondaryWeaponSystemAttack:
+					            _s.SecondaryWeaponSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.ImpulseSystemAttack:
+					            _s.ImpulseSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.WarpEngingSystemAttack:
+					            _s.WarpEngingSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.WarpCoreAttack:
+					            _s.WarpCoreAttack = true;
+                                break;
+					        case ActiveState.AttackType.LifeSupportSystemAttack:
+					            _s.LifeSupportSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.SensorsSystemAttack:
+					            _s.SensorsSystemAttack = true;
+                                break;
+					        case ActiveState.AttackType.TractorBeamSystemAttack:
+					            _s.TractorBeamSystemAttack = true;
+                                break;
+					    }
 						return;
 					}
 				}
@@ -530,39 +526,34 @@ public class TopidoLounser : MonoBehaviour
 						Disrapter _d = AllTorpedose[i].GetComponent<Disrapter>();
 						_d.target = _st.targetTransform.transform;
 						_d.Ship = Owner;
-						if (_as.ImpulseSystemAttack)
-						{
-							_d.ImpulseSystemAttack = true;
-						}
-						if (_as.LifeSupportSystemAttack)
-						{
-							_d.LifeSupportSystemAttack = true;
-						}
-						if (_as.PrimaryWeaponSystemAttack)
-						{
-							_d.PrimaryWeaponSystemAttack = true;
-						}
-						if (_as.SensorsSystemAttack)
-						{
-							_d.SensorsSystemAttack = true;
-						}
-						if (_as.TractorBeamSystemAttack)
-						{
-							_d.TractorBeamSystemAttack = true;
-						}
-						if (_as.WarpEngingSystemAttack)
-						{
-							_d.WarpEngingSystemAttack = true;
-						}
-						if (_as.WarpCoreAttack)
-						{
-							_d.WarpCoreAttack = true;
-						}
-						if (_as.SecondaryWeaponSystemAttack)
-						{
-							_d.SecondaryWeaponSystemAttack = true;
-						}
-						return;
+					    switch (_as.TargetingAt)
+					    {
+					        case ActiveState.AttackType.PrimaryWeaponSystemAttack:
+					            _d.PrimaryWeaponSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.SecondaryWeaponSystemAttack:
+					            _d.SecondaryWeaponSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.ImpulseSystemAttack:
+					            _d.ImpulseSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.WarpEngingSystemAttack:
+					            _d.WarpEngingSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.WarpCoreAttack:
+					            _d.WarpCoreAttack = true;
+					            break;
+					        case ActiveState.AttackType.LifeSupportSystemAttack:
+					            _d.LifeSupportSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.SensorsSystemAttack:
+					            _d.SensorsSystemAttack = true;
+					            break;
+					        case ActiveState.AttackType.TractorBeamSystemAttack:
+					            _d.TractorBeamSystemAttack = true;
+					            break;
+					    }
+                        return;
 					}
 				}
 			}

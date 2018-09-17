@@ -1120,8 +1120,8 @@ public class InterFaceControlScript : MonoBehaviour {
 
 				StationBluePrint.sprite = SBluePrint;
 				if (SH != null) {
-					if (SH.CurСилаПоля > 0) {
-						StationShildBar.fillAmount = SH.CurСилаПоля / SH.СилаПоля;
+					if (SH.CurShilds > 0) {
+						StationShildBar.fillAmount = SH.CurShilds / SH.Shilds;
 					} else {
 						StationShildBar.fillAmount = 0;
 					}

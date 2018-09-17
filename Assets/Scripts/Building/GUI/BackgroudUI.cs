@@ -45,16 +45,16 @@ public class BackgroudUI : MonoBehaviour
 			if (_GDB.selectList.Count == 1 || _GDB.activeObjectInterface != null) {
 				if (_GDB.activeObjectInterface == null) {
 					if (Input.mousePosition.y < Y * 3 & Input.mousePosition.y > (Y * 3 - Y * 1 / 2) & Input.mousePosition.x < (X * 30) & Input.mousePosition.x > (X * 24)) {
-						if (_GDB.selectList [0].GetComponent<HealthModule> ().CurСилаПоля > 0) {
-							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + _GDB.selectList [0].GetComponent<HealthModule> ().CurСилаПоля / _GDB.selectList [0].GetComponent<HealthModule> ().СилаПоля * 100 + "%",10);
+						if (_GDB.selectList [0].GetComponent<HealthModule> ().CurShilds > 0) {
+							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + _GDB.selectList [0].GetComponent<HealthModule> ().CurShilds / _GDB.selectList [0].GetComponent<HealthModule> ().Shilds * 100 + "%",10);
 						} else {
 							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + 0 + "%",10);
 						}
 					}
 				} else {
 					if (Input.mousePosition.y < Y * 3 & Input.mousePosition.y > (Y * 3 - Y * 1 / 2) & Input.mousePosition.x < (X * 30) & Input.mousePosition.x > (X * 24)) {
-						if (_GDB.activeObjectInterface.GetComponent<HealthModule> ().CurСилаПоля > 0) {
-							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + _GDB.activeObjectInterface.GetComponent<HealthModule> ().CurСилаПоля / _GDB.activeObjectInterface.GetComponent<HealthModule> ().СилаПоля * 100 + "%",10);
+						if (_GDB.activeObjectInterface.GetComponent<HealthModule> ().CurShilds > 0) {
+							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + _GDB.activeObjectInterface.GetComponent<HealthModule> ().CurShilds / _GDB.activeObjectInterface.GetComponent<HealthModule> ().Shilds * 100 + "%",10);
 						} else {
 							gameObject.GetComponent<InfoPlane> ().UpdateText("Shields effectiveness – " + 0 + "%",10);
 						}

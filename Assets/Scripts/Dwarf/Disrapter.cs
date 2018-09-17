@@ -28,7 +28,7 @@ public class Disrapter : MonoBehaviour {
 		if (target != null) {
 			HealthModule _hm = target.GetComponent<HealthModule>();
 			if (Vector3.Distance (gameObject.transform.position, target.position) <= 1) {
-				if (_hm.CurСилаПоля <= 0) {
+				if (_hm.CurShilds <= 0) {
 					_hm.curHealth -= (damage);
 					if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack) {
 						_hm.curImpulseSystemHealth -= Random.Range (10, damage);
@@ -131,9 +131,9 @@ public class Disrapter : MonoBehaviour {
 					}
 					Destroy (gameObject);
 				}
-				if (_hm.CurСилаПоля > 0) {
+				if (_hm.CurShilds > 0) {
 					_hm.curHealth -= (damage / 5);
-					_hm.CurСилаПоля -= (damage / 2);
+					_hm.CurShilds -= (damage / 2);
 					if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack) {
 						_hm.curImpulseSystemHealth -= Random.Range (1, damage / 5);
 						_hm.curLifeSupportSystemHealth -= Random.Range (1, damage / 5);
@@ -225,9 +225,9 @@ public class Disrapter : MonoBehaviour {
 						_hm.curSecondaryWeaponSystemHealth -= Random.Range (2, damage / 5);
 					}
 					if (Physics.Raycast (transform.position, transform.position, out hit, 10)) {
-						_hm.Поле.GetComponent<Renderer> ().enabled = true;
-						_hm.Поле.GetComponent<Forcefield> ().Shot = true;
-						_hm.Поле.GetComponent<Forcefield> ().PhaserHit = hit;
+						_hm.ShildModel.GetComponent<Renderer> ().enabled = true;
+						_hm.ShildModel.GetComponent<Forcefield> ().Shot = true;
+						_hm.ShildModel.GetComponent<Forcefield> ().PhaserHit = hit;
 					}
 					DestroyAlternative ();
 				}

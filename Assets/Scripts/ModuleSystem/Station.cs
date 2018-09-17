@@ -97,109 +97,124 @@ public class Station : MonoBehaviour
 
 	// Update is called once per frame
 	void Update()
+    {
+        if (StationOutLineActive)
+        {
+            Debug.LogError("3");
+            if (_sbotv.IsVisible)
+            {
+                Debug.LogError("4");
+                StationOutLine.SetActive(true);
+            }
+        }
+        else
+        {
+            StationOutLine.SetActive(false);
+        }
+
+        if (!visible && _GDB.activeObjectInterface == gameObject)
+        {
+            _GDB.activeObjectInterface = null;
+        }
+
+        if (_GDB.selectList.Count > 0 || _GDB.activeObjectInterface != gameObject || !_sbotv.IsVisible)
+        {
+            visible = false;
+        }
+
+        TagApply();
+
+        if (Neutral)
+        {
+            if (Owner != null)
+            {
+                Owner = null;
+            }
+        }
+        if (ResPlus)
+        {
+            ResPlusMethod();
+        }
+
+        SensorsLine.transform.position = gameObject.transform.position;
+        _scr.radius = _sbsm.VisionRadius;
+
+        if (WeaponModule)
+        {
+            WeaponLine.transform.position = gameObject.transform.position;
+            _wcr.radius = gameObject.GetComponent<WeaponModule>().radiuse;
+        }
+        else
+        {
+            _wcr.radius = 0;
+        }
+        if (visible)
+        {
+            StationOutLineActive = true;
+        }
+        else
+        {
+            if (!Hovering)
+            {
+                StationOutLineActive = false;
+            }
+        }
+    }
+
+    private void ResPlusMethod()
+    {
+        if (!AI && !FreandAI)
+        {
+            _GDB.Humans += CrewPS;
+            _GDB.Dilithium += DilithiumPS;
+            _GDB.Titanium += TiteniumPS;
+        }
+        if (AI)
+        {
+            Owner.GetComponent<GlobalAI>().Crew += CrewPS;
+            Owner.GetComponent<GlobalAI>().Dilithium += DilithiumPS;
+            Owner.GetComponent<GlobalAI>().Titanium += TiteniumPS;
+        }
+        if (!AI && FreandAI)
+        {
+            Owner.GetComponent<GlobalAI>().Crew += CrewPS;
+            Owner.GetComponent<GlobalAI>().Dilithium += DilithiumPS;
+            Owner.GetComponent<GlobalAI>().Titanium += TiteniumPS;
+        }
+    }
+
+    private void TagApply()
+    {
+        if (AI)
+        {
+            gameObject.tag = "Enemy";
+        }
+        if (FreandAI)
+        {
+            gameObject.tag = "Freand";
+        }
+        if (Neutral)
+        {
+            gameObject.tag = "Neutral";
+        }
+        if (NeutralAgrass)
+        {
+            gameObject.tag = "NeutralAgrass";
+        }
+        if (!AI && !FreandAI && !Neutral && !NeutralAgrass)
+        {
+            gameObject.tag = "Dwarf";
+        }
+    }
+
+    void OnMouseOver()
 	{
-		if (StationOutLineActive)
-		{
-			if (_sbotv.IsVisible)
-			{
-				StationOutLine.SetActive(true);
-			}
-		}
-		else
-		{
-			StationOutLine.SetActive(false);
-		}
-
-		if (!visible && _GDB.activeObjectInterface == gameObject)
-		{
-			_GDB.activeObjectInterface = null;
-		}
-
-		if (_GDB.selectList.Count > 0 || _GDB.activeObjectInterface != gameObject || !_sbotv.IsVisible)
-		{
-			visible = false;
-		}
-
-		if (AI)
-		{
-			gameObject.tag = "Enemy";
-		}
-		if (FreandAI)
-		{
-			gameObject.tag = "Freand";
-		}
-		if (Neutral)
-		{
-			gameObject.tag = "Neutral";
-		}
-		if (NeutralAgrass)
-		{
-			gameObject.tag = "NeutralAgrass";
-		}
-		if (!AI && !FreandAI && !Neutral && !NeutralAgrass)
-		{
-			gameObject.tag = "Dwarf";
-		}
-
-		if (Neutral)
-		{
-			if (Owner != null)
-			{
-				Owner = null;
-			}
-		}
-		if (ResPlus)
-		{
-			if (!AI && !FreandAI)
-			{
-				_GDB.Humans += CrewPS;
-				_GDB.Dilithium += DilithiumPS;
-				_GDB.Titanium += TiteniumPS;
-			}
-			if (AI)
-			{
-				Owner.GetComponent<GlobalAI>().Crew += CrewPS;
-				Owner.GetComponent<GlobalAI>().Dilithium += DilithiumPS;
-				Owner.GetComponent<GlobalAI>().Titanium += TiteniumPS;
-			}
-			if (!AI && FreandAI)
-			{
-				Owner.GetComponent<GlobalAI>().Crew += CrewPS;
-				Owner.GetComponent<GlobalAI>().Dilithium += DilithiumPS;
-				Owner.GetComponent<GlobalAI>().Titanium += TiteniumPS;
-			}
-		}
-
-		SensorsLine.transform.position = gameObject.transform.position;
-		_scr.radius = _sbsm.VisionRadius;
-
-		if (WeaponModule)
-		{
-			WeaponLine.transform.position = gameObject.transform.position;
-			_wcr.radius = gameObject.GetComponent<WeaponModule>().radiuse;
-		}
-		else
-		{
-			_wcr.radius = 0;
-		}
-		if (visible)
-		{
-			StationOutLineActive = true;
-		}
-		else
-		{
-			if (!Hovering)
-			{
-				StationOutLineActive = false;
-			}
-		}
-	}
-	void OnMouseOver()
-	{
+        Debug.LogError("1");
 		Hovering = true;
 		if (_sbotv.IsVisible)
 		{
-			StationOutLineActive = true;
+		    Debug.LogError("2");
+            StationOutLineActive = true;
 		}
 	}
 

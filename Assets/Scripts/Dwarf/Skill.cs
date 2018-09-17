@@ -257,9 +257,9 @@ public class Skill : MonoBehaviour
 						if (!ObjectLocked)
 						{
 							HealthModule _thm = Target.GetComponent<HealthModule>();
-							if (_thm.Ship && _thm.CurСилаПоля <= 0)
+							if (_thm.Ship && _thm.CurShilds <= 0)
 							{
-								if (_thm.curImpulseSystemHealth <= 0 && _hm.CurСилаПоля <= 0)
+								if (_thm.curImpulseSystemHealth <= 0 && _hm.CurShilds <= 0)
 								{
 									if (Vector3.Distance(gameObject.transform.position, Target.transform.position) > _tb.Radius)
 									{
@@ -288,9 +288,9 @@ public class Skill : MonoBehaviour
 						if (!ObjectLocked)
 						{
 							HealthModule _thm = Target.GetComponent<HealthModule>();
-							if (_thm.Ship && _thm.CurСилаПоля <= 0)
+							if (_thm.Ship && _thm.CurShilds <= 0)
 							{
-								if (_thm.curImpulseSystemHealth <= 0 && _hm.CurСилаПоля <= 0)
+								if (_thm.curImpulseSystemHealth <= 0 && _hm.CurShilds <= 0)
 								{
 									if (Vector3.Distance(gameObject.transform.position, Target.transform.position) > _tb.Radius)
 									{

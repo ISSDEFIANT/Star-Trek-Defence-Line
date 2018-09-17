@@ -318,7 +318,7 @@ public class CursorController : MonoBehaviour
 	}
 	bool NeedFix(HealthModule _hm)
 	{
-		if (_hm.curHealth < _hm.maxHealth || _hm.curImpulseSystemHealth < _hm.maxImpulseSystemHealth || _hm.curLifeSupportSystemHealth < _hm.maxLifeSupportSystemHealth || _hm.curPrimaryWeaponSystemHealth < _hm.maxPrimaryWeaponSystemHealth || _hm.curTractorBeamSystemHealth < _hm.maxTractorBeamSystemHealth || _hm.curWarpEngingSystemHealth < _hm.maxWarpEngingSystemHealth || _hm.curWarpCoreHealth < _hm.maxWarpCoreHealth || _hm.curSecondaryWeaponSystemHealth < _hm.maxSecondaryWeaponSystemHealth && _hm.curCrew >= _hm.maxCrew && _hm.CurСилаПоля >= _hm.СилаПоля)
+		if (_hm.curHealth < _hm.maxHealth || _hm.curImpulseSystemHealth < _hm.maxImpulseSystemHealth || _hm.curLifeSupportSystemHealth < _hm.maxLifeSupportSystemHealth || _hm.curPrimaryWeaponSystemHealth < _hm.maxPrimaryWeaponSystemHealth || _hm.curTractorBeamSystemHealth < _hm.maxTractorBeamSystemHealth || _hm.curWarpEngingSystemHealth < _hm.maxWarpEngingSystemHealth || _hm.curWarpCoreHealth < _hm.maxWarpCoreHealth || _hm.curSecondaryWeaponSystemHealth < _hm.maxSecondaryWeaponSystemHealth && _hm.curCrew >= _hm.maxCrew && _hm.CurShilds >= _hm.Shilds)
 		{
 			return true;
 		}

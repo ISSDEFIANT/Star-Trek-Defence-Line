@@ -7,14 +7,7 @@ public class ActiveState : MonoBehaviour
 	public GameObject Ship;
 	public bool CanAttack;
 	public int radiuse;
-	public enum enAnimation
-	{
-		idle,
-		move,
-		attact,
-		derth
-	}
-	public enAnimation animationState;
+
 	public float timer = 1;
 	public int damage;
 
@@ -34,16 +27,23 @@ public class ActiveState : MonoBehaviour
 	public bool Protact;
 	public bool Idle;
 
-	public bool ImpulseSystemAttack;
-	public bool LifeSupportSystemAttack;
-	public bool PrimaryWeaponSystemAttack;
-	public bool SensorsSystemAttack;
-	public bool TractorBeamSystemAttack;
-	public bool WarpEngingSystemAttack;
-	public bool WarpCoreAttack;
-	public bool SecondaryWeaponSystemAttack;
+    public enum AttackType
+    {
+        NormalAttack,
+        ImpulseSystemAttack,
+        LifeSupportSystemAttack,
+        PrimaryWeaponSystemAttack,
+        SensorsSystemAttack,
+        TractorBeamSystemAttack,
+        WarpEngingSystemAttack,
+        WarpCoreAttack,
+        SecondaryWeaponSystemAttack
+    }
 
-	public float SctiptLockTimer = 0.1f;
+    public AttackType TargetingAt;
+
+
+    public float SctiptLockTimer = 0.1f;
 	public GameObject SB;
 
 	private GlobalDB _GDB;
@@ -122,7 +122,7 @@ public class ActiveState : MonoBehaviour
 						correct += 0.01f;
 					}
 					else
-					{
+					{//Hi:)
 						correct = 1;
 					}
 				}
@@ -253,7 +253,6 @@ public class ActiveState : MonoBehaviour
 
 		else if (_st.instruction == Stats.enInstruction.move)
 		{
-			animationState = enAnimation.move;
 			if (Vector3.Distance(_st.targetVector, gameObject.transform.position) > 1)
 			{
 				if (_st.targetTransform == null)

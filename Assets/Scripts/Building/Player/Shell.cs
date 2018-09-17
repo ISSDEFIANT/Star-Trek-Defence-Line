@@ -82,7 +82,7 @@ public class Shell : MonoBehaviour
 					{
 						if (coll.GetComponent<HealthModule>())
 						{
-							if (_hp.CurСилаПоля <= 0)
+							if (_hp.CurShilds <= 0)
 							{
 								_hp.curHealth -= (damage);
 								if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack)
@@ -269,10 +269,10 @@ public class Shell : MonoBehaviour
 								Instantiate(Explod, transform.position, transform.rotation);
 								DestroyAlternative();
 							}
-							if (_hp.CurСилаПоля > 0)
+							if (_hp.CurShilds > 0)
 							{
 								_hp.curHealth -= (damage / 5);
-								_hp.CurСилаПоля -= (damage / 2);
+								_hp.CurShilds -= (damage / 2);
 								if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack)
 								{
 									_hp.curImpulseSystemHealth -= Random.Range(1, damage / 5);
@@ -375,9 +375,9 @@ public class Shell : MonoBehaviour
 								Instantiate(Explod, transform.position, transform.rotation);
 								if (Physics.Raycast(transform.position, transform.position, out hit, 10))
 								{
-									_hp.Поле.GetComponent<Renderer>().enabled = true;
-									_hp.Поле.GetComponent<Forcefield>().Shot = true;
-									_hp.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+									_hp.ShildModel.GetComponent<Renderer>().enabled = true;
+									_hp.ShildModel.GetComponent<Forcefield>().Shot = true;
+									_hp.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 								}
 								DestroyAlternative();
 							}
@@ -392,7 +392,7 @@ public class Shell : MonoBehaviour
 					{
 						if (hp != null)
 						{
-							if (_hp.CurСилаПоля <= 0)
+							if (_hp.CurShilds <= 0)
 							{
 								_hp.curHealth -= (damage);
 								if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack)
@@ -579,10 +579,10 @@ public class Shell : MonoBehaviour
 								Instantiate(Explod, transform.position, transform.rotation);
 								DestroyAlternative();
 							}
-							if (_hp.CurСилаПоля > 0)
+							if (_hp.CurShilds > 0)
 							{
 								_hp.curHealth -= (damage / 5);
-								_hp.CurСилаПоля -= (damage / 2);
+								_hp.CurShilds -= (damage / 2);
 								if (!ImpulseSystemAttack & !LifeSupportSystemAttack & !PrimaryWeaponSystemAttack & !SensorsSystemAttack & !TractorBeamSystemAttack & !WarpEngingSystemAttack & !WarpCoreAttack & !SecondaryWeaponSystemAttack)
 								{
 									_hp.curImpulseSystemHealth -= Random.Range(1, damage / 5);
@@ -695,9 +695,9 @@ public class Shell : MonoBehaviour
 								Instantiate(Explod, transform.position, transform.rotation);
 								if (Physics.Raycast(transform.position, transform.position, out hit, 10))
 								{
-									_hp.Поле.GetComponent<Renderer>().enabled = true;
-									_hp.Поле.GetComponent<Forcefield>().Shot = true;
-									_hp.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+									_hp.ShildModel.GetComponent<Renderer>().enabled = true;
+									_hp.ShildModel.GetComponent<Forcefield>().Shot = true;
+									_hp.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 								}
 								DestroyAlternative();
 							}

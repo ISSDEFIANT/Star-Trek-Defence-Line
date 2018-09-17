@@ -90,7 +90,7 @@ public class Forcefield : MonoBehaviour {
 			FadeMask ();
 		}
 		if (!MaskitoEffect) {
-			if (Ship.GetComponent<HealthModule> ().CurСилаПоля > 0) {
+			if (Ship.GetComponent<HealthModule> ().CurShilds > 0) {
 				FadeMask ();
 				if (Shot) {
 					UpdateMask (PhaserHit.point);

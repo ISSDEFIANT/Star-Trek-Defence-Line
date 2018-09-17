@@ -111,11 +111,11 @@ public class Phaser : MonoBehaviour
 									if (Physics.Raycast(_sbwm.target.transform.position, _sbwm.transform.position, out hit, 1000))
 									{
 									}
-									if (EnemyHM.CurСилаПоля > 0)
+									if (EnemyHM.CurShilds > 0)
 									{
-										EnemyHM.Поле.GetComponent<Renderer>().enabled = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().Shot = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+										EnemyHM.ShildModel.GetComponent<Renderer>().enabled = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().Shot = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 									}
 									_PGS.PhaserFire(EnemyHM.Mesh.transform);
 									_a.clip = Sound;
@@ -129,13 +129,13 @@ public class Phaser : MonoBehaviour
 								if (DamageTimer > 0)
 								{
 									DamageTimer -= Time.deltaTime;
-									if (EnemyHM.CurСилаПоля <= 0)
+									if (EnemyHM.CurShilds <= 0)
 									{
 										EnemyHM.curHealth -= Time.deltaTime * Damage;
 									}
 									else
 									{
-										EnemyHM.CurСилаПоля -= Time.deltaTime * Damage;
+										EnemyHM.CurShilds -= Time.deltaTime * Damage;
 									}
 								}
 								if (DamageTimer <= 0)
@@ -159,11 +159,11 @@ public class Phaser : MonoBehaviour
 									if (Physics.Raycast(_sbwm.target.transform.position, _sbwm.target.transform.position, out hit, 1000))
 									{
 									}
-									if (EnemyHM.CurСилаПоля > 0)
+									if (EnemyHM.CurShilds > 0)
 									{
-										EnemyHM.Поле.GetComponent<Renderer>().enabled = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().Shot = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+										EnemyHM.ShildModel.GetComponent<Renderer>().enabled = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().Shot = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 									}
 									_PGS.PhaserFire(EnemyHM.Mesh.transform);
 
@@ -181,13 +181,13 @@ public class Phaser : MonoBehaviour
 								if (DamageTimer > 0)
 								{
 									DamageTimer -= Time.deltaTime;
-									if (EnemyHM.CurСилаПоля <= 0)
+									if (EnemyHM.CurShilds <= 0)
 									{
 										EnemyHM.curHealth -= Time.deltaTime * Damage;
 									}
 									else
 									{
-										EnemyHM.CurСилаПоля -= Time.deltaTime * Damage;
+										EnemyHM.CurShilds -= Time.deltaTime * Damage;
 									}
 								}
 								if (DamageTimer <= 0)
@@ -231,11 +231,11 @@ public class Phaser : MonoBehaviour
 									RaycastHit hit = new RaycastHit();
 									if (_st.targetTransform != null)
 									{
-										if (EnemyHM.CurСилаПоля > 0)
+										if (EnemyHM.CurShilds > 0)
 										{
-											EnemyHM.Поле.GetComponent<Renderer>().enabled = true;
-											EnemyHM.Поле.GetComponent<Forcefield>().Shot = true;
-											EnemyHM.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+											EnemyHM.ShildModel.GetComponent<Renderer>().enabled = true;
+											EnemyHM.ShildModel.GetComponent<Forcefield>().Shot = true;
+											EnemyHM.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 										}
 									}
 									_PGS.PhaserFire(EnemyHM.Mesh.transform);
@@ -252,13 +252,13 @@ public class Phaser : MonoBehaviour
 									DamageTimer -= Time.deltaTime;
 									if (_st.targetTransform != null)
 									{
-										if (EnemyHM.CurСилаПоля <= 0)
+										if (EnemyHM.CurShilds <= 0)
 										{
 											EnemyHM.curHealth -= Time.deltaTime * Damage;
 										}
 										else
 										{
-											EnemyHM.CurСилаПоля -= Time.deltaTime * Damage;
+											EnemyHM.CurShilds -= Time.deltaTime * Damage;
 										}
 									}
 								}
@@ -287,11 +287,11 @@ public class Phaser : MonoBehaviour
 									if (Physics.Raycast(_st.targetTransform.position, _st.targetTransform.position, out hit, gameObject.GetComponent<Distanser>().DistanceToTarget + 1000))
 									{
 									}
-									if (EnemyHM.CurСилаПоля > 0)
+									if (EnemyHM.CurShilds > 0)
 									{
-										EnemyHM.Поле.GetComponent<Renderer>().enabled = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().Shot = true;
-										EnemyHM.Поле.GetComponent<Forcefield>().PhaserHit = hit;
+										EnemyHM.ShildModel.GetComponent<Renderer>().enabled = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().Shot = true;
+										EnemyHM.ShildModel.GetComponent<Forcefield>().PhaserHit = hit;
 									}
 									_PGS.PhaserFire(EnemyHM.Mesh.transform);
 									_a.clip = Sound;
@@ -305,13 +305,13 @@ public class Phaser : MonoBehaviour
 								if (DamageTimer > 0)
 								{
 									DamageTimer -= Time.deltaTime;
-									if (EnemyHM.CurСилаПоля <= 0)
+									if (EnemyHM.CurShilds <= 0)
 									{
 										EnemyHM.curHealth -= Time.deltaTime * Damage;
 									}
 									else
 									{
-										EnemyHM.CurСилаПоля -= Time.deltaTime * Damage;
+										EnemyHM.CurShilds -= Time.deltaTime * Damage;
 									}
 								}
 								if (DamageTimer <= 0)

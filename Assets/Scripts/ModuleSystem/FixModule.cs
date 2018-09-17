@@ -277,13 +277,13 @@ public class FixModule : MonoBehaviour
 									_SHM.curSecondaryWeaponSystemHealth = _SHM.maxSecondaryWeaponSystemHealth;
 								}
 
-								if (_SHM.CurСилаПоля < _SHM.СилаПоля)
+								if (_SHM.CurShilds < _SHM.Shilds)
 								{
-									_SHM.CurСилаПоля += Time.deltaTime * 20;
+									_SHM.CurShilds += Time.deltaTime * 20;
 								}
 								else
 								{
-									_SHM.CurСилаПоля = _SHM.СилаПоля;
+									_SHM.CurShilds = _SHM.Shilds;
 								}
 
 								if (_GDB.Humans > 0)
@@ -299,7 +299,7 @@ public class FixModule : MonoBehaviour
 									}
 								}
 
-								if (_SHM.curHealth >= _SHM.maxHealth && _SHM.curImpulseSystemHealth >= _SHM.maxImpulseSystemHealth && _SHM.curLifeSupportSystemHealth >= _SHM.maxLifeSupportSystemHealth && _SHM.curPrimaryWeaponSystemHealth >= _SHM.maxPrimaryWeaponSystemHealth && _SHM.curTractorBeamSystemHealth >= _SHM.maxTractorBeamSystemHealth && _SHM.curWarpEngingSystemHealth >= _SHM.maxWarpEngingSystemHealth && _SHM.curWarpCoreHealth >= _SHM.maxWarpCoreHealth && _SHM.curSecondaryWeaponSystemHealth >= _SHM.maxSecondaryWeaponSystemHealth && _SHM.curCrew >= _SHM.maxCrew && _SHM.CurСилаПоля >= _SHM.СилаПоля)
+								if (_SHM.curHealth >= _SHM.maxHealth && _SHM.curImpulseSystemHealth >= _SHM.maxImpulseSystemHealth && _SHM.curLifeSupportSystemHealth >= _SHM.maxLifeSupportSystemHealth && _SHM.curPrimaryWeaponSystemHealth >= _SHM.maxPrimaryWeaponSystemHealth && _SHM.curTractorBeamSystemHealth >= _SHM.maxTractorBeamSystemHealth && _SHM.curWarpEngingSystemHealth >= _SHM.maxWarpEngingSystemHealth && _SHM.curWarpCoreHealth >= _SHM.maxWarpCoreHealth && _SHM.curSecondaryWeaponSystemHealth >= _SHM.maxSecondaryWeaponSystemHealth && _SHM.curCrew >= _SHM.maxCrew && _SHM.CurShilds >= _SHM.Shilds)
 								{
 									R3 = true;
 									R2 = false;
@@ -440,7 +440,7 @@ public class FixModule : MonoBehaviour
 				HealthModule _SHM = obj.GetComponent<HealthModule>();
 				if (!_SHM._st.AI && !_SHM._st.FreandAI && !_SHM._st.Neutral && !_SHM._st.NeutralAgrass)
 				{
-					if (_SHM.curHealth < _SHM.maxHealth || _SHM.curImpulseSystemHealth < _SHM.maxImpulseSystemHealth || _SHM.curLifeSupportSystemHealth < _SHM.maxLifeSupportSystemHealth || _SHM.curPrimaryWeaponSystemHealth < _SHM.maxPrimaryWeaponSystemHealth || _SHM.curTractorBeamSystemHealth < _SHM.maxTractorBeamSystemHealth || _SHM.curWarpEngingSystemHealth < _SHM.maxWarpEngingSystemHealth || _SHM.curWarpCoreHealth < _SHM.maxWarpCoreHealth || _SHM.curSecondaryWeaponSystemHealth < _SHM.maxSecondaryWeaponSystemHealth || _SHM.curCrew < _SHM.maxCrew || _SHM.CurСилаПоля < _SHM.СилаПоля)
+					if (_SHM.curHealth < _SHM.maxHealth || _SHM.curImpulseSystemHealth < _SHM.maxImpulseSystemHealth || _SHM.curLifeSupportSystemHealth < _SHM.maxLifeSupportSystemHealth || _SHM.curPrimaryWeaponSystemHealth < _SHM.maxPrimaryWeaponSystemHealth || _SHM.curTractorBeamSystemHealth < _SHM.maxTractorBeamSystemHealth || _SHM.curWarpEngingSystemHealth < _SHM.maxWarpEngingSystemHealth || _SHM.curWarpCoreHealth < _SHM.maxWarpCoreHealth || _SHM.curSecondaryWeaponSystemHealth < _SHM.maxSecondaryWeaponSystemHealth || _SHM.curCrew < _SHM.maxCrew || _SHM.CurShilds < _SHM.Shilds)
 					{
 						if (!FindInFixList(obj)) ShipsToFix.Add(obj);
 						obj.GetComponent<MoveComponent>().CurFleet.Clear();

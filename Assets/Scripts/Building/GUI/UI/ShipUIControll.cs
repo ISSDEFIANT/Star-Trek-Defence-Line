@@ -182,57 +182,31 @@ public class ShipUIControll : MonoBehaviour
 				TargetImage.sprite = _st.ShipBluePrint;
 			}
 			if (ShildBar)
+            {
+                SHERBar(_h.CurShilds, _h.Shilds);
+            }
+            if (HealthBar)
 			{
-				if (_h.CurСилаПоля > 0)
-				{
-					TargetImage.fillAmount = _h.CurСилаПоля / _h.СилаПоля;
-				}
-				else
-				{
-					TargetImage.fillAmount = 0;
-				}
-			}
-			if (HealthBar)
-			{
-				if (_h.curHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curHealth / _h.maxHealth;
-				}
-				else
-				{
-					TargetImage.fillAmount = 0;
-				}
-			}
+			    SHERBar(_h.curHealth, _h.maxHealth);
+            }
 			if (EnergyBar)
 			{
-				if (_h.curEnergy > 0)
-				{
-					TargetImage.fillAmount = _h.curEnergy / _h.maxEnergy;
-				}
-				else
-				{
-					TargetImage.fillAmount = 0;
-				}
-			}
-			if (ResourcesBar)
-			{
-				if (_m != null)
-				{
-					if (_m.curAs > 0)
-					{
-						TargetImage.fillAmount = _m.curAs / _m.maxAs;
-					}
-					else
-					{
-						TargetImage.fillAmount = 0;
-					}
-				}
-				else
-				{
-					TargetImage.fillAmount = 0;
-				}
-			}
-			if (ResourcesCount)
+			    SHERBar(_h.curEnergy, _h.maxEnergy);
+            }
+
+		    if (ResourcesBar)
+		    {
+		        if (_m != null)
+		        {
+		            SHERBar(_m.curAs, _m.maxAs);
+		        }
+		        else
+		        {
+		            TargetImage.fillAmount = 0;
+		        }
+		    }
+
+		    if (ResourcesCount)
 			{
 				if (_m != null)
 				{
@@ -282,555 +256,101 @@ public class ShipUIControll : MonoBehaviour
 			}
 			if (PrimaryWeaponBar)
 			{
-				if (_h.maxPrimaryWeaponSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curPrimaryWeaponSystemHealth / _h.maxPrimaryWeaponSystemHealth;
-					if (!_h.ActivePrimaryWeapon)
-					{
-						if (_h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curPrimaryWeaponSystemHealth < _h.maxPrimaryWeaponSystemHealth / 2 && _h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curPrimaryWeaponSystemHealth < _h.maxPrimaryWeaponSystemHealth / 4 && _h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
+            }
 			if (PrimaryWeaponIcon)
 			{
-				if (_h.maxPrimaryWeaponSystemHealth > 0)
-				{
-					if (_h.ActivePrimaryWeapon)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else if (_h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 2)
-					{
-						TargetImage.color = Color.green;
-					}
-					if (_h.curPrimaryWeaponSystemHealth < _h.maxPrimaryWeaponSystemHealth / 2 && _h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 4)
-					{
-						TargetImage.color = Color.yellow;
-					}
-					if (_h.curPrimaryWeaponSystemHealth < _h.maxPrimaryWeaponSystemHealth / 4 && _h.curPrimaryWeaponSystemHealth > _h.maxPrimaryWeaponSystemHealth / 8)
-					{
-						TargetImage.color = new Color32(255, 174, 0, 255);
-					}
-					if (_h.curPrimaryWeaponSystemHealth < _h.maxPrimaryWeaponSystemHealth / 8)
-					{
-						TargetImage.color = Color.red;
-					}
-					if (_h.curPrimaryWeaponSystemHealth <= 0)
-					{
-						TargetImage.color = Color.grey;
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
+            }
 			if (SecondaryWeaponBar)
 			{
-				if (_h.maxSecondaryWeaponSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curSecondaryWeaponSystemHealth / _h.maxSecondaryWeaponSystemHealth;
-					if (!_h.ActiveSecondaryWeapon)
-					{
-						if (_h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curSecondaryWeaponSystemHealth < _h.maxSecondaryWeaponSystemHealth / 2 && _h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curSecondaryWeaponSystemHealth < _h.maxSecondaryWeaponSystemHealth / 4 && _h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
+            }
 			if (SecondaryWeaponIcon)
 			{
-				if (_h.maxSecondaryWeaponSystemHealth > 0)
-				{
-					if (_h.ActiveSecondaryWeapon)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curSecondaryWeaponSystemHealth < _h.maxSecondaryWeaponSystemHealth / 2 && _h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curSecondaryWeaponSystemHealth < _h.maxSecondaryWeaponSystemHealth / 4 && _h.curSecondaryWeaponSystemHealth > _h.maxSecondaryWeaponSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curSecondaryWeaponSystemHealth < _h.maxSecondaryWeaponSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curSecondaryWeaponSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
+            }
 			if (ImpulsBar)
 			{
-				if (_h.maxImpulseSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curImpulseSystemHealth / _h.maxImpulseSystemHealth;
-					if (!_h.ActiveImpulse)
-					{
-						if (_h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curImpulseSystemHealth < _h.maxImpulseSystemHealth / 2 && _h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curImpulseSystemHealth < _h.maxImpulseSystemHealth / 4 && _h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
+            }
 			if (ImpulsIcon)
 			{
-				if (_h.maxImpulseSystemHealth > 0)
-				{
-					if (_h.ActiveImpulse)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curImpulseSystemHealth < _h.maxImpulseSystemHealth / 2 && _h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curImpulseSystemHealth < _h.maxImpulseSystemHealth / 4 && _h.curImpulseSystemHealth > _h.maxImpulseSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curImpulseSystemHealth < _h.maxImpulseSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curImpulseSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
+            }
 
 			if (WarpEngBar)
 			{
-				if (_h.maxWarpEngingSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curWarpEngingSystemHealth / _h.maxWarpEngingSystemHealth;
-					if (!_h.ActiveWarpEnging)
-					{
-						if (_h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curWarpEngingSystemHealth < _h.maxWarpEngingSystemHealth / 2 && _h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curWarpEngingSystemHealth < _h.maxWarpEngingSystemHealth / 4 && _h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
+            }
 			if (WarpEngIcon)
 			{
-				if (_h.maxWarpEngingSystemHealth > 0)
-				{
-					if (_h.ActiveWarpEnging)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curWarpEngingSystemHealth < _h.maxWarpEngingSystemHealth / 2 && _h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curWarpEngingSystemHealth < _h.maxWarpEngingSystemHealth / 4 && _h.curWarpEngingSystemHealth > _h.maxWarpEngingSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curWarpEngingSystemHealth < _h.maxWarpEngingSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curWarpEngingSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
+            }
 			if (WarpCoreBar)
 			{
-				if (_h.maxWarpCoreHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curWarpCoreHealth / _h.maxWarpCoreHealth;
-					if (!_h.ActiveWarpCore)
-					{
-						if (_h.curWarpCoreHealth > _h.maxWarpCoreHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curWarpCoreHealth < _h.maxWarpCoreHealth / 2 && _h.curWarpCoreHealth > _h.maxWarpCoreHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curWarpCoreHealth < _h.maxWarpCoreHealth / 4 && _h.curWarpCoreHealth > _h.maxWarpCoreHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
+            }
 			if (WarpCoreIcon)
 			{
-				if (_h.maxWarpCoreHealth > 0)
-				{
-					if (_h.ActiveWarpCore)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curWarpCoreHealth > _h.maxWarpCoreHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curWarpCoreHealth < _h.maxWarpCoreHealth / 2 && _h.curWarpCoreHealth > _h.maxWarpCoreHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curWarpCoreHealth < _h.maxWarpCoreHealth / 4 && _h.curWarpCoreHealth > _h.maxWarpCoreHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curWarpCoreHealth < _h.maxWarpCoreHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curWarpCoreHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
+            }
 			if (LifeSupportBar)
 			{
-				if (_h.maxLifeSupportSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curLifeSupportSystemHealth / _h.maxLifeSupportSystemHealth;
-					if (!_h.ActiveLifeSupport)
-					{
-						if (_h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curLifeSupportSystemHealth < _h.maxLifeSupportSystemHealth / 2 && _h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curLifeSupportSystemHealth < _h.maxLifeSupportSystemHealth / 4 && _h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
+			    SystemBarControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
+            }
 			if (LifeSupportIcon)
 			{
-				if (_h.maxLifeSupportSystemHealth > 0)
-				{
-					if (_h.ActiveLifeSupport)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curLifeSupportSystemHealth < _h.maxLifeSupportSystemHealth / 2 && _h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curLifeSupportSystemHealth < _h.maxLifeSupportSystemHealth / 4 && _h.curLifeSupportSystemHealth > _h.maxLifeSupportSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curLifeSupportSystemHealth < _h.maxLifeSupportSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curLifeSupportSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
+            }
 			if (SensorBar)
 			{
-				if (_h.maxSensorsSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curSensorsSystemHealth / _h.maxSensorsSystemHealth;
-					if (!_h.ActiveSensors)
-					{
-						if (_h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curSensorsSystemHealth < _h.maxSensorsSystemHealth / 2 && _h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curSensorsSystemHealth < _h.maxSensorsSystemHealth / 4 && _h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
+			    SystemBarControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
 			}
 			if (SensorIcon)
 			{
-				if (_h.maxSensorsSystemHealth > 0)
-				{
-					if (_h.ActiveSensors)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curSensorsSystemHealth < _h.maxSensorsSystemHealth / 2 && _h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curSensorsSystemHealth < _h.maxSensorsSystemHealth / 4 && _h.curSensorsSystemHealth > _h.maxSensorsSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curSensorsSystemHealth < _h.maxSensorsSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curSensorsSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
+			    SystemIconControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
+            }
 			if (TractorBar)
+            {
+                SystemBarControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
+            }
+            if (TractorIcon)
+            {
+                SystemIconControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
+            }
+            if (SystemAttackIcon)
 			{
-				if (_h.maxTractorBeamSystemHealth > 0)
-				{
-					TargetImage.fillAmount = _h.curTractorBeamSystemHealth / _h.maxTractorBeamSystemHealth;
-					if (!_h.ActiveTractor)
-					{
-						if (_h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curTractorBeamSystemHealth < _h.maxTractorBeamSystemHealth / 2 && _h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curTractorBeamSystemHealth < _h.maxTractorBeamSystemHealth / 4 && _h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-					TargetImage.fillAmount = 1;
-				}
-			}
-			if (TractorIcon)
-			{
-				if (_h.maxTractorBeamSystemHealth > 0)
-				{
-					if (_h.ActiveTractor)
-					{
-						TargetImage.color = DeactiveSystemColor;
-					}
-					else
-					{
-						if (_h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 2)
-						{
-							TargetImage.color = Color.green;
-						}
-						if (_h.curTractorBeamSystemHealth < _h.maxTractorBeamSystemHealth / 2 && _h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 4)
-						{
-							TargetImage.color = Color.yellow;
-						}
-						if (_h.curTractorBeamSystemHealth < _h.maxTractorBeamSystemHealth / 4 && _h.curTractorBeamSystemHealth > _h.maxTractorBeamSystemHealth / 8)
-						{
-							TargetImage.color = new Color32(255, 174, 0, 255);
-						}
-						if (_h.curTractorBeamSystemHealth < _h.maxTractorBeamSystemHealth / 8)
-						{
-							TargetImage.color = Color.red;
-						}
-						if (_h.curTractorBeamSystemHealth <= 0)
-						{
-							TargetImage.color = Color.grey;
-						}
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.grey;
-				}
-			}
-			if (SystemAttackIcon)
-			{
-				if (!_as.WarpCoreAttack && !_as.ImpulseSystemAttack && !_as.SensorsSystemAttack && !_as.WarpEngingSystemAttack && !_as.TractorBeamSystemAttack && !_as.LifeSupportSystemAttack && !_as.PrimaryWeaponSystemAttack && !_as.SecondaryWeaponSystemAttack)
-				{
-					TargetImage.sprite = HullAttack;
-				}
-				else
-				{
-					if (_as.PrimaryWeaponSystemAttack)
-					{
-						TargetImage.sprite = PrimaryAttack;
-					}
-					if (_as.SecondaryWeaponSystemAttack)
-					{
-						TargetImage.sprite = SecondaryAttack;
-					}
-					if (_as.ImpulseSystemAttack)
-					{
-						TargetImage.sprite = ImpulsAttack;
-					}
-					if (_as.WarpEngingSystemAttack)
-					{
-						TargetImage.sprite = WarpEAttack;
-					}
-					if (_as.WarpCoreAttack)
-					{
-						TargetImage.sprite = WarpCAttack;
-					}
-					if (_as.LifeSupportSystemAttack)
-					{
-						TargetImage.sprite = LifeAttack;
-					}
-					if (_as.SensorsSystemAttack)
-					{
-						TargetImage.sprite = SensorEAttack;
-					}
-					if (_as.TractorBeamSystemAttack)
-					{
-						TargetImage.sprite = TractorAttack;
-					}
-				}
+			    switch (_as.TargetingAt)
+			    {
+                    case ActiveState.AttackType.NormalAttack:
+                        TargetImage.sprite = HullAttack;
+                        break;
+			        case ActiveState.AttackType.PrimaryWeaponSystemAttack:
+			            TargetImage.sprite = PrimaryAttack;
+                        break;
+			        case ActiveState.AttackType.SecondaryWeaponSystemAttack:
+			            TargetImage.sprite = SecondaryAttack;
+                        break;
+			        case ActiveState.AttackType.ImpulseSystemAttack:
+			            TargetImage.sprite = ImpulsAttack;
+                        break;
+			        case ActiveState.AttackType.WarpEngingSystemAttack:
+			            TargetImage.sprite = WarpEAttack;
+                        break;
+			        case ActiveState.AttackType.WarpCoreAttack:
+			            TargetImage.sprite = WarpCAttack;
+                        break;
+			        case ActiveState.AttackType.LifeSupportSystemAttack:
+			            TargetImage.sprite = LifeAttack;
+                        break;
+			        case ActiveState.AttackType.SensorsSystemAttack:
+			            TargetImage.sprite = SensorEAttack;
+                        break;
+			        case ActiveState.AttackType.TractorBeamSystemAttack:
+			            TargetImage.sprite = TractorAttack;
+                        break;
+                }
 			}
 			if (RedAlertButton)
 			{
@@ -955,4 +475,82 @@ public class ShipUIControll : MonoBehaviour
 			}
 		}
 	}
+
+    private void SHERBar(float CurVar, float MaxVar)
+    {
+        if (_h.CurShilds > 0)
+        {
+            TargetImage.fillAmount = CurVar / MaxVar;
+        }
+        else
+        {
+            TargetImage.fillAmount = 0;
+        }
+    }
+
+    private void SystemBarControl(float maxSystemHealth, float curSystemHealth, bool DeActivationBool)
+    {
+        if (maxSystemHealth > 0)
+        {
+            TargetImage.fillAmount = curSystemHealth / maxSystemHealth;
+            if (!DeActivationBool)
+            {
+                if (curSystemHealth > maxSystemHealth / 2)
+                {
+                    TargetImage.color = Color.green;
+                }
+                if (curSystemHealth < maxSystemHealth / 2 && curSystemHealth > maxSystemHealth / 4)
+                {
+                    TargetImage.color = Color.yellow;
+                }
+                if (curSystemHealth < maxSystemHealth / 4 && curSystemHealth > maxSystemHealth / 8)
+                {
+                    TargetImage.color = new Color32(255, 174, 0, 255);
+                }
+            }
+        }
+        else
+        {
+            TargetImage.color = Color.grey;
+            TargetImage.fillAmount = 1;
+        }
+    }
+
+    private void SystemIconControl(float maxSystemHealth, float curSystemHealth, bool DeActivationBool)
+    {
+        if (maxSystemHealth > 0)
+        {
+            if (DeActivationBool)
+            {
+                TargetImage.color = DeactiveSystemColor;
+            }
+            else
+            {
+                if (curSystemHealth > maxSystemHealth / 2)
+                {
+                    TargetImage.color = Color.green;
+                }
+                if (curSystemHealth < maxSystemHealth / 2 && curSystemHealth > maxSystemHealth / 4)
+                {
+                    TargetImage.color = Color.yellow;
+                }
+                if (curSystemHealth < maxSystemHealth / 4 && curSystemHealth > maxSystemHealth / 8)
+                {
+                    TargetImage.color = new Color32(255, 174, 0, 255);
+                }
+                if (curSystemHealth < maxSystemHealth / 8)
+                {
+                    TargetImage.color = Color.red;
+                }
+                if (curSystemHealth <= 0)
+                {
+                    TargetImage.color = Color.grey;
+                }
+            }
+        }
+        else
+        {
+            TargetImage.color = Color.grey;
+        }
+    }
 }

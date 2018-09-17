@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using  UnityEngine.SceneManagement;
+
 public class USplashScreen : MonoBehaviour {
 
     public string m_NextLevel = "MainMenu";
@@ -96,7 +98,7 @@ public class USplashScreen : MonoBehaviour {
             if (t_current >= m_uss.Count - 1)
             {
                 yield return new WaitForSeconds(1f);
-                Application.LoadLevel(m_NextLevel);
+                SceneManager.LoadScene(m_NextLevel);
             }else{
                 t_current++;
             }

@@ -5,9 +5,10 @@ using System.Linq;
 
 public class HealthModule : MonoBehaviour
 {
-	public GameObject Поле;
-	public float СилаПоля;
-	public float CurСилаПоля;
+	public GameObject ShildModel;
+
+	public float Shilds;
+	public float CurShilds;
 	public float ReloadShildTimer;
 	public float ShildTimerStarter;
 
@@ -80,11 +81,9 @@ public class HealthModule : MonoBehaviour
 	public GameObject Explode;
 	public GameObject WarpCoreDestroyed;
 	public GameObject BorgWarpCoreDestroyed;
-	public List<GameObject> Обломки;
+	public List<GameObject> DebrisObjects;
 
-	public GameObject Prefeb;
-
-	public float ShildTimer = 2;
+	private float ShildTimer = 2;
 
 	private GlobalDB _GDB;
 	//private SaveAndLoad SAL;
@@ -93,6 +92,7 @@ public class HealthModule : MonoBehaviour
 
 	public GameObject Mesh;
 
+    [HideInInspector]
 	public bool Catched;
 
 	private float CatchTimer = 2;
@@ -110,16 +110,7 @@ public class HealthModule : MonoBehaviour
 	public bool Team8;
 	public bool Team9;
 
-	private float GravityTimer = 0.01f;
-
-	public Vector3 localDirection;
-
-	public Vector3 MoveVelocity;
-	public Vector3 LateRotation;
-	public Vector3 RotationVelocity;
-	public float angle;
-
-	public GameObject MeshPysicsMeshAutomatic;
+	
 
 	private List<Collider> colls;
 
@@ -169,551 +160,538 @@ public class HealthModule : MonoBehaviour
 			Catched = false;
 			CatchTimer = 2;
 		}
-		LateRotation = gameObject.transform.root.eulerAngles;
 	}
 
 	void Update()
-	{
-		if (gameObject.GetComponent<MoveComponent>())
-		{
-			if (gameObject.GetComponent<MoveComponent>().enabled == false)
-			{
-				gameObject.GetComponent<Rigidbody>().drag = 0;
-			}
-		}
+    {
+        if (gameObject.GetComponent<MoveComponent>())
+        {
+            if (gameObject.GetComponent<MoveComponent>().enabled == false)
+            {
+                gameObject.GetComponent<Rigidbody>().drag = 0;
+            }
+        }
 
-		localDirection = transform.position + this.transform.forward * 10;
+        if (curImpulseSystemHealth > 0)
+        {
+            RegenerateSystem(curImpulseSystemHealth, maxImpulseSystemHealth);
+        }
 
-		if (curImpulseSystemHealth > 0)
-		{
-			if (curImpulseSystemHealth < maxImpulseSystemHealth)
-			{
-				curImpulseSystemHealth += Time.deltaTime;
-			}
-			else if (curImpulseSystemHealth > maxImpulseSystemHealth)
-			{
-				curImpulseSystemHealth = maxImpulseSystemHealth;
-			}
-		}
+        if (curLifeSupportSystemHealth > 0)
+        {
+            RegenerateSystem(curLifeSupportSystemHealth, maxLifeSupportSystemHealth);
+        }
 
-		if (curLifeSupportSystemHealth > 0)
-		{
-			if (curLifeSupportSystemHealth < maxLifeSupportSystemHealth)
-			{
-				curLifeSupportSystemHealth += Time.deltaTime;
-			}
-			else if (curLifeSupportSystemHealth > maxLifeSupportSystemHealth)
-			{
-				curLifeSupportSystemHealth = maxLifeSupportSystemHealth;
-			}
-		}
+        if (curPrimaryWeaponSystemHealth > 0)
+        {
+            RegenerateSystem(curPrimaryWeaponSystemHealth, maxPrimaryWeaponSystemHealth);
+        }
 
-		if (curPrimaryWeaponSystemHealth > 0)
-		{
-			if (curPrimaryWeaponSystemHealth < maxPrimaryWeaponSystemHealth)
-			{
-				curPrimaryWeaponSystemHealth += Time.deltaTime;
-			}
-			else if (curPrimaryWeaponSystemHealth > maxPrimaryWeaponSystemHealth)
-			{
-				curPrimaryWeaponSystemHealth = maxPrimaryWeaponSystemHealth;
-			}
-		}
+        if (curSensorsSystemHealth > 0)
+        {
+            RegenerateSystem(curSensorsSystemHealth, maxSensorsSystemHealth);
+        }
 
-		if (curSensorsSystemHealth > 0)
-		{
-			if (curSensorsSystemHealth < maxSensorsSystemHealth)
-			{
-				curSensorsSystemHealth += Time.deltaTime;
-			}
-			else if (curSensorsSystemHealth > maxSensorsSystemHealth)
-			{
-				curSensorsSystemHealth = maxSensorsSystemHealth;
-			}
-		}
+        if (curTractorBeamSystemHealth > 0)
+        {
+            RegenerateSystem(curTractorBeamSystemHealth, maxTractorBeamSystemHealth);
+        }
 
-		if (curTractorBeamSystemHealth > 0)
-		{
-			if (curTractorBeamSystemHealth < maxTractorBeamSystemHealth)
-			{
-				curTractorBeamSystemHealth += Time.deltaTime;
-			}
-			else if (curTractorBeamSystemHealth > maxTractorBeamSystemHealth)
-			{
-				curTractorBeamSystemHealth = maxTractorBeamSystemHealth;
-			}
-		}
+        if (curWarpEngingSystemHealth > 0)
+        {
+            RegenerateSystem(curWarpEngingSystemHealth, maxWarpEngingSystemHealth);
+        }
 
-		if (curWarpEngingSystemHealth > 0)
-		{
-			if (curWarpEngingSystemHealth < maxWarpEngingSystemHealth)
-			{
-				curWarpEngingSystemHealth += Time.deltaTime;
-			}
-			else if (curWarpEngingSystemHealth > maxWarpEngingSystemHealth)
-			{
-				curWarpEngingSystemHealth = maxWarpEngingSystemHealth;
-			}
-		}
+        if (curWarpCoreHealth > 0)
+        {
+            RegenerateSystem(curWarpCoreHealth, maxWarpCoreHealth);
+        }
 
-		if (curWarpCoreHealth > 0)
-		{
-			if (curWarpCoreHealth < maxWarpCoreHealth)
-			{
-				curWarpCoreHealth += Time.deltaTime;
-			}
-			else if (curWarpCoreHealth > maxWarpCoreHealth)
-			{
-				curWarpCoreHealth = maxWarpCoreHealth;
-			}
-		}
-
-		if (curSecondaryWeaponSystemHealth > 0)
-		{
-			if (curSecondaryWeaponSystemHealth < maxSecondaryWeaponSystemHealth)
-			{
-				curSecondaryWeaponSystemHealth += Time.deltaTime;
-			}
-			else if (curSecondaryWeaponSystemHealth > maxSecondaryWeaponSystemHealth)
-			{
-				curSecondaryWeaponSystemHealth = maxSecondaryWeaponSystemHealth;
-			}
-		}
+        if (curSecondaryWeaponSystemHealth > 0)
+        {
+            RegenerateSystem(curSecondaryWeaponSystemHealth, maxSecondaryWeaponSystemHealth);
+        }
 
 
-		if (curEnergy < maxEnergy)
-		{
-			curEnergy += Time.deltaTime;
-		}
-		else if (curEnergy > maxEnergy)
-		{
-			curEnergy = maxEnergy;
-		}
-		if (СилаПоля > 0)
-		{
-			if (CurСилаПоля < СилаПоля & CurСилаПоля > 0)
-			{
-				CurСилаПоля += Time.deltaTime / 3;
-			}
-			if (CurСилаПоля <= 0)
-			{
-				ReloadShildTimer -= Time.deltaTime;
-				CurСилаПоля = 0;
-			}
-			if (ReloadShildTimer <= 0)
-			{
-				CurСилаПоля = 1;
-				ReloadShildTimer = ShildTimerStarter;
-			}
-		}
+        if (curEnergy < maxEnergy)
+        {
+            curEnergy += Time.deltaTime;
+        }
+        else if (curEnergy > maxEnergy)
+        {
+            curEnergy = maxEnergy;
+        }
+        ShildsWorkingEvent();
 
-		if (Поле != null)
-		{
-			if (Поле.GetComponent<Renderer>().enabled == true)
-			{
-				ShildTimer -= Time.deltaTime;
-			}
-		}
-		if (ShildTimer <= 0)
-		{
-			Поле.GetComponent<Renderer>().enabled = false;
-			ShildTimer = 2;
-		}
-		if (curHealth <= 0)
-		{
-			if (timer > 0)
-			{
-				timer -= Time.deltaTime;
-			}
-			if (Ship)
-			{
-				_GDB.selectList.Remove(gameObject);
-				_GDB.dwarfList.Remove(gameObject);
-			}
+        if (curHealth <= 0)
+        {
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
+            if (Ship)
+            {
+                _GDB.selectList.Remove(gameObject);
+                _GDB.dwarfList.Remove(gameObject);
+            }
 
-			curImpulseSystemHealth = 0;
-			curPrimaryWeaponSystemHealth = 0;
-			curSecondaryWeaponSystemHealth = 0;
-			curWarpEngingSystemHealth = 0;
-			if (timer < 0)
-			{
-				Instantiate(Explode, Mesh.transform.position, Mesh.transform.rotation);
-				if (curWarpCoreHealth <= 0)
-				{
-					if (Ship)
-					{
-						if (_st.Assimilated)
-						{
-							Instantiate(BorgWarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
-						}
-						else
-						{
-							Instantiate(WarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
-						}
-					}
-					if (Station)
-					{
-						if (_sb.Assimilated)
-						{
-							Instantiate(BorgWarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
-						}
-						else
-						{
-							Instantiate(WarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
-						}
-					}
-				}
-				if (Обломки.Count != 0)
-				{
-					int i = Random.Range(0, Обломки.Count);
-					Обломки[i].SetActive(true);
-					Обломки[i].transform.parent = null;
+            curImpulseSystemHealth = 0;
+            curPrimaryWeaponSystemHealth = 0;
+            curSecondaryWeaponSystemHealth = 0;
+            curWarpEngingSystemHealth = 0;
+            if (timer < 0)
+            {
+                ExplodeAndCreateDebrisObjects();
+                Destroy(gameObject);
+            }
+        }
+        ObjectNeutralisationEvent();
 
-					Component[] Debris = Обломки[i].GetComponentsInChildren(typeof(Rigidbody));
+        if (curHealth <= maxHealth / 2)
+        {
+            if (!DamageEffect1)
+            {
+                DE1 = DEList[Random.Range(0, 4)];
+                DE1.SetActive(true);
+                DamageEffect1 = true;
+            }
+        }
+        if (curHealth > maxHealth / 2)
+        {
+            if (DamageEffect1)
+            {
+                DE1.SetActive(false);
+                DE1 = null;
+                DamageEffect1 = false;
+            }
+        }
+        if (curHealth <= maxHealth / 3)
+        {
+            if (!DamageEffect2)
+            {
+                DE2 = DEList[Random.Range(0, 4)];
+                DE2.SetActive(true);
+                DamageEffect2 = true;
+            }
+        }
+        if (curHealth > maxHealth / 3)
+        {
+            if (DamageEffect2)
+            {
+                DE2.SetActive(false);
+                DE2 = null;
+                DamageEffect2 = false;
+            }
+        }
+        if (curHealth <= maxHealth / 4)
+        {
+            if (!DamageEffect3)
+            {
+                DE3 = DEList[Random.Range(0, 4)];
+                DE3.SetActive(true);
+                DamageEffect3 = true;
+            }
+        }
+        if (curHealth > maxHealth / 4)
+        {
+            if (DamageEffect3)
+            {
+                DE3.SetActive(false);
+                DE3 = null;
+                DamageEffect3 = false;
+            }
+        }
+        if (curHealth <= maxHealth / 5)
+        {
+            if (!DamageEffect4)
+            {
+                DE4 = DEList[Random.Range(0, 4)];
+                DE4.SetActive(true);
+                DamageEffect4 = true;
+            }
+        }
+        if (curHealth > maxHealth / 5)
+        {
+            if (DamageEffect4)
+            {
+                DE4.SetActive(false);
+                DE4 = null;
+                DamageEffect4 = false;
+            }
+        }
+        if (curHealth <= maxHealth / 6)
+        {
+            if (!DamageEffect5)
+            {
+                DE5 = DEList[Random.Range(0, 4)];
+                DE5.SetActive(true);
+                DamageEffect5 = true;
+            }
+        }
+        if (curHealth > maxHealth / 6)
+        {
+            if (DamageEffect5)
+            {
+                DE5.SetActive(false);
+                DE5 = null;
+                DamageEffect5 = false;
+            }
+        }
+        if (curWarpCoreHealth <= 0)
+        {
+            curHealth = 0;
+        }
 
-					foreach (Rigidbody _drg in Debris)
-					{
-						_drg.velocity = gameObject.GetComponent<Rigidbody>().velocity;
-					}
-				}
-				Destroy(gameObject);
-			}
-		}
-		if (Ship)
-		{
-			if (maxCrew > 0)
-			{
-				if (curCrew <= 0)
-				{
-					_st.AI = false;
-					_st.FreandAI = false;
-					_st.NeutralAgrass = false;
-					_st.Neutral = true;
+        SystemEffects();
+        SelfDestructionEvent();
+        DefenceMachine();
+    }
 
-					_st.targetTransform = null;
-					if (curCrew < 0)
-					{
-						curCrew = 0;
-					}
-				}
-			}
-		}
-		if (Station)
-		{
-			if (maxCrew > 0)
-			{
-				if (curCrew <= 0)
-				{
-					_sb.AI = false;
-					_sb.FreandAI = false;
-					_sb.NeutralAgrass = false;
-					_sb.Neutral = true;
+    private void ShildsWorkingEvent()
+    {
+        if (Shilds > 0)
+        {
+            if (CurShilds < Shilds & CurShilds > 0)
+            {
+                CurShilds += Time.deltaTime / 3;
+            }
+            if (CurShilds <= 0)
+            {
+                ReloadShildTimer -= Time.deltaTime;
+                CurShilds = 0;
+            }
+            if (ReloadShildTimer <= 0)
+            {
+                CurShilds = 1;
+                ReloadShildTimer = ShildTimerStarter;
+            }
+        }
 
-					if (_sb.WeaponModule)
-					{
-						WeaponModule _wm = gameObject.GetComponent<WeaponModule>();
-						_wm.target = null;
-					}
-					if (curCrew < 0)
-					{
-						curCrew = 0;
-					}
-				}
-			}
-		}
+        if (ShildModel != null)
+        {
+            if (ShildModel.GetComponent<Renderer>().enabled == true)
+            {
+                ShildTimer -= Time.deltaTime;
+            }
+        }
+        if (ShildTimer <= 0)
+        {
+            ShildModel.GetComponent<Renderer>().enabled = false;
+            ShildTimer = 2;
+        }
+    }
 
+    private void ObjectNeutralisationEvent()
+    {
+        if (Ship)
+        {
+            if (maxCrew > 0)
+            {
+                if (curCrew <= 0)
+                {
+                    _st.AI = false;
+                    _st.FreandAI = false;
+                    _st.NeutralAgrass = false;
+                    _st.Neutral = true;
 
-		if (curHealth <= maxHealth / 2)
-		{
-			if (!DamageEffect1)
-			{
-				DE1 = DEList[Random.Range(0, 4)];
-				DE1.SetActive(true);
-				DamageEffect1 = true;
-			}
-		}
-		if (curHealth > maxHealth / 2)
-		{
-			if (DamageEffect1)
-			{
-				DE1.SetActive(false);
-				DE1 = null;
-				DamageEffect1 = false;
-			}
-		}
-		if (curHealth <= maxHealth / 3)
-		{
-			if (!DamageEffect2)
-			{
-				DE2 = DEList[Random.Range(0, 4)];
-				DE2.SetActive(true);
-				DamageEffect2 = true;
-			}
-		}
-		if (curHealth > maxHealth / 3)
-		{
-			if (DamageEffect2)
-			{
-				DE2.SetActive(false);
-				DE2 = null;
-				DamageEffect2 = false;
-			}
-		}
-		if (curHealth <= maxHealth / 4)
-		{
-			if (!DamageEffect3)
-			{
-				DE3 = DEList[Random.Range(0, 4)];
-				DE3.SetActive(true);
-				DamageEffect3 = true;
-			}
-		}
-		if (curHealth > maxHealth / 4)
-		{
-			if (DamageEffect3)
-			{
-				DE3.SetActive(false);
-				DE3 = null;
-				DamageEffect3 = false;
-			}
-		}
-		if (curHealth <= maxHealth / 5)
-		{
-			if (!DamageEffect4)
-			{
-				DE4 = DEList[Random.Range(0, 4)];
-				DE4.SetActive(true);
-				DamageEffect4 = true;
-			}
-		}
-		if (curHealth > maxHealth / 5)
-		{
-			if (DamageEffect4)
-			{
-				DE4.SetActive(false);
-				DE4 = null;
-				DamageEffect4 = false;
-			}
-		}
-		if (curHealth <= maxHealth / 6)
-		{
-			if (!DamageEffect5)
-			{
-				DE5 = DEList[Random.Range(0, 4)];
-				DE5.SetActive(true);
-				DamageEffect5 = true;
-			}
-		}
-		if (curHealth > maxHealth / 6)
-		{
-			if (DamageEffect5)
-			{
-				DE5.SetActive(false);
-				DE5 = null;
-				DamageEffect5 = false;
-			}
-		}
-		if (curWarpCoreHealth <= 0)
-		{
-			curHealth = 0;
-		}
+                    _st.targetTransform = null;
+                    if (curCrew < 0)
+                    {
+                        curCrew = 0;
+                    }
+                }
+            }
+        }
+        if (Station)
+        {
+            if (maxCrew > 0)
+            {
+                if (curCrew <= 0)
+                {
+                    _sb.AI = false;
+                    _sb.FreandAI = false;
+                    _sb.NeutralAgrass = false;
+                    _sb.Neutral = true;
 
-		if (curWarpCoreHealth <= maxWarpCoreHealth * 0.125f || ActiveWarpCore)
-		{
-			curEnergy = 0;
-			if (WarpCoreDisable == null)
-			{
-				WarpCoreDisable = gameObject.AddComponent<ShipEffects>();
-				WarpCoreDisable.Effect = ShipEffects.ShipEffect.WarpCoreDisable;
-			}
-		}
-		if (curWarpCoreHealth > maxWarpCoreHealth * 0.125f && !ActiveWarpCore)
-		{
-			if (WarpCoreDisable != null)
-			{
-				Destroy(WarpCoreDisable);
-				WarpCoreDisable = null;
-			}
-		}
+                    if (_sb.WeaponModule)
+                    {
+                        WeaponModule _wm = gameObject.GetComponent<WeaponModule>();
+                        _wm.target = null;
+                    }
+                    if (curCrew < 0)
+                    {
+                        curCrew = 0;
+                    }
+                }
+            }
+        }
+    }
 
-		if (curSensorsSystemHealth <= maxSensorsSystemHealth * 0.125f || ActiveSensors)
-		{
-			_es.VisionRadius = NormalSensors / 5;
-		}
-		else
-		{
-			_es.VisionRadius = NormalSensors;
-		}
+    private void SelfDestructionEvent()
+    {
+        if (SelfDestructActive)
+        {
+            if (SelfDestructTimer > 0)
+            {
+                SelfDestructTimer -= Time.deltaTime;
+            }
+            else
+            {
+                curHealth = 0;
+                timer = -1;
+            }
+        }
+        else
+        {
+            if (SelfDestructTimer < 5)
+            {
+                SelfDestructTimer = 5;
+            }
+        }
+    }
+
+    private void SystemEffects()
+    {
+        if (curWarpCoreHealth <= maxWarpCoreHealth * 0.125f || ActiveWarpCore)
+        {
+            curEnergy = 0;
+            if (WarpCoreDisable == null)
+            {
+                WarpCoreDisable = gameObject.AddComponent<ShipEffects>();
+                WarpCoreDisable.Effect = ShipEffects.ShipEffect.WarpCoreDisable;
+            }
+        }
+        if (curWarpCoreHealth > maxWarpCoreHealth * 0.125f && !ActiveWarpCore)
+        {
+            if (WarpCoreDisable != null)
+            {
+                Destroy(WarpCoreDisable);
+                WarpCoreDisable = null;
+            }
+        }
+
+        if (curSensorsSystemHealth <= maxSensorsSystemHealth * 0.125f || ActiveSensors)
+        {
+            _es.VisionRadius = NormalSensors / 5;
+        }
+        else
+        {
+            _es.VisionRadius = NormalSensors;
+        }
 
 
-		if (curLifeSupportSystemHealth <= maxLifeSupportSystemHealth * 0.125f || ActiveLifeSupport)
-		{
-			if (curCrew > 0)
-			{
-				if (curCrew > 15)
-				{
-					float T9;
-					T9 = maxCrew / 100;
-					curCrew -= T9 / 50;
-				}
-				if (curCrew < 15)
-				{
-					float T9;
-					T9 = maxCrew / 1000;
-					curCrew -= T9 / 50;
-				}
-			}
-			else
-			{
-				curCrew = 0;
-			}
-		}
-		if (curEnergy < maxEnergy)
-		{
-			curEnergy += Time.deltaTime;
-		}
-		if (maxCrew > 0)
-		{
-			if (curImpulseSystemHealth <= maxImpulseSystemHealth * 0.125f || ActiveImpulse || curCrew <= 0)
-			{
-				if (Ship)
-				{
-					gameObject.GetComponent<MoveComponent>().enabled = false;
-				}
-			}
-		}
-		else if (maxCrew <= 0)
-		{
-			if (curImpulseSystemHealth <= maxImpulseSystemHealth * 0.125f || ActiveImpulse)
-			{
-				if (Ship)
-				{
-					gameObject.GetComponent<MoveComponent>().enabled = false;
-				}
-			}
-		}
-		if (maxCrew > 0)
-		{
-			if (curImpulseSystemHealth > maxImpulseSystemHealth * 0.125f && !ActiveImpulse && curCrew > 0)
-			{
-				if (Ship)
-				{
-					gameObject.GetComponent<MoveComponent>().enabled = true;
-				}
-			}
-		}
-		else
-		{
-			if (curImpulseSystemHealth > maxImpulseSystemHealth * 0.125f && !ActiveImpulse)
-			{
-				if (Ship)
-				{
-					gameObject.GetComponent<MoveComponent>().enabled = true;
-				}
-			}
-		}
-		if (SelfDestructActive)
-		{
-			if (SelfDestructTimer > 0)
-			{
-				SelfDestructTimer -= Time.deltaTime;
-			}
-			else
-			{
-				curHealth = 0;
-				timer = -1;
-			}
-		}
-		else
-		{
-			if (SelfDestructTimer < 5)
-			{
-				SelfDestructTimer = 5;
-			}
-		}
+        if (curLifeSupportSystemHealth <= maxLifeSupportSystemHealth * 0.125f || ActiveLifeSupport)
+        {
+            if (curCrew > 0)
+            {
+                if (curCrew > 15)
+                {
+                    float T9;
+                    T9 = maxCrew / 100;
+                    curCrew -= T9 / 50;
+                }
+                if (curCrew < 15)
+                {
+                    float T9;
+                    T9 = maxCrew / 1000;
+                    curCrew -= T9 / 50;
+                }
+            }
+            else
+            {
+                curCrew = 0;
+            }
+        }
+        if (curEnergy < maxEnergy)
+        {
+            curEnergy += Time.deltaTime;
+        }
+        if (maxCrew > 0)
+        {
+            if (curImpulseSystemHealth <= maxImpulseSystemHealth * 0.125f || ActiveImpulse || curCrew <= 0)
+            {
+                if (Ship)
+                {
+                    gameObject.GetComponent<MoveComponent>().enabled = false;
+                }
+            }
+        }
+        else if (maxCrew <= 0)
+        {
+            if (curImpulseSystemHealth <= maxImpulseSystemHealth * 0.125f || ActiveImpulse)
+            {
+                if (Ship)
+                {
+                    gameObject.GetComponent<MoveComponent>().enabled = false;
+                }
+            }
+        }
+        if (maxCrew > 0)
+        {
+            if (curImpulseSystemHealth > maxImpulseSystemHealth * 0.125f && !ActiveImpulse && curCrew > 0)
+            {
+                if (Ship)
+                {
+                    gameObject.GetComponent<MoveComponent>().enabled = true;
+                }
+            }
+        }
+        else
+        {
+            if (curImpulseSystemHealth > maxImpulseSystemHealth * 0.125f && !ActiveImpulse)
+            {
+                if (Ship)
+                {
+                    gameObject.GetComponent<MoveComponent>().enabled = true;
+                }
+            }
+        }
+    }
 
-		List<GameObject> OldDefenceList = new List<GameObject>();
+    private void DefenceMachine()
+    {
+        List<GameObject> OldDefenceList = new List<GameObject>();
 
-		float OldMaxRadius = 0;
+        float OldMaxRadius = 0;
 
-		if (_GDB.selectList.Count == 0)
-		{
-			if (radius.Count > 0)
-			{
-				radius.Clear();
-			}
-		}
-		if (OldDefenceList != _GDB.selectList)
-		{
-			radius.Clear();
-			OldDefenceList = _GDB.selectList;
-		}
-		if (radius.Count < _GDB.selectList.Count)
-		{
-			foreach (GameObject obj in ShipsForDefence)
-			{
-				radius.Add(obj.GetComponent<HealthModule>().ShipRadius);
-			}
-		}
-		if (radius.Count != 0)
-		{
-			MaxDefenceRadius = radius.Max();
-		}
+        if (_GDB.selectList.Count == 0)
+        {
+            if (radius.Count > 0)
+            {
+                radius.Clear();
+            }
+        }
+        if (OldDefenceList != _GDB.selectList)
+        {
+            radius.Clear();
+            OldDefenceList = _GDB.selectList;
+        }
+        if (radius.Count < _GDB.selectList.Count)
+        {
+            foreach (GameObject obj in ShipsForDefence)
+            {
+                radius.Add(obj.GetComponent<HealthModule>().ShipRadius);
+            }
+        }
+        if (radius.Count != 0)
+        {
+            MaxDefenceRadius = radius.Max();
+        }
 
-		if ((int)OldMaxRadius != (int)MaxDefenceRadius)
-		{
-			ProtectPosition[0].x = 0;
-			ProtectPosition[0].y = (MaxDefenceRadius * 10) + ShipRadius;
+        if ((int)OldMaxRadius != (int)MaxDefenceRadius)
+        {
+            SetProtectPosition();
 
-			ProtectPosition[1].x = 0;
-			ProtectPosition[1].y = -1 * ((MaxDefenceRadius * 10) + ShipRadius);
+            OldMaxRadius = MaxDefenceRadius;
+        }
 
-			ProtectPosition[2].x = (MaxDefenceRadius * 8) + ShipRadius;
-			ProtectPosition[2].y = 0;
+        if (ShipsForDefence.Count > 0)
+        {
+            foreach (GameObject obj in ShipsForDefence)
+            {
+                if (obj.GetComponent<Stats>().GuartTarget != gameObject.transform)
+                {
+                    ShipsForDefence.Remove(obj);
+                }
+            }
+        }
+    }
 
-			ProtectPosition[3].x = -1 * ((MaxDefenceRadius * 8) + ShipRadius);
-			ProtectPosition[3].y = 0;
+    private void ExplodeAndCreateDebrisObjects()
+    {
+        Instantiate(Explode, Mesh.transform.position, Mesh.transform.rotation);
+        if (curWarpCoreHealth <= 0)
+        {
+            if (Ship)
+            {
+                if (_st.Assimilated)
+                {
+                    Instantiate(BorgWarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
+                }
+                else
+                {
+                    Instantiate(WarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
+                }
+            }
+            if (Station)
+            {
+                if (_sb.Assimilated)
+                {
+                    Instantiate(BorgWarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
+                }
+                else
+                {
+                    Instantiate(WarpCoreDestroyed, Mesh.transform.position, Mesh.transform.rotation);
+                }
+            }
+        }
+        if (DebrisObjects.Count != 0)
+        {
+            int i = Random.Range(0, DebrisObjects.Count);
+            DebrisObjects[i].SetActive(true);
+            DebrisObjects[i].transform.parent = null;
 
-			ProtectPosition[4].x = ProtectPosition[0].x - (MaxDefenceRadius * 3f);
-			ProtectPosition[4].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
+            Component[] DebrisObjectsCom = DebrisObjects[i].GetComponentsInChildren(typeof(Rigidbody));
 
-			ProtectPosition[5].x = ProtectPosition[0].x + (MaxDefenceRadius * 3f);
-			ProtectPosition[5].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
+            foreach (Rigidbody _drg in DebrisObjectsCom)
+            {
+                _drg.velocity = gameObject.GetComponent<Rigidbody>().velocity;
+            }
+        }
+    }
 
-			ProtectPosition[6].x = ProtectPosition[1].x - (MaxDefenceRadius * 3f);
-			ProtectPosition[6].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
+    private void RegenerateSystem(float CurSystemHealth, float MaxSystemHealth)
+    {
+        if (CurSystemHealth < MaxSystemHealth)
+        {
+            CurSystemHealth += Time.deltaTime;
+        }
+        else if (CurSystemHealth > MaxSystemHealth)
+        {
+            CurSystemHealth = MaxSystemHealth;
+        }
+    }
 
-			ProtectPosition[7].x = ProtectPosition[1].x + (MaxDefenceRadius * 3f);
-			ProtectPosition[7].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
+    private void SetProtectPosition()
+    {
+        ProtectPosition[0].x = 0;
+        ProtectPosition[0].y = (MaxDefenceRadius * 10) + ShipRadius;
 
-			ProtectPosition[8].x = ProtectPosition[2].x;
-			ProtectPosition[8].y = ProtectPosition[2].y + (MaxDefenceRadius * 5);
+        ProtectPosition[1].x = 0;
+        ProtectPosition[1].y = -1 * ((MaxDefenceRadius * 10) + ShipRadius);
 
-			ProtectPosition[9].x = ProtectPosition[3].x;
-			ProtectPosition[9].y = ProtectPosition[3].y + (MaxDefenceRadius * 5);
+        ProtectPosition[2].x = (MaxDefenceRadius * 8) + ShipRadius;
+        ProtectPosition[2].y = 0;
 
-			ProtectPosition[10].x = ProtectPosition[2].x;
-			ProtectPosition[10].y = ProtectPosition[2].y - (MaxDefenceRadius * 5);
+        ProtectPosition[3].x = -1 * ((MaxDefenceRadius * 8) + ShipRadius);
+        ProtectPosition[3].y = 0;
 
-			ProtectPosition[11].x = ProtectPosition[3].x;
-			ProtectPosition[11].y = ProtectPosition[3].y - (MaxDefenceRadius * 5);
+        ProtectPosition[4].x = ProtectPosition[0].x - (MaxDefenceRadius * 3f);
+        ProtectPosition[4].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
 
-			OldMaxRadius = MaxDefenceRadius;
-		}
+        ProtectPosition[5].x = ProtectPosition[0].x + (MaxDefenceRadius * 3f);
+        ProtectPosition[5].y = ProtectPosition[0].y - (MaxDefenceRadius * 3f);
 
-		if (ShipsForDefence.Count > 0)
-		{
-			foreach (GameObject obj in ShipsForDefence)
-			{
-				if (obj.GetComponent<Stats>().GuartTarget != gameObject.transform)
-				{
-					ShipsForDefence.Remove(obj);
-				}
-			}
-		}
-	}
+        ProtectPosition[6].x = ProtectPosition[1].x - (MaxDefenceRadius * 3f);
+        ProtectPosition[6].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
 
-	void OnDestroy()
+        ProtectPosition[7].x = ProtectPosition[1].x + (MaxDefenceRadius * 3f);
+        ProtectPosition[7].y = ProtectPosition[1].y - (MaxDefenceRadius * 3f);
+
+        ProtectPosition[8].x = ProtectPosition[2].x;
+        ProtectPosition[8].y = ProtectPosition[2].y + (MaxDefenceRadius * 5);
+
+        ProtectPosition[9].x = ProtectPosition[3].x;
+        ProtectPosition[9].y = ProtectPosition[3].y + (MaxDefenceRadius * 5);
+
+        ProtectPosition[10].x = ProtectPosition[2].x;
+        ProtectPosition[10].y = ProtectPosition[2].y - (MaxDefenceRadius * 5);
+
+        ProtectPosition[11].x = ProtectPosition[3].x;
+        ProtectPosition[11].y = ProtectPosition[3].y - (MaxDefenceRadius * 5);
+    }
+
+    void OnDestroy()
 	{
 		if (timer > 0)
 		{

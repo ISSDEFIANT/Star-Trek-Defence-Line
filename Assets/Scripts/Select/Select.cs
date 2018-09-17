@@ -110,7 +110,7 @@ public class Select : MonoBehaviour
 				{
 					if (!gameObject.GetComponent<AudioSource>().isPlaying)
 					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurAttack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurAttack.Count)];
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 				}
@@ -142,7 +142,7 @@ public class Select : MonoBehaviour
 				{
 					if (!gameObject.GetComponent<AudioSource>().isPlaying)
 					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurAttack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurAttack.Count)];
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 				}
@@ -179,7 +179,7 @@ public class Select : MonoBehaviour
 					i++;
 					if (!gameObject.GetComponent<AudioSource>().isPlaying)
 					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Move[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
@@ -290,9 +290,9 @@ public class Select : MonoBehaviour
 									{
 										if (!gameObject.GetComponent<AudioSource>().isPlaying)
 										{
-											if (_GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count > 0)
+											if (_GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count > 0)
 											{
-												gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count)];
+												gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count)];
 												gameObject.GetComponent<AudioSource>().Play();
 											}
 										}
@@ -303,9 +303,9 @@ public class Select : MonoBehaviour
 										{
 											if (!gameObject.GetComponent<AudioSource>().isPlaying)
 											{
-												if (_GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count > 0)
+												if (_GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count > 0)
 												{
-													gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurLocationInvalid.Count)];
+													gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count)];
 													gameObject.GetComponent<AudioSource>().Play();
 												}
 											}
@@ -854,7 +854,7 @@ public class Select : MonoBehaviour
                         {
                             if (!gameObject.GetComponent<AudioSource>().isPlaying)
                             {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+                                gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
                                 gameObject.GetComponent<AudioSource>().Play();
                             }
                         }
@@ -886,7 +886,7 @@ public class Select : MonoBehaviour
                         {
                             if (!gameObject.GetComponent<AudioSource>().isPlaying)
                             {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
+                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select.Count)];
                                 gameObject.GetComponent<AudioSource>().Play();
                             }
                         }
@@ -909,7 +909,7 @@ public class Select : MonoBehaviour
                         {
                             if (!gameObject.GetComponent<AudioSource>().isPlaying)
                             {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurSelect.Count)];
+                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select.Count)];
                                 gameObject.GetComponent<AudioSource>().Play();
                             }
                         }
@@ -967,7 +967,7 @@ public class Select : MonoBehaviour
                                 {
                                     if (!gameObject.GetComponent<AudioSource>().isPlaying)
                                     {
-                                        gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+                                        gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
                                         gameObject.GetComponent<AudioSource>().Play();
                                     }
                                 }
@@ -1006,7 +1006,7 @@ public class Select : MonoBehaviour
 					i++;
 					if (!gameObject.GetComponent<AudioSource>().isPlaying)
 					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurMove[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurMove.Count)];
+						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Move[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
 						gameObject.GetComponent<AudioSource>().Play();
 					}
 					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
@@ -1050,7 +1050,7 @@ public class Select : MonoBehaviour
 						{
 							if (!gameObject.GetComponent<AudioSource>().isPlaying)
 							{
-								gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+								gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
 								gameObject.GetComponent<AudioSource>().Play();
 							}
 						}
@@ -1093,7 +1093,7 @@ public class Select : MonoBehaviour
 							{
 								if (!gameObject.GetComponent<AudioSource>().isPlaying)
 								{
-									gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurSelect[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurSelect.Count)];
+									gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
 									gameObject.GetComponent<AudioSource>().Play();
 								}
 							}
@@ -1132,52 +1132,52 @@ public class Select : MonoBehaviour
 	}
 	public void PlayMoveSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurMove[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurMove.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Move[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Move.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlaySelectSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurSelect[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurSelect.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Select[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Select.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayAttackSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurAttack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurAttack.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Attack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Attack.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayInvaliLocationSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurLocationInvalid[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurLocationInvalid.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.LocationInvalid.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayIsUnderAttackSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurIsUnderAttack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurIsUnderAttack.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.IsUnderAttack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.IsUnderAttack.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayFixSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurFix[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurFix.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Fix[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Fix.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayLowResusesSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurLowResuses[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurLowResuses.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.LowResuses[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.LowResuses.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayConstructingBeganSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurConstructingBegan[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurConstructingBegan.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingBegan[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingBegan.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayConstructingEndSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurConstructingEnd[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurConstructingEnd.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingEnd[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingEnd.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 	public void PlayConstructingCanseledSound(GameObject ActiveUnit)
 	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurConstructingCanseled[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurConstructingCanseled.Count)];
+		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingCanseled[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingCanseled.Count)];
 		gameObject.GetComponent<AudioSource>().Play();
 	}
 
@@ -1211,95 +1211,32 @@ public class Select : MonoBehaviour
 					_as.Protact = false;
 					break;
 				case "ImpulsAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = true;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
+				    _as.TargetingAt = ActiveState.AttackType.ImpulseSystemAttack;
 					break;
 				case "WarpEngingAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = true;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.WarpEngingSystemAttack;
+                    break;
 				case "PrimaryWeaponAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = true;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.PrimaryWeaponSystemAttack;
+                    break;
 				case "SecondaryWeaponAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = true;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.SecondaryWeaponSystemAttack;
+                    break;
 				case "LifeSupportAttack":
-					_as.LifeSupportSystemAttack = true;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.LifeSupportSystemAttack;
+                    break;
 				case "TractorAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = true;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.TractorBeamSystemAttack;
+                    break;
 				case "WarpCoreAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = true;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.WarpCoreAttack;
+                    break;
 				case "SensorAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = true;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.SensorsSystemAttack;
+                    break;
 				case "NormalAttack":
-					_as.LifeSupportSystemAttack = false;
-					_as.ImpulseSystemAttack = false;
-					_as.PrimaryWeaponSystemAttack = false;
-					_as.SensorsSystemAttack = false;
-					_as.TractorBeamSystemAttack = false;
-					_as.WarpEngingSystemAttack = false;
-					_as.WarpCoreAttack = false;
-					_as.SecondaryWeaponSystemAttack = false;
-					break;
+				    _as.TargetingAt = ActiveState.AttackType.NormalAttack;
+                    break;
 
 				case "FullStop":
 					_as.isAttack = false;
