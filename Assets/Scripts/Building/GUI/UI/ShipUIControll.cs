@@ -5,71 +5,70 @@ using UnityEngine.UI;
 
 public class ShipUIControll : MonoBehaviour
 {
-	public bool BlockImage;
+    public enum UIRenderType
+    {
+        None,
+        ShipIcon,
+        ResourcesBar,
+        ShildBar,
+        HealthBar,
+        EnergyBar,
+        Blueprint,
+        ShipName,
+        ShipClass,
+        Operator,
+        ResourcesCount,
+        CrewIcon,
+        CrewCount,
+        PrimaryWeaponIcon,
+        PrimaryWeaponBar,
+        SecondaryWeaponIcon,
+        SecondaryWeaponBar,
+        ImpulsIcon,
+        ImpulsBar,
+        WarpEngIcon,
+        WarpEngBar,
+        WarpCoreIcon,
+        WarpCoreBar,
+        LifeSupportIcon,
+        LifeSupportBar,
+        SensorIcon,
+        SensorBar,
+        TractorIcon,
+        TractorBar,
+        SystemAttackIcon,
+        RedAlertButton,
+        YellowAlertButton,
+        GreenAlertButton,
+        SelfDestructionButton,
+        GuardOrder,
+        SelfDestructionBar,
+        FixButton
+    }
+    private Select _sel;
+    private GlobalDB _GDB;
+    private GlobalLockingSystem _GLS;
+
+    private Stats _st;
+    private ActiveState _as;
+    private HealthModule _h;
+    private Miner _m;
+
+    private Image TargetImage;
+    private Text TargetText;
+    private Toggle TargetToggle;
+
+    private float ColorChangeTime;
+    private Color32 DeactiveSystemColor;
+
+    public bool BlockImage;
 	public bool BlockText;
 	public bool BlockToggle;
 
 	public GameObject Ship;
 
-	public bool ShipIcon;
+    public UIRenderType ShipUIRenderType;
 
-	public bool ResourcesBar;
-
-	public bool ShildBar;
-	public bool HealthBar;
-	public bool EnergyBar;
-
-	public bool Blueprint;
-
-	public bool ShipName;
-	public bool ShipClass;
-	public bool Operator;
-	public bool ResourcesCount;
-
-	public bool CrewIcon;
-	public bool CrewCount;
-
-	public bool PrimaryWeaponIcon;
-	public bool PrimaryWeaponBar;
-
-	public bool SecondaryWeaponIcon;
-	public bool SecondaryWeaponBar;
-
-	public bool ImpulsIcon;
-	public bool ImpulsBar;
-
-	public bool WarpEngIcon;
-	public bool WarpEngBar;
-
-	public bool WarpCoreIcon;
-	public bool WarpCoreBar;
-
-	public bool LifeSupportIcon;
-	public bool LifeSupportBar;
-
-	public bool SensorIcon;
-	public bool SensorBar;
-
-	public bool TractorIcon;
-	public bool TractorBar;
-
-	private Select _sel;
-	private GlobalDB _GDB;
-	private GlobalLockingSystem _GLS;
-
-	private Stats _st;
-	private ActiveState _as;
-	private HealthModule _h;
-	private Miner _m;
-
-	private Image TargetImage;
-	private Text TargetText;
-	private Toggle TargetToggle;
-
-	private float ColorChangeTime;
-	private Color32 DeactiveSystemColor;
-
-	public bool SystemAttackIcon;
 	public Sprite HullAttack;
 	public Sprite PrimaryAttack;
 	public Sprite SecondaryAttack;
@@ -83,15 +82,6 @@ public class ShipUIControll : MonoBehaviour
 	public Sprite OrderActive;
 	public Sprite OrderDeActive;
 
-	public bool RedAlertButton;
-
-	public bool YellowAlertButton;
-
-	public bool GreenAlertButton;
-
-	public bool SelfDestructionButton;
-
-	public bool GuardOrder;
 	// Use this for initialization
 	void Start()
 	{
@@ -150,265 +140,270 @@ public class ShipUIControll : MonoBehaviour
 				_m = null;
 			}
 
-			if (ShipIcon)
-			{
-				TargetImage.sprite = _st.icon;
-			}
-			if (ShipName)
-			{
-				TargetText.text = _st.Name;
-			}
-			if (ShipClass)
-			{
-				TargetText.text = _st.nameShip;
-			}
-			if (Operator)
-			{
-				if (!_st.AI && !_st.FreandAI && !_st.Neutral && !_st.NeutralAgrass)
-				{
-					TargetText.text = "Operator: " + _GDB.PlayerName;
-				}
-				if (_st.AI || _st.FreandAI)
-				{
-					TargetText.text = "Operator: " + _st.Owner.name;
-				}
-				if (_st.Neutral)
-				{
-					TargetText.text = "Operator: Neutral";
-				}
-			}
-			if (Blueprint)
-			{
-				TargetImage.sprite = _st.ShipBluePrint;
-			}
-			if (ShildBar)
-            {
-                SHERBar(_h.CurShilds, _h.Shilds);
-            }
-            if (HealthBar)
-			{
-			    SHERBar(_h.curHealth, _h.maxHealth);
-            }
-			if (EnergyBar)
-			{
-			    SHERBar(_h.curEnergy, _h.maxEnergy);
-            }
-
-		    if (ResourcesBar)
+		    switch (ShipUIRenderType)
 		    {
-		        if (_m != null)
-		        {
-		            SHERBar(_m.curAs, _m.maxAs);
-		        }
-		        else
-		        {
-		            TargetImage.fillAmount = 0;
-		        }
-		    }
+                //MSD Menu
 
-		    if (ResourcesCount)
-			{
-				if (_m != null)
-				{
-					TargetText.text = "Resources " + (int)_m.curAs + ":" + _m.maxAs;
-				}
-				else
-				{
-					TargetText.text = string.Empty;
-				}
-			}
-			if (CrewIcon)
-			{
-				if (_h.maxCrew > 0)
-				{
-					if (_h.curCrew > _h.maxCrew / 2)
-					{
-						TargetImage.color = Color.green;
-					}
-					if (_h.curCrew < _h.maxCrew / 2 && _h.curCrew > _h.maxCrew / 4)
-					{
-						TargetImage.color = Color.yellow;
-					}
-					if (_h.curCrew < _h.maxCrew / 4 && _h.curCrew > 0)
-					{
-						TargetImage.color = Color.red;
-					}
-					if (_h.curCrew <= 0)
-					{
-						TargetImage.color = Color.black;
-					}
-				}
-				else
-				{
-					TargetImage.color = Color.green;
-				}
-			}
-			if (CrewCount)
-			{
-				if (_h.maxCrew > 0)
-				{
-					TargetText.text = ": " + (int)_h.curCrew;
-				}
-				else
-				{
-					TargetText.text = ": 0";
-				}
-			}
-			if (PrimaryWeaponBar)
-			{
-			    SystemBarControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
-            }
-			if (PrimaryWeaponIcon)
-			{
-			    SystemIconControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
-            }
-			if (SecondaryWeaponBar)
-			{
-			    SystemBarControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
-            }
-			if (SecondaryWeaponIcon)
-			{
-			    SystemIconControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
-            }
-			if (ImpulsBar)
-			{
-			    SystemBarControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
-            }
-			if (ImpulsIcon)
-			{
-			    SystemIconControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
-            }
+                case UIRenderType.ShipIcon:
+                    TargetImage.sprite = _st.icon;
+                    break;
+		        case UIRenderType.ShipName:
+		            TargetText.text = _st.Name;
+                    break;
+		        case UIRenderType.ShipClass:
+		            TargetText.text = _st.nameShip;
+                    break;
 
-			if (WarpEngBar)
-			{
-			    SystemBarControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
-            }
-			if (WarpEngIcon)
-			{
-			    SystemIconControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
-            }
-			if (WarpCoreBar)
-			{
-			    SystemBarControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
-            }
-			if (WarpCoreIcon)
-			{
-			    SystemIconControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
-            }
-			if (LifeSupportBar)
-			{
-			    SystemBarControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
-            }
-			if (LifeSupportIcon)
-			{
-			    SystemIconControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
-            }
-			if (SensorBar)
-			{
-			    SystemBarControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
-			}
-			if (SensorIcon)
-			{
-			    SystemIconControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
-            }
-			if (TractorBar)
-            {
-                SystemBarControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
-            }
-            if (TractorIcon)
-            {
-                SystemIconControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
-            }
-            if (SystemAttackIcon)
-			{
-			    switch (_as.TargetingAt)
-			    {
-                    case ActiveState.AttackType.NormalAttack:
-                        TargetImage.sprite = HullAttack;
-                        break;
-			        case ActiveState.AttackType.PrimaryWeaponSystemAttack:
-			            TargetImage.sprite = PrimaryAttack;
-                        break;
-			        case ActiveState.AttackType.SecondaryWeaponSystemAttack:
-			            TargetImage.sprite = SecondaryAttack;
-                        break;
-			        case ActiveState.AttackType.ImpulseSystemAttack:
-			            TargetImage.sprite = ImpulsAttack;
-                        break;
-			        case ActiveState.AttackType.WarpEngingSystemAttack:
-			            TargetImage.sprite = WarpEAttack;
-                        break;
-			        case ActiveState.AttackType.WarpCoreAttack:
-			            TargetImage.sprite = WarpCAttack;
-                        break;
-			        case ActiveState.AttackType.LifeSupportSystemAttack:
-			            TargetImage.sprite = LifeAttack;
-                        break;
-			        case ActiveState.AttackType.SensorsSystemAttack:
-			            TargetImage.sprite = SensorEAttack;
-                        break;
-			        case ActiveState.AttackType.TractorBeamSystemAttack:
-			            TargetImage.sprite = TractorAttack;
-                        break;
-                }
-			}
-			if (RedAlertButton)
-			{
-				if (_as.Agrass)
-				{
-					TargetImage.sprite = OrderActive;
-				}
-				else
-				{
-					TargetImage.sprite = OrderDeActive;
-				}
-			}
-			if (YellowAlertButton)
-			{
-				if (_as.Protact)
-				{
-					TargetImage.sprite = OrderActive;
-				}
-				else
-				{
-					TargetImage.sprite = OrderDeActive;
-				}
-			}
-			if (GreenAlertButton)
-			{
-				if (_as.Idle)
-				{
-					TargetImage.sprite = OrderActive;
-				}
-				else
-				{
-					TargetImage.sprite = OrderDeActive;
-				}
-			}
-			if (SelfDestructionButton)
-			{
-				if (_h.SelfDestructActive)
-				{
-					TargetImage.sprite = OrderActive;
-				}
-				else
-				{
-					TargetImage.sprite = OrderDeActive;
-				}
-			}
-			if (GuardOrder)
-			{
-				if (_st.GuartTarget != null)
-				{
-					TargetImage.sprite = OrderActive;
-				}
-				else
-				{
-					TargetImage.sprite = OrderDeActive;
-				}
-			}
+		        case UIRenderType.Operator:
+		            if (!_st.AI && !_st.FreandAI && !_st.Neutral && !_st.NeutralAgrass)
+		            {
+		                TargetText.text = "Operator: " + _GDB.PlayerName;
+		            }
+		            if (_st.AI || _st.FreandAI)
+		            {
+		                TargetText.text = "Operator: " + _st.Owner.name;
+		            }
+		            if (_st.Neutral)
+		            {
+		                TargetText.text = "Operator: Neutral";
+		            }
+                    break;
 
+		        case UIRenderType.Blueprint:
+		            TargetImage.sprite = _st.ShipBluePrint;
+                    break;
+		        case UIRenderType.ShildBar:
+		            SHERBar(_h.CurShilds, _h.Shilds);
+                    break;
+		        case UIRenderType.HealthBar:
+		            SHERBar(_h.curHealth, _h.maxHealth);
+                    break;
+		        case UIRenderType.EnergyBar:
+		            SHERBar(_h.curEnergy, _h.maxEnergy);
+                    break;
 
+		        case UIRenderType.ResourcesBar:
+		            if (_m != null)
+		            {
+		                SHERBar(_m.curAs, _m.maxAs);
+		            }
+		            else
+		            {
+		                TargetImage.fillAmount = 0;
+		            }
+                    break;
+
+		        case UIRenderType.ResourcesCount:
+		            if (_m != null)
+		            {
+		                TargetText.text = "Resources " + (int)_m.curAs + ":" + _m.maxAs;
+		            }
+		            else
+		            {
+		                TargetText.text = string.Empty;
+		            }
+                    break;
+
+		        case UIRenderType.CrewIcon:
+		            if (_h.maxCrew > 0)
+		            {
+		                if (_h.curCrew > _h.maxCrew / 2)
+		                {
+		                    TargetImage.color = Color.green;
+		                }
+		                if (_h.curCrew < _h.maxCrew / 2 && _h.curCrew > _h.maxCrew / 4)
+		                {
+		                    TargetImage.color = Color.yellow;
+		                }
+		                if (_h.curCrew < _h.maxCrew / 4 && _h.curCrew > 0)
+		                {
+		                    TargetImage.color = Color.red;
+		                }
+		                if (_h.curCrew <= 0)
+		                {
+		                    TargetImage.color = Color.black;
+		                }
+		            }
+		            else
+		            {
+		                TargetImage.color = Color.green;
+		            }
+                    break;
+		        case UIRenderType.CrewCount:
+		            if (_h.maxCrew > 0)
+		            {
+		                TargetText.text = ": " + (int)_h.curCrew;
+		            }
+		            else
+		            {
+		                TargetText.text = ": 0";
+		            }
+                    break;
+
+		        case UIRenderType.PrimaryWeaponBar:
+		            SystemBarControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
+                    break;
+		        case UIRenderType.PrimaryWeaponIcon:
+		            SystemIconControl(_h.maxPrimaryWeaponSystemHealth, _h.curPrimaryWeaponSystemHealth, _h.ActivePrimaryWeapon);
+                    break;
+
+		        case UIRenderType.SecondaryWeaponBar:
+		            SystemBarControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
+                    break;
+		        case UIRenderType.SecondaryWeaponIcon:
+		            SystemIconControl(_h.maxSecondaryWeaponSystemHealth, _h.curSecondaryWeaponSystemHealth, _h.ActiveSecondaryWeapon);
+                    break;
+
+		        case UIRenderType.ImpulsBar:
+		            SystemBarControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
+                    break;
+		        case UIRenderType.ImpulsIcon:
+		            SystemIconControl(_h.maxImpulseSystemHealth, _h.curImpulseSystemHealth, _h.ActiveImpulse);
+                    break;
+
+		        case UIRenderType.WarpEngBar:
+		            SystemBarControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
+                    break;
+		        case UIRenderType.WarpEngIcon  :
+		            SystemIconControl(_h.maxWarpEngingSystemHealth, _h.curWarpEngingSystemHealth, _h.ActiveWarpEnging);
+                    break;
+
+		        case UIRenderType.WarpCoreBar:
+		            SystemBarControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
+                    break;
+		        case UIRenderType.WarpCoreIcon:
+		            SystemIconControl(_h.maxWarpCoreHealth, _h.curWarpCoreHealth, _h.ActiveWarpCore);
+                    break;
+
+		        case UIRenderType.LifeSupportBar:
+		            SystemBarControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
+                    break;
+		        case UIRenderType.LifeSupportIcon:
+		            SystemIconControl(_h.maxLifeSupportSystemHealth, _h.curLifeSupportSystemHealth, _h.ActiveLifeSupport);
+                    break;
+
+		        case UIRenderType.SensorBar:
+		            SystemBarControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
+                    break;
+		        case UIRenderType.SensorIcon:
+		            SystemIconControl(_h.maxSensorsSystemHealth, _h.curSensorsSystemHealth, _h.ActiveSensors);
+                    break;
+
+		        case UIRenderType.TractorBar:
+		            SystemBarControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
+                    break;
+		        case UIRenderType.TractorIcon:
+		            SystemIconControl(_h.maxTractorBeamSystemHealth, _h.curTractorBeamSystemHealth, _h.ActiveTractor);
+                    break;
+
+                    //OrdersMenu
+
+		        case UIRenderType.SystemAttackIcon:
+		            switch (_as.TargetingAt)
+		            {
+		                case ActiveState.AttackType.NormalAttack:
+		                    TargetImage.sprite = HullAttack;
+		                    break;
+		                case ActiveState.AttackType.PrimaryWeaponSystemAttack:
+		                    TargetImage.sprite = PrimaryAttack;
+		                    break;
+		                case ActiveState.AttackType.SecondaryWeaponSystemAttack:
+		                    TargetImage.sprite = SecondaryAttack;
+		                    break;
+		                case ActiveState.AttackType.ImpulseSystemAttack:
+		                    TargetImage.sprite = ImpulsAttack;
+		                    break;
+		                case ActiveState.AttackType.WarpEngingSystemAttack:
+		                    TargetImage.sprite = WarpEAttack;
+		                    break;
+		                case ActiveState.AttackType.WarpCoreAttack:
+		                    TargetImage.sprite = WarpCAttack;
+		                    break;
+		                case ActiveState.AttackType.LifeSupportSystemAttack:
+		                    TargetImage.sprite = LifeAttack;
+		                    break;
+		                case ActiveState.AttackType.SensorsSystemAttack:
+		                    TargetImage.sprite = SensorEAttack;
+		                    break;
+		                case ActiveState.AttackType.TractorBeamSystemAttack:
+		                    TargetImage.sprite = TractorAttack;
+		                    break;
+		            }
+                    break;
+
+		        case UIRenderType.RedAlertButton:
+		            if (_as.Agrass)
+		            {
+		                TargetImage.sprite = OrderActive;
+		            }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+		            }
+                    break;
+		        case UIRenderType.YellowAlertButton:
+		            if (_as.Protact)
+		            {
+		                TargetImage.sprite = OrderActive;
+		            }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+		            }
+                    break;
+		        case UIRenderType.GreenAlertButton:
+		            if (_as.Idle)
+		            {
+		                TargetImage.sprite = OrderActive;
+		            }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+		            }
+                    break;
+
+		        case UIRenderType.SelfDestructionButton:
+		            if (_h.SelfDestructActive)
+		            {
+		                TargetImage.sprite = OrderActive;
+		            }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+		            }
+                    break;
+		        case UIRenderType.SelfDestructionBar:
+		            if (_h.SelfDestructActive)
+		            {
+		                TargetImage.enabled = true;
+                        SHERBar(_h.SelfDestructTimer, 5, true);
+		            }
+		            else
+		            {
+		                TargetImage.enabled = false;
+                    }
+		            break;
+                case UIRenderType.GuardOrder:
+		            if (_st.GuartTarget != null)
+		            {
+		                TargetImage.sprite = OrderActive;
+		            }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+		            }
+                    break;
+		        case UIRenderType.FixButton:
+		            if (_as.curShipYard != null)
+		            {
+		                TargetImage.sprite = OrderActive;
+                    }
+		            else
+		            {
+		                TargetImage.sprite = OrderDeActive;
+                    }
+		            break;
+            }
 
 			if (!BlockImage)
 			{
@@ -476,15 +471,30 @@ public class ShipUIControll : MonoBehaviour
 		}
 	}
 
-    private void SHERBar(float CurVar, float MaxVar)
+    private void SHERBar(float CurVar, float MaxVar, bool Revert = false)
     {
-        if (_h.CurShilds > 0)
+        if (!Revert)
         {
-            TargetImage.fillAmount = CurVar / MaxVar;
+            if (CurVar > 0)
+            {
+                TargetImage.fillAmount = CurVar / MaxVar;
+            }
+            else
+            {
+                TargetImage.fillAmount = 0;
+            }
         }
         else
         {
-            TargetImage.fillAmount = 0;
+            if (CurVar > 0)
+            {
+                float tx = CurVar / MaxVar;
+                TargetImage.fillAmount = 1-tx;
+            }
+            else
+            {
+                TargetImage.fillAmount = 1;
+            }
         }
     }
 

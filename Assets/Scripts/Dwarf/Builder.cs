@@ -17,24 +17,23 @@ public class Builder : MonoBehaviour {
 	void Start () {
 		_st = gameObject.GetComponent<Stats>();
 		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
-		_agent = gameObject.GetComponent<MoveComponent>();
+        _agent = gameObject.GetComponent<MoveComponent>();
 	}
 	
 	// Update is called once per frame
 	void LateUpdate(){
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit, 1000)) {
-			if (_st.WasSelect) {
-				if (!_st.AI & !_st.FreandAI) {
-					if (Input.GetMouseButtonDown (1)) {
-						//print ("Hit" + hit.transform.gameObject.name);
-						BuilderTarget = hit.transform.gameObject;
-						//_agent.ResetPath ();
-					}
-				}
-			}
-		}
+	    if (Input.GetMouseButtonDown(1))
+	    {
+	        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	        RaycastHit hit;
+	        if (Physics.Raycast(ray, out hit, 1000))
+	        {
+	            if (STDLCMethods.FindInList(gameObject, _GDB.selectList) & !_st.AI & !_st.FreandAI)
+	            {
+	                BuilderTarget = hit.transform.gameObject;                   
+	            }
+	        }
+	    }
 	}
 	void Update () {
 		if (BuilderTarget != null) {
@@ -105,7 +104,7 @@ public class Builder : MonoBehaviour {
 			}
 		if (Build) {
 			if (BuilderTarget != null) {
-				if (!FindInList (gameObject)) {
+				if (!STDLCMethods.FindInList(gameObject, BuilderTarget.GetComponent<BuildingStationScript>().Builders)) {
 					BuilderTarget.GetComponent<BuildingStationScript> ().Builders.Add (gameObject);
 					_GDB.gameObject.GetComponent<Select> ().PlayConstructingBeganSound(gameObject);
 				}
@@ -145,72 +144,63 @@ public class Builder : MonoBehaviour {
 			}
 		}
 		if (_st.AI || _st.FreandAI) {
-			if (!gameObject.GetComponent<ShipAI> ().DilithiumMiner && !gameObject.GetComponent<ShipAI> ().TitaniumMiner) {
-				if (!FindInBuildersList (gameObject)) {
-					_st.Owner.GetComponent<GlobalAI> ().Builders.Add (gameObject);
-				}
-				if (BuilderTarget == null) {
-					if (!FindInFreeBuildersList (gameObject)) {
-						_st.Owner.GetComponent<GlobalAI> ().FreeBuilders.Add (gameObject);
-					}
-				} else {
-					if (FindInFreeBuildersList (gameObject)) {
-						_st.Owner.GetComponent<GlobalAI> ().FreeBuilders.Remove (gameObject);
-					}
-				}
-			} else {
-				if (FindInBuildersList(gameObject)) {
-					_st.Owner.GetComponent<GlobalAI> ().Builders.Remove (gameObject);
-				}
-				if (FindInFreeBuildersList(gameObject)) {
-					_st.Owner.GetComponent<GlobalAI> ().FreeBuilders.Remove (gameObject);
-				}
-			}
+		    if (_st.Owner != null)
+		    {
+		        if (!gameObject.GetComponent<ShipAI>().DilithiumMiner && !gameObject.GetComponent<ShipAI>().TitaniumMiner)
+		        {
+		            if (!STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().Builders))
+		            {
+		                _st.Owner.GetComponent<GlobalAI>().Builders.Add(gameObject);
+		            }
+
+		            if (BuilderTarget == null)
+		            {
+		                if (!STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().FreeBuilders))
+		                {
+		                    _st.Owner.GetComponent<GlobalAI>().FreeBuilders.Add(gameObject);
+		                }
+		            }
+		            else
+		            {
+		                if (STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().FreeBuilders))
+		                {
+		                    _st.Owner.GetComponent<GlobalAI>().FreeBuilders.Remove(gameObject);
+		                }
+		            }
+		        }
+		        else
+		        {
+		            if (STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().Builders))
+		            {
+		                _st.Owner.GetComponent<GlobalAI>().Builders.Remove(gameObject);
+		            }
+
+		            if (STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().FreeBuilders))
+		            {
+		                _st.Owner.GetComponent<GlobalAI>().FreeBuilders.Remove(gameObject);
+		            }
+		        }
+		    }
 		}
 	}
 	void OnDestroy(){
 		if (_st.AI || _st.FreandAI) {
-			if (FindInBuildersList(gameObject)) {
-				_st.Owner.GetComponent<GlobalAI> ().Builders.Remove (gameObject);
-			}
-			if (BuilderTarget == null) {
-				if (FindInFreeBuildersList(gameObject)) {
-					_st.Owner.GetComponent<GlobalAI> ().FreeBuilders.Remove (gameObject);
-				}
-			}
-		}
-	}
-	bool FindInList (GameObject obj)
-	{
-		if (BuilderTarget != null) {
-			foreach (GameObject selObj in BuilderTarget.GetComponent<BuildingStationScript>().Builders) {
-				if (selObj == obj)
-					return true;
-			}
-			return false;
-		}
-		return false;
-	}
+		    if (_st.Owner != null)
+		    {
+		        if (STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().Builders))
+		        {
+		            _st.Owner.GetComponent<GlobalAI>().Builders.Remove(gameObject);
+		        }
 
-	bool FindInBuildersList (GameObject obj)
-	{
-		if (_st.Owner != null) {
-			foreach (GameObject selObj in _st.Owner.GetComponent<GlobalAI>().Builders) {
-				if (selObj == obj)
-					return true;
-			}
-			return false;
+		        if (BuilderTarget == null)
+		        {
+		            if (STDLCMethods.FindInList(gameObject, _st.Owner.GetComponent<GlobalAI>().FreeBuilders))
+		            {
+		                _st.Owner.GetComponent<GlobalAI>().FreeBuilders.Remove(gameObject);
+		            }
+		        }
+		    }
 		}
-		return false;
-	}
-
-	bool FindInFreeBuildersList (GameObject obj)
-	{
-		foreach (GameObject selObj in _st.Owner.GetComponent<GlobalAI>().FreeBuilders) {
-			if (selObj == obj)
-				return true;
-		}
-		return false;
 	}
 
 	public void Help(GameObject Builder){

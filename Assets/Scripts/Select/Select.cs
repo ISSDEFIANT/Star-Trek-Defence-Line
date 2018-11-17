@@ -98,24 +98,31 @@ public class Select : MonoBehaviour
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
-			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
-			{
-				_ost.Order = true;
-				_ost.targetTransform = targetGO;
-				_ost.instruction = Stats.enInstruction.attack;
-				obj.GetComponent<MoveComponent>().InPatrol = false;
-				obj.GetComponent<MoveComponent>().PatrolWay.Clear();
-				Instantiate(AttackMark, targetGO.transform.position, MoveMark.transform.rotation);
-				if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
-				{
-					if (!gameObject.GetComponent<AudioSource>().isPlaying)
-					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
-						gameObject.GetComponent<AudioSource>().Play();
-					}
-				}
-				obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
-			}
+		    ActiveState _oast = obj.GetComponent<ActiveState>();
+		    if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+		    {
+		        if (!_oast.ForcedFix)
+		        {
+		            _ost.Order = true;
+		            _ost.targetTransform = targetGO;
+		            _ost.instruction = Stats.enInstruction.attack;
+		            obj.GetComponent<MoveComponent>().InPatrol = false;
+		            obj.GetComponent<MoveComponent>().PatrolWay.Clear();
+		            Instantiate(AttackMark, targetGO.transform.position, MoveMark.transform.rotation);
+		            if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+		            {
+		                if (!gameObject.GetComponent<AudioSource>().isPlaying)
+		                {
+		                    gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
+		                        .CurCap.Attack[
+		                            Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
+		                    gameObject.GetComponent<AudioSource>().Play();
+		                }
+		            }
+
+		            obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
+		        }
+		    }
 		}
 	}
 	void GuardEvent(Transform GTarget)
@@ -127,25 +134,35 @@ public class Select : MonoBehaviour
 		foreach (GameObject obj in _GDB.selectList)
 		{
 			Stats _ost = obj.GetComponent<Stats>();
-			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+		    ActiveState _oast = obj.GetComponent<ActiveState>();
+            if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 			{
-				obj.GetComponent<MoveComponent>().InPatrol = false;
-				obj.GetComponent<MoveComponent>().PatrolWay.Clear();
-				_ost.GuartTarget = GTarget.transform;
-				_gthm.ShipsForDefence.Add(obj);
-				if (i <= _gthm.ShipsForDefence.Count - 1)
-				{
-					Instantiate(GuardMark, GTarget.transform.position + (rotation * new Vector3(_gthm.ProtectPosition[i].x, 0, _gthm.ProtectPosition[i].y)), MoveMark.transform.rotation);
-				}
-				i++;
-				if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
-				{
-					if (!gameObject.GetComponent<AudioSource>().isPlaying)
-					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
-						gameObject.GetComponent<AudioSource>().Play();
-					}
-				}
+			    if (!_oast.ForcedFix)
+			    {
+			        obj.GetComponent<MoveComponent>().InPatrol = false;
+			        obj.GetComponent<MoveComponent>().PatrolWay.Clear();
+			        _ost.GuartTarget = GTarget.transform;
+			        _gthm.ShipsForDefence.Add(obj);
+			        if (i <= _gthm.ShipsForDefence.Count - 1)
+			        {
+			            Instantiate(GuardMark,
+			                GTarget.transform.position +
+			                (rotation * new Vector3(_gthm.ProtectPosition[i].x, 0, _gthm.ProtectPosition[i].y)),
+			                MoveMark.transform.rotation);
+			        }
+
+			        i++;
+			        if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+			        {
+			            if (!gameObject.GetComponent<AudioSource>().isPlaying)
+			            {
+			                gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
+			                    .CurCap.Attack[
+			                        Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
+			                gameObject.GetComponent<AudioSource>().Play();
+			            }
+			        }
+			    }
 			}
 		}
 	}
@@ -153,44 +170,54 @@ public class Select : MonoBehaviour
 	void StateInSelect(Vector3 targetVec)
 	{
 		int i = 0;
-		foreach (GameObject obj in _GDB.selectList)
-		{
-			Stats _ost = obj.GetComponent<Stats>();
+	    foreach (GameObject obj in _GDB.selectList)
+	    {
+	        Stats _ost = obj.GetComponent<Stats>();
+	        ActiveState _oast = obj.GetComponent<ActiveState>();
 
-			if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
-			{
-				if (!Input.GetKey(KeyCode.LeftShift))
-				{
-					Vector3 relativePos = targetVec - _GDB.selectList[0].transform.position;
-					Quaternion rotation = Quaternion.LookRotation(relativePos);
+            if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
+	        {
+	            if (!_oast.ForcedFix)
+	            {
+	                if (!Input.GetKey(KeyCode.LeftShift))
+	                {
+	                    Vector3 relativePos = targetVec - _GDB.selectList[0].transform.position;
+	                    Quaternion rotation = Quaternion.LookRotation(relativePos);
 
-					Vector3 rotateVector = targetVec + (rotation * new Vector3(pos[i].x, 0, pos[i].z));
+	                    Vector3 rotateVector = targetVec + (rotation * new Vector3(pos[i].x, 0, pos[i].z));
 
-					Instantiate(MoveMark, new Vector3(rotateVector.x, targetVec.y, rotateVector.z), MoveMark.transform.rotation);
-					_ost.Order = true;
-					_ost.targetTransform = null;
-					_ost.GuartTarget = null;
-					_ost.instruction = Stats.enInstruction.move;
-					_ost.targetVector = new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z);
-					obj.GetComponent<MoveComponent>().Movement(new Vector3(rotateVector.x, targetVec.y, rotateVector.z));
-					obj.GetComponent<MoveComponent>().InPatrol = false;
-					obj.GetComponent<MoveComponent>().PatrolWay.Clear();
-					_ost.StopOrder = true;
-					i++;
-					if (!gameObject.GetComponent<AudioSource>().isPlaying)
-					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Move[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
-						gameObject.GetComponent<AudioSource>().Play();
-					}
-					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
-				}
-				else
-				{
-					obj.GetComponent<MoveComponent>().AddPatrolPoint(new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z));
-					LockOnPatrolSetting = true;
-				}
-			}
-		}
+	                    Instantiate(MoveMark, new Vector3(rotateVector.x, targetVec.y, rotateVector.z),
+	                        MoveMark.transform.rotation);
+	                    _ost.Order = true;
+	                    _ost.targetTransform = null;
+	                    _ost.GuartTarget = null;
+	                    _ost.instruction = Stats.enInstruction.move;
+	                    _ost.targetVector = new Vector3(targetVec.x + pos[i].x, targetVec.y, targetVec.z + pos[i].z);
+	                    obj.GetComponent<MoveComponent>()
+	                        .Movement(new Vector3(rotateVector.x, targetVec.y, rotateVector.z));
+	                    obj.GetComponent<MoveComponent>().InPatrol = false;
+	                    obj.GetComponent<MoveComponent>().PatrolWay.Clear();
+	                    _ost.StopOrder = true;
+	                    i++;
+	                    if (!gameObject.GetComponent<AudioSource>().isPlaying)
+	                    {
+	                        gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
+	                            .CurCap.Move[
+	                                Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
+	                        gameObject.GetComponent<AudioSource>().Play();
+	                    }
+
+	                    obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
+	                }
+	                else
+	                {
+	                    obj.GetComponent<MoveComponent>().AddPatrolPoint(new Vector3(targetVec.x + pos[i].x,
+	                        targetVec.y, targetVec.z + pos[i].z));
+	                    LockOnPatrolSetting = true;
+	                }
+	            }
+	        }
+	    }
 	}
 	// Update is called once per frame
 
@@ -813,7 +840,7 @@ public class Select : MonoBehaviour
                     {
                         if (_GDB.selectList.Count <= 0)
                         {
-                            if (!FindInSelectList(_hit.transform.gameObject))
+                            if (!STDLCMethods.FindInList(_hit.transform.gameObject, _GDB.selectList))
                             {
                                 _GDB.selectList.Add(_hit.transform.gameObject);
                             }
@@ -824,7 +851,7 @@ public class Select : MonoBehaviour
                             {
                                 _GDB.selectList.Clear();
                             }
-                            if (!FindInSelectList(_hit.transform.gameObject))
+                            if (!STDLCMethods.FindInList(_hit.transform.gameObject, _GDB.selectList))
                             {
                                 _GDB.selectList.Add(_hit.transform.gameObject);
                             }
@@ -843,7 +870,7 @@ public class Select : MonoBehaviour
                                 }
                                 else
                                 {
-                                    if (!FindInSelectList(_hit.transform.gameObject))
+                                    if (!STDLCMethods.FindInList(_hit.transform.gameObject, _GDB.selectList))
                                     {
                                         _GDB.selectList.Add(_hit.transform.gameObject);
                                     }
@@ -933,7 +960,7 @@ public class Select : MonoBehaviour
                             {
                                 if (_GDB.selectList.Count <= 0)
                                 {
-                                    if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
+                                    if (!STDLCMethods.FindInList(_hitWOTerrain.transform.gameObject, _GDB.selectList))
                                     {
                                         _GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
                                     }
@@ -944,7 +971,7 @@ public class Select : MonoBehaviour
                                     {
                                         _GDB.selectList.Clear();
                                     }
-                                    if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
+                                    if (!STDLCMethods.FindInList(_hitWOTerrain.transform.gameObject, _GDB.selectList))
                                     {
                                         _GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
                                     }
@@ -957,7 +984,7 @@ public class Select : MonoBehaviour
                                     }
                                     else
                                     {
-                                        if (!FindInSelectList(_hitWOTerrain.transform.gameObject))
+                                        if (!STDLCMethods.FindInList(_hitWOTerrain.transform.gameObject, _GDB.selectList))
                                         {
                                             _GDB.selectList.Add(_hitWOTerrain.transform.gameObject);
                                         }
@@ -1036,7 +1063,7 @@ public class Select : MonoBehaviour
 			{
 				if ((objpos.y > _startPoint.y && objpos.y < _endPoint.y) || (objpos.y < _startPoint.y && objpos.y > _endPoint.y))
 				{
-					if (!FindInSelectList(obj) && _GDB.selectList.Count < 12)
+					if (!STDLCMethods.FindInList(obj, _GDB.selectList) && _GDB.selectList.Count < 12)
 					{
 						if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 						{
@@ -1077,7 +1104,7 @@ public class Select : MonoBehaviour
 			{
 				if ((objpos.y > 0 && objpos.y < Screen.height) || (objpos.y < 0 && objpos.y > Screen.height))
 				{
-					if (!FindInSelectList(obj) && _GDB.selectList.Count < 12)
+					if (!STDLCMethods.FindInList(obj, _GDB.selectList) && _GDB.selectList.Count < 12)
 					{
 						if (_ost.classname == Type)
 						{
@@ -1109,17 +1136,7 @@ public class Select : MonoBehaviour
 		}
 	}
 
-	// Проверяет присутствует-ли объект в списке selectList
-	bool FindInSelectList(GameObject obj)
-	{
-		foreach (GameObject selObj in _GDB.selectList)
-		{
-			if (selObj == obj)
-				return true;
-			//	obj.GetComponent<Stats>().Proector.GetComponent<MeshRenderer>().enabled = false;
-		}
-		return false;
-	}
+	// Проверяет присутствует-ли объект в списке selectLis
 
 	// Очистка выделенных юнитив
 	public void ClearSelect()
@@ -1188,84 +1205,96 @@ public class Select : MonoBehaviour
 
 	public void SetOrder(string Order)
 	{
-		foreach (GameObject selObj in _GDB.selectList)
-		{
-			ActiveState _as = selObj.GetComponent<ActiveState>();
-			Stats _st = selObj.GetComponent<Stats>();
-			MoveComponent _mc = selObj.GetComponent<MoveComponent>();
-			switch (Order)
-			{
-				case "RedAlert":
-					_as.Agrass = true;
-					_as.Protact = false;
-					_as.Idle = false;
-					break;
-				case "YellowAlert":
-					_as.Protact = true;
-					_as.Agrass = false;
-					_as.Idle = false;
-					break;
-				case "GreenAlert":
-					_as.Idle = true;
-					_as.Agrass = false;
-					_as.Protact = false;
-					break;
-				case "ImpulsAttack":
-				    _as.TargetingAt = ActiveState.AttackType.ImpulseSystemAttack;
-					break;
-				case "WarpEngingAttack":
-				    _as.TargetingAt = ActiveState.AttackType.WarpEngingSystemAttack;
-                    break;
-				case "PrimaryWeaponAttack":
-				    _as.TargetingAt = ActiveState.AttackType.PrimaryWeaponSystemAttack;
-                    break;
-				case "SecondaryWeaponAttack":
-				    _as.TargetingAt = ActiveState.AttackType.SecondaryWeaponSystemAttack;
-                    break;
-				case "LifeSupportAttack":
-				    _as.TargetingAt = ActiveState.AttackType.LifeSupportSystemAttack;
-                    break;
-				case "TractorAttack":
-				    _as.TargetingAt = ActiveState.AttackType.TractorBeamSystemAttack;
-                    break;
-				case "WarpCoreAttack":
-				    _as.TargetingAt = ActiveState.AttackType.WarpCoreAttack;
-                    break;
-				case "SensorAttack":
-				    _as.TargetingAt = ActiveState.AttackType.SensorsSystemAttack;
-                    break;
-				case "NormalAttack":
-				    _as.TargetingAt = ActiveState.AttackType.NormalAttack;
-                    break;
+	    foreach (GameObject selObj in _GDB.selectList)
+	    {
+	        ActiveState _as = selObj.GetComponent<ActiveState>();
+	        Stats _st = selObj.GetComponent<Stats>();
+	        MoveComponent _mc = selObj.GetComponent<MoveComponent>();
 
-				case "FullStop":
-					_as.isAttack = false;
-					_st.targetTransform = null;
-					_st.GuartTarget = null;
-					_mc.Stop();
-					_mc.InPatrol = false;
-					_mc.PatrolWay.Clear();
-					break;
-				case "Attack":
-					OrderActive = true;
-					AttackOrder = true;
-					break;
-				case "Guard":
-					OrderActive = true;
-					GuardOrder = true;
-					break;
-				case "Patrol":
-					LockSelection = true;
-					SettingPatrolWay = true;
-					break;
-				case "Fix":
-					_as.Fix();
-					break;
-				case "DeAssamble":
-					_as.DeAssamble();
-					break;
-			}
-		}
+	       
+	            switch (Order)
+	            {
+	                case "RedAlert":
+	                    _as.Agrass = true;
+	                    _as.Protact = false;
+	                    _as.Idle = false;
+	                    break;
+	                case "YellowAlert":
+	                    _as.Protact = true;
+	                    _as.Agrass = false;
+	                    _as.Idle = false;
+	                    break;
+	                case "GreenAlert":
+	                    _as.Idle = true;
+	                    _as.Agrass = false;
+	                    _as.Protact = false;
+	                    break;
+	                case "ImpulsAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.ImpulseSystemAttack;
+	                    break;
+	                case "WarpEngingAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.WarpEngingSystemAttack;
+	                    break;
+	                case "PrimaryWeaponAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.PrimaryWeaponSystemAttack;
+	                    break;
+	                case "SecondaryWeaponAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.SecondaryWeaponSystemAttack;
+	                    break;
+	                case "LifeSupportAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.LifeSupportSystemAttack;
+	                    break;
+	                case "TractorAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.TractorBeamSystemAttack;
+	                    break;
+	                case "WarpCoreAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.WarpCoreAttack;
+	                    break;
+	                case "SensorAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.SensorsSystemAttack;
+	                    break;
+	                case "NormalAttack":
+	                    _as.TargetingAt = ActiveState.AttackType.NormalAttack;
+	                    break;
+
+	                case "FullStop":
+	                    _as.isAttack = false;
+	                    _st.targetTransform = null;
+	                    _st.GuartTarget = null;
+	                    _mc.Stop();
+	                    _mc.InPatrol = false;
+	                    _mc.PatrolWay.Clear();
+	                    break;
+	                case "Attack":
+	                    if (!_as.ForcedFix)
+	                    {
+	                        OrderActive = true;
+	                        AttackOrder = true;
+	                    }
+	                    break;
+	                case "Guard":
+	                    if (!_as.ForcedFix)
+	                    {
+	                        OrderActive = true;
+	                        GuardOrder = true;
+	                    }
+	                    break;
+	                case "Patrol":
+	                    if (!_as.ForcedFix)
+	                    {
+	                        LockSelection = true;
+	                        SettingPatrolWay = true;
+	                    }
+	                    break;
+	                case "Fix":
+	                    _as.Fix();
+	                    break;
+	                case "DeAssamble":
+	                    _as.DeAssamble();
+	                    break;
+	            }
+	        }
+	    
 	}
 }
 

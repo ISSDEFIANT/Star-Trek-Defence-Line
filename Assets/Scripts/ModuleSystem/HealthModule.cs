@@ -5,6 +5,7 @@ using System.Linq;
 
 public class HealthModule : MonoBehaviour
 {
+    [HideInInspector]
 	public GameObject ShildModel;
 
 	public float Shilds;
@@ -120,7 +121,8 @@ public class HealthModule : MonoBehaviour
 	private ActiveState _as;
 	private SensorModule _es;
 
-	private float SelfDestructTimer = 5;
+    [HideInInspector]
+	public float SelfDestructTimer = 5;
 	[HideInInspector]
 	public bool SelfDestructActive;
 
@@ -133,6 +135,8 @@ public class HealthModule : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+	    ShildModel = gameObject.GetComponentInChildren<Forcefield>().gameObject;
+
 		ProtectPosition = new Vector2[12];
 		radius = new List<float>();
 

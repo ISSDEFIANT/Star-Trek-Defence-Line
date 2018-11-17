@@ -2172,11 +2172,8 @@ public class InterFaceControlScript : MonoBehaviour {
 	}
 	public void FixOrder()
 	{
-		foreach (GameObject obj in _GDB.selectList)
-		{
-
-		}
-	}
+	    _sel.SetOrder("Fix");
+    }
 	public void RecycleOrder()
 	{
 		foreach (GameObject obj in _GDB.selectList)

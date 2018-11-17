@@ -5,77 +5,88 @@ using System.Linq;
 
 public class CtrlNum : MonoBehaviour
 {
-	public List<GameObject> Num1;
-	public List<GameObject> Num2;
-	public List<GameObject> Num3;
-	public List<GameObject> Num4;
-	public List<GameObject> Num5;
-	public List<GameObject> Num6;
-	public List<GameObject> Num7;
-	public List<GameObject> Num8;
-	public List<GameObject> Num9;
-	public List<GameObject> Num0;
+	public List<GameObject> Num1 = new List<GameObject>();
+	public List<GameObject> Num2 = new List<GameObject>();
+    public List<GameObject> Num3 = new List<GameObject>();
+    public List<GameObject> Num4 = new List<GameObject>();
+    public List<GameObject> Num5 = new List<GameObject>();
+    public List<GameObject> Num6 = new List<GameObject>();
+    public List<GameObject> Num7 = new List<GameObject>();
+    public List<GameObject> Num8 = new List<GameObject>();
+    public List<GameObject> Num9 = new List<GameObject>();
+    public List<GameObject> Num0 = new List<GameObject>();
 
-	private GlobalDB _GDB;
+    private GlobalDB _GDB;
 
 	private int ClickNumber;
 	private int ClickCount;
 	private float ClickDelay;
 
-    private GameObject Ccamera = GameObject.FindGameObjectWithTag("CAMERAMOVE");
+    private GameObject Ccamera;
     // Use this for initialization
     void Start()
 	{
-		_GDB = gameObject.GetComponent<GlobalDB>();
+    Ccamera = GameObject.FindGameObjectWithTag("CAMERAMOVE");
+    _GDB = gameObject.GetComponent<GlobalDB>();
 		ClickDelay = 0.2f;
 	}
 
 	// Update is called once per frame
 	void LateUpdate()
 	{
-		foreach (GameObject obj in Num1)
-		{
-			obj.GetComponent<HealthModule>().Team1 = true;
-		}
-		foreach (GameObject obj in Num2)
-		{
-			obj.GetComponent<HealthModule>().Team2 = true;
-		}
-		foreach (GameObject obj in Num3)
-		{
-			obj.GetComponent<HealthModule>().Team3 = true;
-		}
-		foreach (GameObject obj in Num4)
-		{
-			obj.GetComponent<HealthModule>().Team4 = true;
-		}
-		foreach (GameObject obj in Num5)
-		{
-			obj.GetComponent<HealthModule>().Team5 = true;
-		}
-		foreach (GameObject obj in Num6)
-		{
-			obj.GetComponent<HealthModule>().Team6 = true;
-		}
-		foreach (GameObject obj in Num7)
-		{
-			obj.GetComponent<HealthModule>().Team7 = true;
-		}
-		foreach (GameObject obj in Num8)
-		{
-			obj.GetComponent<HealthModule>().Team8 = true;
-		}
-		foreach (GameObject obj in Num9)
-		{
-			obj.GetComponent<HealthModule>().Team9 = true;
-		}
-		foreach (GameObject obj in Num0)
-		{
-			obj.GetComponent<HealthModule>().Team0 = true;
-		}
-	}
+	    UpdateTeams(Num1, 1);
+	    UpdateTeams(Num2, 2);
+	    UpdateTeams(Num3, 3);
+	    UpdateTeams(Num4, 4);
+	    UpdateTeams(Num5, 5);
+	    UpdateTeams(Num6, 6);
+	    UpdateTeams(Num7, 7);
+	    UpdateTeams(Num8, 8);
+        UpdateTeams(Num9, 9);
+	    UpdateTeams(Num0, 0);
+    }
 
-	void Update()
+    void UpdateTeams(List<GameObject> Fleet, int Number)
+    {
+        foreach (GameObject obj in Fleet)
+        {
+            switch (Number)
+            {
+                case 0:
+                    obj.GetComponent<HealthModule>().Team0 = true;
+                    break;
+                case 1:
+                    obj.GetComponent<HealthModule>().Team1 = true;
+                    break;
+                case 2:
+                    obj.GetComponent<HealthModule>().Team2 = true;
+                    break;
+                case 3:
+                    obj.GetComponent<HealthModule>().Team3 = true;
+                    break;
+                case 4:
+                    obj.GetComponent<HealthModule>().Team4 = true;
+                    break;
+                case 5:
+                    obj.GetComponent<HealthModule>().Team5 = true;
+                    break;
+                case 6:
+                    obj.GetComponent<HealthModule>().Team6 = true;
+                    break;
+                case 7:
+                    obj.GetComponent<HealthModule>().Team7 = true;
+                    break;
+                case 8:
+                    obj.GetComponent<HealthModule>().Team8 = true;
+                    break;
+                case 9:
+                    obj.GetComponent<HealthModule>().Team9 = true;
+                    break;
+            }
+        }
+    }
+
+    void Update()
 	{
 		if (ClickCount > 0)
 		{

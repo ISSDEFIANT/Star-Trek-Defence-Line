@@ -92,7 +92,7 @@ public class SensorModule : MonoBehaviour
 				{
 					if (VisibleObjectList.Count != 0)
 					{
-						if (!FindInVisibleObjectList(C.gameObject))
+						if (!STDLCMethods.FindInList(C.gameObject, VisibleObjectList))
 						{
 							VisibleObjectList.Add(C.gameObject);
 						}
@@ -166,15 +166,5 @@ public class SensorModule : MonoBehaviour
 				}
 			}
 		}
-	}
-
-	bool FindInVisibleObjectList(GameObject obj)
-	{
-		foreach (GameObject selObj in VisibleObjectList)
-		{
-			if (selObj == obj)
-				return true;
-		}
-		return false;
 	}
 }

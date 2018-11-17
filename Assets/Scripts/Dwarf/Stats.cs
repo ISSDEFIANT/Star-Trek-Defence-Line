@@ -11,7 +11,6 @@ public class Stats : MonoBehaviour
     public bool Neutral;
 
     public int protect;
-    public int damage;
 
 
     public bool AttackStations;
@@ -153,7 +152,7 @@ public class Stats : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (FindInSelectList(gameObject))
+        if (STDLCMethods.FindInList(gameObject, _GDB.selectList))
         {
             WasSelect = true;
             isSelect = true;
@@ -209,7 +208,7 @@ public class Stats : MonoBehaviour
             gameObject.GetComponent<Captan>().CaptanNum = 0;
         }
 
-        if (FindInSelectList(gameObject))
+        if (STDLCMethods.FindInList(gameObject, _GDB.selectList))
         {
             Proector.GetComponent<MeshRenderer>().enabled = true;
         }
@@ -578,17 +577,6 @@ public class Stats : MonoBehaviour
 
         WeaponLine.transform.position = gameObject.transform.position;
         _wcr.radius = _AS.radiuse;
-    }
-
-    bool FindInSelectList(GameObject obj)
-    {
-        foreach (GameObject selObj in _GDB.selectList)
-        {
-            if (selObj == obj)
-                return true;
-        }
-
-        return false;
     }
 
     void OnDestroy()

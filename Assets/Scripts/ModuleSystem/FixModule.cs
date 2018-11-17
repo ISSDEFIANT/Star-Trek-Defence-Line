@@ -33,7 +33,8 @@ public class FixModule : MonoBehaviour
 	private Vector3 MovementStart;
 	private bool MSPAccepted;
 
-	private Station _sb;
+    [HideInInspector]
+	public Station _sb;
 
 	// Use this for initialization
 	void Start()
@@ -101,7 +102,9 @@ public class FixModule : MonoBehaviour
 				if (obj.GetComponent<Stats>().StopOrder)
 				{
 					ShipsToFix.Remove(obj);
-				}
+				    obj.GetComponent<ActiveState>().ForcedFix = false;
+				    obj.GetComponent<ActiveState>().curShipYard = null;
+                }
 			}
 		}
 
@@ -134,7 +137,13 @@ public class FixModule : MonoBehaviour
 
 							Quaternion rotation = Quaternion.LookRotation(rpos);
 
-							_tmc.RotateShipAndMoveToTarget(rotation.eulerAngles, RPoint1.transform.position, true, true);
+						    float Amount = 0;
+						    if (Amount < 1)
+						    {
+						        Amount += Time.deltaTime / _tmc.RotationAcceleration;
+						    }
+
+                            _tmc.RotateShipAndMoveToTarget(rotation.eulerAngles, RPoint1.transform.position, Amount, true, true);
 						}
 					}
 					else
@@ -354,28 +363,21 @@ public class FixModule : MonoBehaviour
 						FixTarget.GetComponent<Rigidbody>().isKinematic = false;
 
 						FixTarget.GetComponent<Stats>().SelectLock = false;
-						if (FindInFixList(FixTarget)) ShipsToFix.Remove(FixTarget);
+						if (STDLCMethods.FindInList(FixTarget, ShipsToFix)) ShipsToFix.Remove(FixTarget);
 						FixTarget = null;
 						Repair = false;
 						R3 = false;
 					}
 					FixTarget.GetComponent<Stats>().IsFix = false;
-				}
+				    FixTarget.GetComponent<ActiveState>().ForcedFix = false;
+				    FixTarget.GetComponent<ActiveState>().curShipYard = null;
+                }
 			}
 			else
 			{
 				Repair = false;
 			}
 		}
-	}
-	bool FindInFixList(GameObject obj)
-	{
-		foreach (GameObject selObj in ShipsToFix)
-		{
-			if (selObj == obj)
-				return true;
-		}
-		return false;
 	}
 
 	void CreateWaitingPoints()
@@ -415,7 +417,13 @@ public class FixModule : MonoBehaviour
 
 					Quaternion rotation = Quaternion.LookRotation(rpos);
 
-					_mc.RotateShipAndMoveToTarget(rotation.eulerAngles, new Vector3(waitingPointOffset.x, gameObject.transform.position.y, waitingPointOffset.z), true, true);
+				    float Amount = 0;
+				    if (Amount < 1)
+				    {
+				        Amount += Time.deltaTime / _mc.RotationAcceleration;
+				    }
+
+                    _mc.RotateShipAndMoveToTarget(rotation.eulerAngles, new Vector3(waitingPointOffset.x, gameObject.transform.position.y, waitingPointOffset.z), Amount, true, true);
 				}
 				else
 				{
@@ -423,7 +431,13 @@ public class FixModule : MonoBehaviour
 
 					Quaternion rotation = Quaternion.LookRotation(rpos);
 
-					_mc.RotateShipAndMoveToTarget(rotation.eulerAngles, new Vector3(waitingPointOffset.x, gameObject.transform.position.y, waitingPointOffset.z), true, true);
+				    float Amount = 0;
+				    if (Amount < 1)
+				    {
+				        Amount += Time.deltaTime / _mc.RotationAcceleration;
+				    }
+
+                    _mc.RotateShipAndMoveToTarget(rotation.eulerAngles, new Vector3(waitingPointOffset.x, gameObject.transform.position.y, waitingPointOffset.z), Amount, true, true);
 				}
 			}
 
@@ -442,9 +456,10 @@ public class FixModule : MonoBehaviour
 				{
 					if (_SHM.curHealth < _SHM.maxHealth || _SHM.curImpulseSystemHealth < _SHM.maxImpulseSystemHealth || _SHM.curLifeSupportSystemHealth < _SHM.maxLifeSupportSystemHealth || _SHM.curPrimaryWeaponSystemHealth < _SHM.maxPrimaryWeaponSystemHealth || _SHM.curTractorBeamSystemHealth < _SHM.maxTractorBeamSystemHealth || _SHM.curWarpEngingSystemHealth < _SHM.maxWarpEngingSystemHealth || _SHM.curWarpCoreHealth < _SHM.maxWarpCoreHealth || _SHM.curSecondaryWeaponSystemHealth < _SHM.maxSecondaryWeaponSystemHealth || _SHM.curCrew < _SHM.maxCrew || _SHM.CurShilds < _SHM.Shilds)
 					{
-						if (!FindInFixList(obj)) ShipsToFix.Add(obj);
+						if (!STDLCMethods.FindInList(obj, ShipsToFix)) ShipsToFix.Add(obj);
 						obj.GetComponent<MoveComponent>().CurFleet.Clear();
-						_SEL.PlayFixSound(gameObject);
+					    obj.GetComponent<ActiveState>().curShipYard = gameObject;
+                        _SEL.PlayFixSound(gameObject);
 					}
 				}
 			}

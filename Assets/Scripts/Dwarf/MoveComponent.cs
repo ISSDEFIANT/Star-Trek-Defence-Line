@@ -23,21 +23,9 @@ public class MoveComponent : MonoBehaviour
 	public float CurRotSpeed;
 
 	private Stats _st;
-	private ActiveState _as;
 	private Rigidbody _rb;
 	private HealthModule _hm;
 	public bool Move;
-
-	[HideInInspector]
-	public bool StabilizationActive;
-	[HideInInspector]
-	public Vector3 RotationVelocity;
-	[HideInInspector]
-	public float angleL;
-	[HideInInspector]
-	public float angleYL;
-	[HideInInspector]
-	public float angleZL;
 
 	[HideInInspector]
 	public GameObject LeftSensor;
@@ -149,15 +137,20 @@ public class MoveComponent : MonoBehaviour
 
 	public int PatrolCurTarget = 0;
 
-	// Use this for initialization
-	void Awake()
+    private float StabAmount = 0;
+
+    private bool IsStoping;
+    private float StopAmount = 0;
+    private float SpeedMoment = 0;
+
+    // Use this for initialization
+    void Awake()
 	{
 		TargetVector = gameObject.transform.position;
 		OldTargetVector = gameObject.transform.position;
 		Move = false;
 
 		_st = gameObject.GetComponent<Stats>();
-		_as = gameObject.GetComponent<ActiveState>();
 		_rb = gameObject.GetComponent<Rigidbody>();
 		_hm = gameObject.GetComponent<HealthModule>();
 
@@ -215,8 +208,10 @@ public class MoveComponent : MonoBehaviour
 		}
 	}
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    private Vector3 StopPoint = Vector3.zero;
+
+    void Update()
 	{
 		if (CurFleet.Count > 0)
 		{
@@ -257,6 +252,44 @@ public class MoveComponent : MonoBehaviour
 				}
 			}
 		}
+
+	    if (IsStoping)
+	    {
+	        if (StopAmount < 1)
+	        {
+	            if (SpeedMoment == 0)
+	            {
+	                SpeedMoment = ForwardSpeed;
+	            }
+	            StopAmount += Time.deltaTime / SpeedMoment;
+	        }
+	        else
+	        {
+	            IsStoping = false;
+	            StopAmount = 0;
+	            SpeedMoment = 0;
+	        }
+        
+	        if (StopPoint == Vector3.zero)
+	        {
+	            StopPoint = transform.position + (transform.forward * ForwardSpeed);
+	        }
+
+	        RotateShipAndMoveToTarget(transform.rotation.eulerAngles, StopPoint, StopAmount, true, true);
+
+            if (transform.position == StopPoint)
+            {
+	            IsStoping = false;
+                StopAmount = 0;
+                SpeedMoment = 0;
+            }
+        }
+	    else
+	    {
+            StopPoint = Vector3.zero;
+	        StopAmount = 0;
+	        SpeedMoment = 0;
+        }
 	}
 	void FixedUpdate()
 	{
@@ -283,15 +316,41 @@ public class MoveComponent : MonoBehaviour
 		{
 			if (Move)
 			{
-				CalculateInput(TargetVector);
 				ClampInputs();
 				CalculateRollAndPitchAngles();
-				ShipRotation(RotationSpeed, RotationAcceleration);
-				ForwardMovement(MaxAcceleration);
-			}
+			    if (ForwardSpeed > 0.5f)
+			    {
+			        CalculateInput(TargetVector);
+                    ShipRotation(RotationSpeed, RotationAcceleration);
+			        ForwardMovement(MaxAcceleration);
+                }
+			    else
+			    {
+			        Vector3 lookVector = TargetVector - transform.position;
+			        if (Vector3.Angle(transform.forward, lookVector) > 20)
+			        {
+			            CalculateInput(TargetVector, true);
+                        ShipRotation(RotationSpeed/5, RotationAcceleration/5, true);
+                    }
+			        else
+			        {
+			            ForwardMovement(MaxAcceleration);
+                    }
+			    }
+
+			    StabAmount = 0;
+            }
 			else
 			{
-				StabilizeShip();
+			    if (StabAmount < 1)
+			    {
+			        StabAmount += Time.deltaTime / RotationAcceleration;
+			    }
+			    else
+			    {
+			        StabAmount = 1;
+			    }
+                StabilizeShip(StabAmount);
 			}
 		}
 		else
@@ -344,20 +403,11 @@ public class MoveComponent : MonoBehaviour
 		PatrolWay.Add(Point);
 	}
 
-	public void FullStop()
-	{
-		_rb.velocity = Vector3.Slerp(_rb.velocity, new Vector3(0, 0, 0), 0.1f);
-	}
-	public void RotationStop()
-	{
-		_rb.angularVelocity = Vector3.Slerp(_rb.angularVelocity, new Vector3(0, 0, 0), 0.1f * RotationSpeed);
-	}
 	public void Stop()
 	{
-		gameObject.GetComponent<Stats>().instruction = Stats.enInstruction.idle;
-		gameObject.GetComponent<Stats>().targetVector = gameObject.transform.position;
-		FullStop();
-		RotationStop();
+		_st.instruction = Stats.enInstruction.idle;
+		_st.targetVector = gameObject.transform.position + transform.forward*(ForwardSpeed+_hm.ShipRadius);
+	    IsStoping = true;
 		Move = false;
 	}
 
@@ -441,28 +491,42 @@ public class MoveComponent : MonoBehaviour
 		Gizmos.color = new Color32(0, 255, 0, 100);
 		Gizmos.DrawSphere(TargetVector, 5);
 	}
-	void ShipRotation(float Power, float RAcceleration)
-	{
-		var Factor = Vector3.Dot(transform.forward, _rb.velocity.normalized);
-		Factor *= Factor;
-		var newVelocity = Vector3.Lerp(_rb.velocity, transform.forward * Vector3.Dot(_rb.velocity, transform.forward), Factor * Vector3.Dot(_rb.velocity, transform.forward) * Time.deltaTime);
-		_rb.velocity = newVelocity;
 
-		_rb.rotation = Quaternion.Slerp(_rb.rotation, Quaternion.LookRotation(_rb.velocity, transform.up), 0.02f * Time.deltaTime);
+    void ShipRotation(float Power, float RAcceleration, bool zerospeed = false)
+    {
+        var Factor = Vector3.Dot(transform.forward, _rb.velocity.normalized);
+        if (!zerospeed)
+        {
+            Factor *= Factor;
+            var newVelocity = Vector3.Lerp(_rb.velocity,
+                transform.forward * Vector3.Dot(_rb.velocity, transform.forward),
+                Factor * Vector3.Dot(_rb.velocity, transform.forward) * Time.deltaTime);
+            _rb.velocity = newVelocity;
+        }
 
-		var torque = Vector3.zero;
+        _rb.rotation = Quaternion.Slerp(_rb.rotation, Quaternion.LookRotation(_rb.velocity, transform.up),
+            0.02f * Time.deltaTime);
 
-		m_BankedTurnAmount = Mathf.Sin(RollAngle);
-		_rb.angularDrag = Mathf.Abs(_rb.angularVelocity.magnitude - ((pitchInput + rollInput) / 2));
+        var torque = Vector3.zero;
 
-		torque += pitchInput * transform.right;
-		torque += yawInput * 0.01f * transform.up;
-		torque += -rollInput * transform.forward;
-		torque += m_BankedTurnAmount * 0.5f * transform.up;
-		_rb.AddTorque(torque * ForwardSpeed * Factor * _rb.mass);
-	}
+        m_BankedTurnAmount = Mathf.Sin(RollAngle);
+        _rb.angularDrag = Mathf.Abs(_rb.angularVelocity.magnitude - ((pitchInput + rollInput) / 2));
 
-	private void ClampInputs()
+        torque += pitchInput * transform.right;
+        torque += yawInput * 0.01f * transform.up;
+        torque += -rollInput * transform.forward;
+        torque += m_BankedTurnAmount * 0.5f * transform.up;
+        if (!zerospeed)
+        {
+            _rb.AddTorque(torque * ForwardSpeed * Factor * _rb.mass);
+        }
+        else
+        {
+            _rb.AddTorque(torque * MovementSpeed * _rb.mass);
+        }
+    }
+
+    private void ClampInputs()
 	{
 		rollInput = Mathf.Clamp(rollInput, -1, 1);
 		pitchInput = Mathf.Clamp(pitchInput, -1, 1);
@@ -489,7 +553,7 @@ public class MoveComponent : MonoBehaviour
 		}
 	}
 
-	void CalculateInput(Vector3 Target)
+	void CalculateInput(Vector3 Target, bool zerospeed = false)
 	{
 		Vector3 targetPos = Target;
 
@@ -512,13 +576,23 @@ public class MoveComponent : MonoBehaviour
 		var localVelocity = transform.InverseTransformDirection(_rb.velocity);
 		ForwardSpeed = Mathf.Max(0, localVelocity.z);
 
-		float currentSpeedEffect = 1 + ForwardSpeed * 0.01f;
-		rollInput *= currentSpeedEffect;
+	    float currentSpeedEffect;
+
+        if (!zerospeed)
+	    {
+	        currentSpeedEffect = 1 + ForwardSpeed * 0.01f;
+	    }
+	    else
+	    {
+	        currentSpeedEffect = MovementSpeed * 0.01f;
+        }
+
+	    rollInput *= currentSpeedEffect;
 		pitchInput *= currentSpeedEffect;
 		yawInput *= currentSpeedEffect;
 	}
 
-	void ApplySensor(GameObject Start, Vector3 Vector, string Direction, bool ManeuversActive = false)
+    void ApplySensor(GameObject Start, Vector3 Vector, string Direction, bool ManeuversActive = false)
 	{
 		RaycastHit _rh;
 
@@ -614,16 +688,11 @@ public class MoveComponent : MonoBehaviour
 
 	public void Movement(Vector3 MovementPosition)
 	{
-		gameObject.GetComponent<Stats>().targetVector = MovementPosition;
+		_st.targetVector = MovementPosition;
 	}
 
-	void StabilizeShip()
+	void StabilizeShip(float Amount)
 	{
-		float Amount = 0;
-		if (Amount < 1)
-		{
-			Amount += Time.deltaTime / RotationAcceleration;
-		}
 		_rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Amount);
 		_rb.velocity = Vector3.Lerp(_rb.velocity, Vector3.zero, Amount);
 		_rb.angularDrag = 0;
@@ -652,13 +721,8 @@ public class MoveComponent : MonoBehaviour
 		}
 	}
 
-	public void RotateShipAndMoveToTarget(Vector3 Target, Vector3 MoveTarget, bool move = false, bool rotate = false)
+	public void RotateShipAndMoveToTarget(Vector3 Target, Vector3 MoveTarget, float Amount, bool move = false, bool rotate = false)
 	{
-		float Amount = 0;
-		if (Amount < 1)
-		{
-			Amount += Time.deltaTime / RotationAcceleration;
-		}
 		_rb.angularVelocity = Vector3.Lerp(_rb.angularVelocity, Vector3.zero, Amount);
 		_rb.velocity = Vector3.Lerp(_rb.velocity, Vector3.zero, Amount);
 		_rb.angularDrag = 0;
