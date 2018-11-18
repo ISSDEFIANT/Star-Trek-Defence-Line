@@ -231,7 +231,6 @@
     <Compile Include="Assets\Scripts\Fog of war\GhostObjectColor.cs" />
     <Compile Include="Assets\Scripts\Fog of war\ObjectTypeVisible.cs" />
     <Compile Include="Assets\Scripts\GlobalDB.cs" />
-    <Compile Include="Assets\Scripts\Menu\GameSettense.cs" />
     <Compile Include="Assets\Scripts\Menu\LoadMenu.cs" />
     <Compile Include="Assets\Scripts\Menu\MainMenu2.cs" />
     <Compile Include="Assets\Scripts\Menu\RandomObjectActive.cs" />

@@ -63,48 +63,18 @@ public class MainMenu2 : MonoBehaviour
                 }
 
                 if (Faster)
-                {
-                    GameSettense.Faster = true;
-                    GameSettense.Good = false;
-                    GameSettense.Beautiful = false;
-                    GameSettense.Fantastic = false;
-                }
-
-                if (Good)
-                {
-                    GameSettense.Faster = false;
-                    GameSettense.Good = true;
-                    GameSettense.Beautiful = false;
-                    GameSettense.Fantastic = false;
-                }
-
-                if (Beautiful)
-                {
-                    GameSettense.Faster = false;
-                    GameSettense.Good = false;
-                    GameSettense.Beautiful = true;
-                    GameSettense.Fantastic = false;
-                }
-
-                if (Fantastic)
-                {
-                    GameSettense.Faster = false;
-                    GameSettense.Good = false;
-                    GameSettense.Beautiful = false;
-                    GameSettense.Fantastic = true;
-                }
+                    Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Faster;
+                else if (Good)
+                    Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Good;
+                else if (Beautiful)
+                    Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Beautiful;
+                else if (Fantastic)
+                    Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Fantastic;
 
                 if (AudioOn)
-                {
-                    GameSettense.AudioOn = true;
-                    GameSettense.AudioOff = false;
-                }
-
-                if (AudioOff)
-                {
-                    GameSettense.AudioOn = false;
-                    GameSettense.AudioOff = true;
-                }
+                    Settings.Settings.Instance.SoundLevel = 1.0F;
+                else if (AudioOff)
+                    Settings.Settings.Instance.SoundLevel = 0.0F;
 
                 if (Play)
                 {
@@ -129,74 +99,42 @@ public class MainMenu2 : MonoBehaviour
 
     public void FastestButton()
     {
-        GameSettense.Fastest = true;
-        GameSettense.Faster = false;
-        GameSettense.Simple = false;
-        GameSettense.Good = false;
-        GameSettense.Beautiful = false;
-        GameSettense.Fantastic = false;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Fastest;
     }
 
     public void FasterButton()
     {
-        GameSettense.Fastest = false;
-        GameSettense.Faster = true;
-        GameSettense.Simple = false;
-        GameSettense.Good = false;
-        GameSettense.Beautiful = false;
-        GameSettense.Fantastic = false;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Faster;
     }
 
     public void SimpleButton()
     {
-        GameSettense.Fastest = false;
-        GameSettense.Faster = false;
-        GameSettense.Simple = true;
-        GameSettense.Good = false;
-        GameSettense.Beautiful = false;
-        GameSettense.Fantastic = false;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Simple;
     }
 
     public void GoodButton()
     {
-        GameSettense.Fastest = false;
-        GameSettense.Faster = false;
-        GameSettense.Simple = false;
-        GameSettense.Good = true;
-        GameSettense.Beautiful = false;
-        GameSettense.Fantastic = false;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Good;
     }
 
     public void BeautifulButton()
     {
-        GameSettense.Fastest = false;
-        GameSettense.Faster = false;
-        GameSettense.Simple = false;
-        GameSettense.Good = false;
-        GameSettense.Beautiful = true;
-        GameSettense.Fantastic = false;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Beautiful;
     }
 
     public void FantasticButton()
     {
-        GameSettense.Fastest = false;
-        GameSettense.Faster = false;
-        GameSettense.Simple = false;
-        GameSettense.Good = false;
-        GameSettense.Beautiful = false;
-        GameSettense.Fantastic = true;
+        Settings.Settings.Instance.Graphics = Settings.Settings.GraphicsMode.Fantastic;
     }
 
     public void AudioOnButton()
     {
-        GameSettense.AudioOn = true;
-        GameSettense.AudioOff = false;
+        Settings.Settings.Instance.SoundLevel = 1.0F;
     }
 
     public void AudioOffButton()
     {
-        GameSettense.AudioOn = false;
-        GameSettense.AudioOff = true;
+        Settings.Settings.Instance.SoundLevel = 0.0F;
     }
 
     public void PlayButton()
