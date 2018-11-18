@@ -255,9 +255,11 @@
     <Compile Include="Assets\Scripts\Select\EnterSelectPlaneActive.cs" />
     <Compile Include="Assets\Scripts\Select\PatrolVisual.cs" />
     <Compile Include="Assets\Scripts\Select\Select.cs" />
+    <Compile Include="Assets\Scripts\Settings\Settings.cs" />
     <Compile Include="Assets\Scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\Scripts\STDLCMethods.cs" />
     <Compile Include="Assets\Scripts\TiltWindow.cs" />
+    <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
     <Compile Include="Assets\Scripts\World\Music.cs" />
     <Compile Include="Assets\Scripts\World\Nebula.cs" />
     <Compile Include="Assets\Scripts\Быстрый бой\AISelecter.cs" />
