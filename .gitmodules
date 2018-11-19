@@ -1,0 +1,6 @@
+[submodule "Models"]
+	path = Assets/Models
+	url = https://github.com/ISSDEFIANT/Star-Trek-Defence-Line-models
+[submodule "Assets/Models"]
+	path = Assets/Models
+	url = https://github.com/ISSDEFIANT/Star-Trek-Defence-Line-models
