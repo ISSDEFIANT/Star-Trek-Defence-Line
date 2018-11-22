@@ -47,9 +47,17 @@ namespace Settings
                 QualitySettings.SetQualityLevel((int) _graphicsMode, true);
             if (Math.Abs(_soundLevel - AudioListener.volume) > 0.001)
                 AudioListener.volume = _soundLevel;
-            SoundLevelChanged += level => PlayerPrefs.SetFloat("Sound", level);
+            SoundLevelChanged += level =>
+            {
+                PlayerPrefs.SetFloat("Sound", level);
+                PlayerPrefs.Save();
+            };
             SoundLevelChanged += level => AudioListener.volume = level;
-            GraphicsChanged += graphics => PlayerPrefs.SetInt("Graphic", (int) graphics);
+            GraphicsChanged += graphics =>
+            {
+                PlayerPrefs.SetInt("Graphic", (int) graphics);
+                PlayerPrefs.Save();
+            };
             GraphicsChanged += graphics => QualitySettings.SetQualityLevel((int) graphics, true);
         }
 
