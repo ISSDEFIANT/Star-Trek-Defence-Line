@@ -26,9 +26,6 @@ ExportedObj/
 *.VC.db
 /.idea
 
-# Unity3D generated meta files
-*.meta
-
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
