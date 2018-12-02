@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: dd5d7668220a29e4a87598c37f31481a
+timeCreated: 1439474219
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 20
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: LCARS
+  fontNames:
+  - LCARS
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 1
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
