@@ -1,9 +1,12 @@
 fileFormatVersion: 2
-guid: e4e20d5e657334113a6d3fff522cb602
+guid: 816be06db9f045942946ceaffb897cbd
+timeCreated: 1481641712
+licenseType: Free
 MonoImporter:
-  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - StarShip: {instanceID: 0}
+  - Material: {fileID: 2100000, guid: cf580c1df58ffd84d908eeaca30c3583, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

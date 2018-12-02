@@ -1,9 +1,90 @@
 fileFormatVersion: 2
-guid: 88ce59b9be92c4637a393a203e5729ed
+guid: 12576ae38ff335d4090cb77c02e82c21
+timeCreated: 1482548953
+licenseType: Free
 MonoImporter:
-  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - AI2: {instanceID: 0}
+  - AI3: {instanceID: 0}
+  - AI4: {instanceID: 0}
+  - AI5: {instanceID: 0}
+  - AI6: {instanceID: 0}
+  - AI7: {instanceID: 0}
+  - AI8: {instanceID: 0}
+  - SmallStarSpawnPoint: {instanceID: 0}
+  - MediumStarSpawnPoint: {instanceID: 0}
+  - BigStarSpawnPoint: {instanceID: 0}
+  - HugeStarSpawnPoint: {instanceID: 0}
+  - Player1SpawnPoint: {instanceID: 0}
+  - Player2SpawnPoint: {instanceID: 0}
+  - Player3SpawnPoint: {instanceID: 0}
+  - Player4SpawnPoint: {instanceID: 0}
+  - Player5SpawnPoint: {instanceID: 0}
+  - Player6SpawnPoint: {instanceID: 0}
+  - Player7SpawnPoint: {instanceID: 0}
+  - Player8SpawnPoint: {instanceID: 0}
+  - SmallRed: {fileID: 1071190877655638, guid: 4887133c4c9d95348938c4cd5b28d5ed, type: 2}
+  - SmallYellow: {fileID: 161848, guid: 5b67f82be3c10bd48a9d8429cf7356b6, type: 2}
+  - SmallGreen: {fileID: 1398614665779752, guid: b4e0732f00d2c1e4999481c022195fb8,
+      type: 2}
+  - SmallBlue: {fileID: 1109454894084898, guid: 64323926919502946adb7c8b825b41ad,
+      type: 2}
+  - SmallWhite: {fileID: 1436607253060532, guid: bacf4d02470812544897ae78c17b6085,
+      type: 2}
+  - SmallDark: {fileID: 1983707584055954, guid: a90007d9968220d4ba5baeac445679ec,
+      type: 2}
+  - SmallBlackHole: {instanceID: 0}
+  - MediumRed: {fileID: 1071190877655638, guid: 66aefc0bc5fdf6d4cb2313dad594b075,
+      type: 2}
+  - MediumYellow: {fileID: 161848, guid: a7433d4d8b3a3874486a52f0c8cfcb73, type: 2}
+  - MediumGreen: {fileID: 1398614665779752, guid: d871b913b8df78f4daea974a5bc36c9b,
+      type: 2}
+  - MediumBlue: {fileID: 1109454894084898, guid: 457c5472088fe4442bddf4b198db3a7d,
+      type: 2}
+  - MediumWhite: {fileID: 1436607253060532, guid: f195f3cbfd1c8534389153d1b71f48e9,
+      type: 2}
+  - MediumDark: {fileID: 1983707584055954, guid: 1d838315b5e530f4eb869d09b53c6857,
+      type: 2}
+  - MeduimBlackHole: {instanceID: 0}
+  - BigRed: {fileID: 1071190877655638, guid: 55792b279c24e6245b966d8cd4061803, type: 2}
+  - BigYellow: {fileID: 161848, guid: 514895bf9792d8a43a411940df866893, type: 2}
+  - BigGreen: {fileID: 1398614665779752, guid: 0ecaf4755aec8404da0d2db2ea371e93, type: 2}
+  - BigBlue: {fileID: 1109454894084898, guid: f2980febd5fe34440833af3b27a2cbea, type: 2}
+  - BigWhite: {fileID: 1436607253060532, guid: 3698731b02abc994882543cc7e7129bf, type: 2}
+  - BigDark: {fileID: 1983707584055954, guid: d891e10349f768642ba443e165c3ff73, type: 2}
+  - BigBlackHole: {instanceID: 0}
+  - HugeRed: {fileID: 1071190877655638, guid: beb8d75dc04755244b2cce62c77a1567, type: 2}
+  - HugeYellow: {fileID: 161848, guid: b259d728a2b40d040969e51902dc07b1, type: 2}
+  - HugeGreen: {fileID: 1398614665779752, guid: 57900d2dceb371c439d94d14a9ff8945,
+      type: 2}
+  - HugeBlue: {fileID: 1109454894084898, guid: 5b35932345bdb0b46a7373bf834af1cf, type: 2}
+  - HugeWhite: {fileID: 1436607253060532, guid: 24cdf095db863544394e16322bb93eca,
+      type: 2}
+  - HugeDark: {fileID: 1983707584055954, guid: d1225127721f4f24aa4df24adc8c7223, type: 2}
+  - HugeBlackHole: {instanceID: 0}
+  - FedStart: {fileID: 1763359285555790, guid: dae8c77531cee10428d881d392f3cf02, type: 2}
+  - KliStart: {instanceID: 0}
+  - RomStart: {instanceID: 0}
+  - CarStart: {instanceID: 0}
+  - BorStart: {fileID: 1329774904910838, guid: f2df448ce35093948839fc72f2af295c, type: 2}
+  - UndStart: {instanceID: 0}
+  - FedStartAI: {fileID: 1763359285555790, guid: b9eb4a5d772c68a45889bda1d7fd2535,
+      type: 2}
+  - KliStartAI: {instanceID: 0}
+  - RomStartAI: {instanceID: 0}
+  - CarStartAI: {instanceID: 0}
+  - BorStartAI: {fileID: 1329774904910838, guid: 031baa92f2ebd544cbc9c7b53670cd62,
+      type: 2}
+  - UndStartAI: {instanceID: 0}
+  - FedStartAlly: {fileID: 1763359285555790, guid: 2f2e70a35b61e9d4593901d2c7e81255,
+      type: 2}
+  - KliStartAlly: {instanceID: 0}
+  - RomStartAlly: {instanceID: 0}
+  - CarStartAlly: {instanceID: 0}
+  - BorStartAlly: {fileID: 1329774904910838, guid: f13f5016d173b114695c540ab1469138,
+      type: 2}
+  - UndStartAlly: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
