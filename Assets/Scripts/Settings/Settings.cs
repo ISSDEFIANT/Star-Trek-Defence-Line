@@ -39,7 +39,7 @@ namespace Settings
         public event GraphicsChangedDelegate GraphicsChanged;
         public event SoundLevelChangedDelegate SoundLevelChanged;
 
-        public Settings()
+        private void Awake()
         {
             _graphicsMode = (GraphicsMode) PlayerPrefs.GetInt("Graphic", QualitySettings.GetQualityLevel());
             _soundLevel = PlayerPrefs.GetFloat("Sound", AudioListener.volume);
