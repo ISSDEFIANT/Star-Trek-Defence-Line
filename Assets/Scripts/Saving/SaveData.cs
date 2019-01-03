@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
-using UnityEngine.WSA;
 using Utils;
 
 namespace Saving
@@ -79,6 +78,14 @@ namespace Saving
             foreach (var part in _parts) part.Value.Save();
         }
 
+        /// <summary>
+        /// Get/create part from save
+        /// </summary>
+        /// <param name="factory">part factory</param>
+        /// <typeparam name="TPart">part type</typeparam>
+        /// <typeparam name="TSerial">part serializable object type</typeparam>
+        /// <returns>existing/new part</returns>
+        /// <exception cref="IOException"></exception>
         public TPart GetPart<TPart, TSerial>(ISaveDataPartFactory<TPart, TSerial> factory)
             where TPart : ISaveDataPart<TSerial>
         {
@@ -114,6 +121,13 @@ namespace Saving
             Directory.Delete(_file);
         }
 
+        /// <summary>
+        /// Remove part from the save and delete all files linked to it
+        /// </summary>
+        /// <param name="factory">part factory</param>
+        /// <typeparam name="TPart">part type</typeparam>
+        /// <typeparam name="TSerial">part serializable object type</typeparam>
+        /// <exception cref="IOException"></exception>
         public void Remove<TPart, TSerial>(ISaveDataPartFactory<TPart, TSerial> factory)
             where TPart : ISaveDataPart<TSerial>
         {
@@ -124,6 +138,13 @@ namespace Saving
             PartWrapper.Delete(_file, id);
         }
 
+        /// <summary>
+        /// Check if this save has the part
+        /// </summary>
+        /// <param name="factory">part factory</param>
+        /// <typeparam name="TPart">part type</typeparam>
+        /// <typeparam name="TSerial">part serializable object type</typeparam>
+        /// <returns><code>true</code> - save contains the part,otherwise - <code>false</code></returns>
         public bool Contains<TPart, TSerial>(ISaveDataPartFactory<TPart, TSerial> factory)
             where TPart : ISaveDataPart<TSerial>
         {
@@ -190,7 +211,7 @@ namespace Saving
             {
                 using (var writer = new StreamWriter(_file, false, Encoding.UTF8))
                 {
-                    writer.Write(JsonUtility.ToJson(_part.Serialize()));
+                    writer.Write(JsonUtility.ToJson(_part.Serialize(), Debug.isDebugBuild));
                     writer.Flush();
                 }
             }
@@ -265,7 +286,7 @@ namespace Saving
                 }
             }
 
-            public List<Guid> Get()
+            public IEnumerable<Guid> Get()
             {
                 return _parts;
             }

@@ -6,8 +6,14 @@ using Utils;
 
 namespace Saving
 {
+    /// <summary>
+    /// This class manages all saves
+    /// </summary>
     public class SaveManager : Singleton<SaveManager>
     {
+        /// <summary>
+        /// Read-only collection with all saves
+        /// </summary>
         public readonly List<Save> Saves = new List<Save>();
         private string _savesFolder;
         
@@ -28,6 +34,11 @@ namespace Saving
             }
         }
 
+        /// <summary>
+        /// Create new save
+        /// </summary>
+        /// <param name="saveName">save human-readable name</param>
+        /// <returns>new save instance</returns>
         public Save NewSave(string saveName)
         {
             var save = new Save(_savesFolder, saveName);
@@ -35,6 +46,11 @@ namespace Saving
             return save;
         }
 
+        /// <summary>
+        /// Remove save from manager and delete all files and folders linked to it
+        /// </summary>
+        /// <param name="save">the save</param>
+        /// <exception cref="IOException"></exception>
         public void RemoveSave(Save save)
         {
             Saves.Remove(save);
