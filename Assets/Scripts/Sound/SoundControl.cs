@@ -16,6 +16,7 @@ namespace Sound
         public event VolumeChanged OnMasterVolumeChanged = delegate {  };
         public event VolumeChanged OnMusicVolumeChanged = delegate {  };
         public event VolumeChanged OnSfxVolumeChanged = delegate { };
+        public event VolumeChanged OnVoiceVolumeChanged = delegate { };
 
         public void SetMasterVolume(float value)
         {
@@ -35,15 +36,23 @@ namespace Sound
             OnSfxVolumeChanged(value);
         }
 
+        public void SetVoiceVolume(float value)
+        {
+            mixer.SetFloat("voiceVolume", value);
+            OnVoiceVolumeChanged(value);
+        }
+
         private void Awake()
         {
             mixer.SetFloat("masterVolume", PlayerPrefs.GetFloat("sound_master", 1.0f));
             mixer.SetFloat("musicVolume", PlayerPrefs.GetFloat("sound_music", 1.0f));
             mixer.SetFloat("sfxVolume", PlayerPrefs.GetFloat("sound_sfx", 1.0f));
+            mixer.SetFloat("voiceVolume", PlayerPrefs.GetFloat("sound_voice", 1.0f));
 
             OnSfxVolumeChanged += value => PlayerPrefs.SetFloat("sound_sfx", value);
             OnMusicVolumeChanged += value => PlayerPrefs.SetFloat("sound_music", value);
             OnMasterVolumeChanged += value => PlayerPrefs.SetFloat("sound_master", value);
+            OnVoiceVolumeChanged += value => PlayerPrefs.SetFloat("sound_voice", value);
         }
     }
 }
