@@ -22,6 +22,7 @@ namespace Settings
             }
         }
 
+        [Obsolete]
         public float SoundLevel
         {
             get { return _soundLevel; }
