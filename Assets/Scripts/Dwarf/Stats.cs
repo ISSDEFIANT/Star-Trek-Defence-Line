@@ -10,8 +10,8 @@ public class Stats : MonoBehaviour
     public bool NeutralAgrass;
     public bool Neutral;
 
-    public int protect;
-
+    public string Race;
+    public int VoiceNum;
 
     public bool AttackStations;
     public bool DefenceStations;
@@ -204,8 +204,9 @@ public class Stats : MonoBehaviour
 
         if (Assimilated)
         {
-            gameObject.GetComponent<Captan>().Race = "Borg";
-            gameObject.GetComponent<Captan>().CaptanNum = 0;
+            VoiceIndex _vi = gameObject.GetComponent<VoiceIndex>();
+            _vi.race = VoiceIndex.enRace.Borg;
+            _vi.initRace();
         }
 
         if (STDLCMethods.FindInList(gameObject, _GDB.selectList))

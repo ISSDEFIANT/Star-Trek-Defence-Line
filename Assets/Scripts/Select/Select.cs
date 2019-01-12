@@ -77,6 +77,8 @@ public class Select : MonoBehaviour
 
 	[HideInInspector]
 	public bool SettingPatrolWay;
+
+    private AudioSource voiceSource;
 	// Use this for initialization
 	void Start()
 	{
@@ -85,13 +87,12 @@ public class Select : MonoBehaviour
 		radius = new List<float>();
 		_GDB = GameObject.FindGameObjectWithTag("MainUI").GetComponent<GlobalDB>();
 		MSDActive = true;
-		if (!gameObject.GetComponent<AudioSource>())
-		{
-			gameObject.AddComponent<AudioSource>();
-		}
+		
 		Time.timeScale = 1;
 
 		PlayerCamera = GameObject.FindGameObjectWithTag("CAMERAMOVE");
+
+	    voiceSource = gameObject.GetComponent<AudioSource>();
 	}
 	void StateInSelectTarget(Transform targetGO)
 	{
@@ -111,13 +112,7 @@ public class Select : MonoBehaviour
 		            Instantiate(AttackMark, targetGO.transform.position, MoveMark.transform.rotation);
 		            if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 		            {
-		                if (!gameObject.GetComponent<AudioSource>().isPlaying)
-		                {
-		                    gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
-		                        .CurCap.Attack[
-		                            Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
-		                    gameObject.GetComponent<AudioSource>().Play();
-		                }
+                        PlayUnitSound(_GDB.selectList[0], "Attack");
 		            }
 
 		            obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
@@ -154,14 +149,8 @@ public class Select : MonoBehaviour
 			        i++;
 			        if (!_ost.AI && !_ost.FreandAI && !_ost.Neutral && !_ost.NeutralAgrass)
 			        {
-			            if (!gameObject.GetComponent<AudioSource>().isPlaying)
-			            {
-			                gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
-			                    .CurCap.Attack[
-			                        Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Attack.Count)];
-			                gameObject.GetComponent<AudioSource>().Play();
-			            }
-			        }
+			            PlayUnitSound(_GDB.selectList[0], "Attack");
+                    }
 			    }
 			}
 		}
@@ -199,15 +188,9 @@ public class Select : MonoBehaviour
 	                    obj.GetComponent<MoveComponent>().PatrolWay.Clear();
 	                    _ost.StopOrder = true;
 	                    i++;
-	                    if (!gameObject.GetComponent<AudioSource>().isPlaying)
-	                    {
-	                        gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>()
-	                            .CurCap.Move[
-	                                Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
-	                        gameObject.GetComponent<AudioSource>().Play();
-	                    }
+	                    PlayUnitSound(_GDB.selectList[0], "Move");
 
-	                    obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
+                        obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
 	                }
 	                else
 	                {
@@ -315,28 +298,14 @@ public class Select : MonoBehaviour
 								{
 									if (!_GDB.selectList[0].GetComponent<Stats>().miner)
 									{
-										if (!gameObject.GetComponent<AudioSource>().isPlaying)
-										{
-											if (_GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count > 0)
-											{
-												gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count)];
-												gameObject.GetComponent<AudioSource>().Play();
-											}
-										}
-									}
+									    PlayUnitSound(_GDB.selectList[0], "LocationInvalid");
+                                    }
 									else
 									{
 										if (_hit.transform.gameObject.tag != "BuildingBuilding" && _hit.transform.gameObject.tag != "BuildingBuildingEnemy" && _hit.transform.gameObject.tag != "BuildingBuildingFreand")
 										{
-											if (!gameObject.GetComponent<AudioSource>().isPlaying)
-											{
-												if (_GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count > 0)
-												{
-													gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.LocationInvalid.Count)];
-													gameObject.GetComponent<AudioSource>().Play();
-												}
-											}
-										}
+										    PlayUnitSound(_GDB.selectList[0], "LocationInvalid");
+                                        }
 									}
 								}
 							}
@@ -879,11 +848,7 @@ public class Select : MonoBehaviour
                         }
                         if (!_hit.transform.gameObject.GetComponent<Stats>().AI && !_hit.transform.gameObject.GetComponent<Stats>().FreandAI && !_hit.transform.gameObject.GetComponent<Stats>().Neutral && !_hit.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
                         {
-                            if (!gameObject.GetComponent<AudioSource>().isPlaying)
-                            {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
-                                gameObject.GetComponent<AudioSource>().Play();
-                            }
+                            PlayUnitSound(_GDB.selectList[0], "Select");
                         }
                     }
                 }
@@ -911,11 +876,7 @@ public class Select : MonoBehaviour
                         }
                         if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
                         {
-                            if (!gameObject.GetComponent<AudioSource>().isPlaying)
-                            {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select.Count)];
-                                gameObject.GetComponent<AudioSource>().Play();
-                            }
+                            PlayUnitSound(_GDB.activeObjectInterface, "Select");
                         }
                     }
                     else
@@ -934,11 +895,7 @@ public class Select : MonoBehaviour
                         }
                         if (!_GDB.activeObjectInterface.GetComponent<Station>().AI && !_GDB.activeObjectInterface.GetComponent<Station>().FreandAI && !_GDB.activeObjectInterface.GetComponent<Station>().Neutral && !_GDB.activeObjectInterface.GetComponent<Station>().NeutralAgrass)
                         {
-                            if (!gameObject.GetComponent<AudioSource>().isPlaying)
-                            {
-                                gameObject.GetComponent<AudioSource>().clip = _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.activeObjectInterface.GetComponent<Captan>().CurCap.Select.Count)];
-                                gameObject.GetComponent<AudioSource>().Play();
-                            }
+                            PlayUnitSound(_GDB.activeObjectInterface, "Select");
                         }
                     }
                 }
@@ -992,11 +949,7 @@ public class Select : MonoBehaviour
                                 }
                                 if (!_hitWOTerrain.transform.gameObject.GetComponent<Stats>().AI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().FreandAI && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().Neutral && !_hitWOTerrain.transform.gameObject.GetComponent<Stats>().NeutralAgrass)
                                 {
-                                    if (!gameObject.GetComponent<AudioSource>().isPlaying)
-                                    {
-                                        gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
-                                        gameObject.GetComponent<AudioSource>().Play();
-                                    }
+                                    PlayUnitSound(_GDB.selectList[0], "Select");
                                 }
                             }
                         }
@@ -1031,12 +984,8 @@ public class Select : MonoBehaviour
 					obj.GetComponent<MoveComponent>().InPatrol = true;
 					_ost.StopOrder = true;
 					i++;
-					if (!gameObject.GetComponent<AudioSource>().isPlaying)
-					{
-						gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Move[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Move.Count)];
-						gameObject.GetComponent<AudioSource>().Play();
-					}
-					obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
+				    PlayUnitSound(_GDB.selectList[0], "Move");
+                    obj.GetComponent<MoveComponent>().SetCurFleet(_GDB.selectList);
 
 					LockOnPatrolSetting = false;
 				}
@@ -1075,12 +1024,8 @@ public class Select : MonoBehaviour
 						}
 						if (!_ost.AI && !_ost.FreandAI)
 						{
-							if (!gameObject.GetComponent<AudioSource>().isPlaying)
-							{
-								gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
-								gameObject.GetComponent<AudioSource>().Play();
-							}
-						}
+						    PlayUnitSound(_GDB.selectList[0], "Select");
+                        }
 					}
 				}
 			}
@@ -1118,12 +1063,8 @@ public class Select : MonoBehaviour
 							}
 							if (!_ost.AI && !_ost.FreandAI)
 							{
-								if (!gameObject.GetComponent<AudioSource>().isPlaying)
-								{
-									gameObject.GetComponent<AudioSource>().clip = _GDB.selectList[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, _GDB.selectList[0].GetComponent<Captan>().CurCap.Select.Count)];
-									gameObject.GetComponent<AudioSource>().Play();
-								}
-							}
+							    PlayUnitSound(_GDB.selectList[0], "Select");
+                            }
 						}
 					}
 				}
@@ -1136,9 +1077,6 @@ public class Select : MonoBehaviour
 		}
 	}
 
-	// Проверяет присутствует-ли объект в списке selectLis
-
-	// Очистка выделенных юнитив
 	public void ClearSelect()
 	{
 		foreach (GameObject selObj in _GDB.selectList)
@@ -1147,56 +1085,129 @@ public class Select : MonoBehaviour
 		}
 		_GDB.selectList.Clear();
 	}
-	public void PlayMoveSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Move[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Move.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlaySelectSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Select[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Select.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayAttackSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Attack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Attack.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayInvaliLocationSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.LocationInvalid[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.LocationInvalid.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayIsUnderAttackSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.IsUnderAttack[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.IsUnderAttack.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayFixSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.Fix[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.Fix.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayLowResusesSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.LowResuses[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.LowResuses.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayConstructingBeganSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingBegan[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingBegan.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayConstructingEndSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingEnd[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingEnd.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
-	public void PlayConstructingCanseledSound(GameObject ActiveUnit)
-	{
-		gameObject.GetComponent<AudioSource>().clip = ActiveUnit.GetComponent<Captan>().CurCap.ConstructingCanseled[Random.Range(0, ActiveUnit.GetComponent<Captan>().CurCap.ConstructingCanseled.Count)];
-		gameObject.GetComponent<AudioSource>().Play();
-	}
+
+
+
+    public void PlayUnitSound(GameObject ActiveUnit, string soundType)
+    {
+        VoiceIndex _vi = ActiveUnit.GetComponent<VoiceIndex>();
+        CapAudio curCap;
+
+        switch (_vi.race)
+        {
+            case VoiceIndex.enRace.Borg:
+                curCap = VoiceSystem.BorgVoice[_vi.CapNum];
+                break;
+            case VoiceIndex.enRace.Federation:
+                curCap = VoiceSystem.FedVoice[_vi.CapNum];
+                break;
+            case VoiceIndex.enRace.Klingon:
+                curCap = VoiceSystem.KliVoice[_vi.CapNum];
+                break;
+            case VoiceIndex.enRace.Romulan:
+                curCap = VoiceSystem.RomVoice[_vi.CapNum];
+                break;
+            case VoiceIndex.enRace.Cardassian:
+                curCap = VoiceSystem.CarVoice[_vi.CapNum];
+                break;
+            case VoiceIndex.enRace.S8472:
+                curCap = VoiceSystem.SpiVoice[_vi.CapNum];
+                break;
+            default:
+                curCap = VoiceSystem.FedVoice[_vi.CapNum];
+                break;
+
+        }
+
+        if (!voiceSource.isPlaying)
+        {
+            switch (soundType)
+            {
+                case "Attack":
+                    voiceSource.clip = curCap.Attack[Random.Range(0, curCap.Attack.Count)];
+                    break;
+                case "Select":
+                    voiceSource.clip = curCap.Select[Random.Range(0, curCap.Select.Count)];
+                    break;
+                case "Fix":
+                    voiceSource.clip = curCap.Fix[Random.Range(0, curCap.Fix.Count)];
+                    break;
+                case "Move":
+                    voiceSource.clip = curCap.Move[Random.Range(0, curCap.Move.Count)];
+                    break;
+                case "LocationInvalid":
+                    voiceSource.clip = curCap.LocationInvalid[Random.Range(0, curCap.LocationInvalid.Count)];
+                    break;
+            }
+
+            voiceSource.Play();
+        }
+    }
+
+    public void PlayComputerSound(VoiceIndex.enRace race, string soundType)
+    {
+        ComputerVoice _cv;
+
+        switch (race)
+        {
+            case VoiceIndex.enRace.Borg:
+                _cv = VoiceSystem.BorgSystemVoice;
+                break;
+            case VoiceIndex.enRace.Federation:
+                _cv = VoiceSystem.FedSystemVoice;
+                break;
+            case VoiceIndex.enRace.Klingon:
+                _cv = VoiceSystem.KliSystemVoice;
+                break;
+            case VoiceIndex.enRace.Romulan:
+                _cv = VoiceSystem.RomSystemVoice;
+                break;
+            case VoiceIndex.enRace.Cardassian:
+                _cv = VoiceSystem.CarSystemVoice;
+                break;
+            case VoiceIndex.enRace.S8472:
+                _cv = VoiceSystem.SpiSystemVoice;
+                break;
+            default:
+                _cv = VoiceSystem.FedSystemVoice;
+                break;
+
+        }
+
+        if (!voiceSource.isPlaying)
+        {
+            switch (soundType)
+            {
+                case "lowResources":
+                    voiceSource.clip = _cv.lowResources;
+                    break;
+                case "lowCrew":
+                    voiceSource.clip = _cv.lowCrew;
+                    break;
+                case "stationConstructingBegan":
+                    voiceSource.clip = _cv.stationConstructingBegan;
+                    break;
+                case "shipConstructingBegan":
+                    voiceSource.clip = _cv.shipConstructingBegan;
+                    break;
+                case "stationConstructingEnd":
+                    voiceSource.clip = _cv.stationConstructingEnd;
+                    break;
+                case "shipConstructingEnd":
+                    voiceSource.clip = _cv.shipConstructingEnd;
+                    break;
+                case "constructingCanseled":
+                    voiceSource.clip = _cv.constructingCanseled;
+                    break;
+                case "isUnderAttack":
+                    voiceSource.clip = _cv.isUnderAttack;
+                    break;
+            }
+            voiceSource.Play();
+        }
+    }
+
+
 
 	public void MoveCameraToCuttentShip()
 	{

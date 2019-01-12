@@ -106,8 +106,8 @@ public class Builder : MonoBehaviour {
 			if (BuilderTarget != null) {
 				if (!STDLCMethods.FindInList(gameObject, BuilderTarget.GetComponent<BuildingStationScript>().Builders)) {
 					BuilderTarget.GetComponent<BuildingStationScript> ().Builders.Add (gameObject);
-					_GDB.gameObject.GetComponent<Select> ().PlayConstructingBeganSound(gameObject);
-				}
+                    _GDB.gameObject.GetComponent<Select> ().PlayComputerSound(_GDB.PlayerRace, "stationConstructingBegan");
+                }
 				if (_st.WasSelect) {
 					if (!_st.AI & !_st.FreandAI) {
 						if (Input.GetMouseButtonDown (1)) {
@@ -139,8 +139,8 @@ public class Builder : MonoBehaviour {
 			}
 			if (BuilderTarget.GetComponent<BuildingStationScript> ().Timer <= 0) {
 				if (!BuilderTarget.GetComponent<BuildingStationScript> ().AI && !BuilderTarget.GetComponent<BuildingStationScript> ().FreandAI) {
-					_GDB.gameObject.GetComponent<Select> ().PlayConstructingEndSound(gameObject);
-				}
+				    _GDB.gameObject.GetComponent<Select>().PlayComputerSound(_GDB.PlayerRace, "stationConstructingEnd");
+                }
 			}
 		}
 		if (_st.AI || _st.FreandAI) {

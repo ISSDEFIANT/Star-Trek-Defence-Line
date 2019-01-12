@@ -103,8 +103,8 @@ public class ShipBuild : MonoBehaviour
 		{
 			if (!_sb.AI && !_sb.FreandAI)
 			{
-				_sel.PlayConstructingEndSound(gameObject);
-			}
+				_sel.PlayComputerSound(_GDB.PlayerRace, "shipConstructingEnd");
+            }
 			GameObject Ship;
 			Ship = (GameObject)Instantiate(Корабль[0], _sbm.startPoint.transform.position, _sbm.startPoint.transform.rotation);
 

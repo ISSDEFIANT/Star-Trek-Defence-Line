@@ -87,8 +87,8 @@ public class BuildingStationScript : MonoBehaviour
 		{
 			if (!AI && !FreandAI)
 			{
-				_SEL.PlayConstructingEndSound(gameObject);
-			}
+			    _SEL.PlayComputerSound(_GDB.PlayerRace, "stationConstructingEnd");
+            }
 			if (!Ready)
 			{
 				foreach (GameObject obj in Builders)
@@ -158,6 +158,6 @@ public class BuildingStationScript : MonoBehaviour
 		_GDB.Dilithium += Dilithium;
 		_GDB.Titanium += Titanium;
 		Destroy(gameObject);
-		_SEL.PlayConstructingCanseledSound(gameObject);
+		_SEL.PlayComputerSound(_GDB.PlayerRace, "constructingCanseled");
 	}
 }

@@ -13,4 +13,13 @@ public static class STDLCMethods
         }
         return false;
     }
+    public static bool FindInList(AudioClip obj, List<AudioClip> list)
+    {
+        foreach (AudioClip selObj in list)
+        {
+            if (selObj == obj)
+                return true;
+        }
+        return false;
+    }
 }

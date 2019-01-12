@@ -459,7 +459,7 @@ public class FixModule : MonoBehaviour
 						if (!STDLCMethods.FindInList(obj, ShipsToFix)) ShipsToFix.Add(obj);
 						obj.GetComponent<MoveComponent>().CurFleet.Clear();
 					    obj.GetComponent<ActiveState>().curShipYard = gameObject;
-                        _SEL.PlayFixSound(gameObject);
+                        _SEL.PlayUnitSound(gameObject, "Fix");
 					}
 				}
 			}

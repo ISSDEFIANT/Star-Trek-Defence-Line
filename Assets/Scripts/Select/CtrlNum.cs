@@ -275,52 +275,52 @@ public class CtrlNum : MonoBehaviour
 
             if (ClickNum != 1)
             {
-                if (FindInFleetList(obj, Num1)) Num1.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num1)) Num1.Remove(obj);
             }
 
             if (ClickNum != 2)
             {
-                if (FindInFleetList(obj, Num2)) Num2.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num2)) Num2.Remove(obj);
             }
 
             if (ClickNum != 3)
             {
-                if (FindInFleetList(obj, Num3)) Num3.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num3)) Num3.Remove(obj);
             }
 
             if (ClickNum != 4)
             {
-                if (FindInFleetList(obj, Num4)) Num4.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num4)) Num4.Remove(obj);
             }
 
             if (ClickNum != 5)
             {
-                if (FindInFleetList(obj, Num5)) Num5.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num5)) Num5.Remove(obj);
             }
 
             if (ClickNum != 6)
             {
-                if (FindInFleetList(obj, Num6)) Num6.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num6)) Num6.Remove(obj);
             }
 
             if (ClickNum != 7)
             {
-                if (FindInFleetList(obj, Num7)) Num7.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num7)) Num7.Remove(obj);
             }
 
             if (ClickNum != 8)
             {
-                if (FindInFleetList(obj, Num8)) Num8.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num8)) Num8.Remove(obj);
             }
 
             if (ClickNum != 9)
             {
-                if (FindInFleetList(obj, Num9)) Num9.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num9)) Num9.Remove(obj);
             }
 
             if (ClickNum != 0)
             {
-                if (FindInFleetList(obj, Num0)) Num0.Remove(obj);
+                if (STDLCMethods.FindInList(obj, Num0)) Num0.Remove(obj);
             }
 
             obj1.GetComponent<HealthModule>().ResetTeam();
@@ -380,15 +380,13 @@ public class CtrlNum : MonoBehaviour
             foreach (GameObject obj in CorrectionFleet)
             {
                 _GDB.selectList = CorrectionFleet.ToList();
-                obj.GetComponent<Stats>().Proector.GetComponent<MeshRenderer>().enabled = true;
-                obj.GetComponent<Stats>().BoxSelected = true;
-                obj.GetComponent<Stats>().WasSelect = true;
-                obj.GetComponent<Stats>().isSelect = true;
-                if (!gameObject.GetComponent<AudioSource>().isPlaying)
-                {
-                    gameObject.GetComponent<AudioSource>().clip = CorrectionFleet[0].GetComponent<Captan>().CurCap.Select[Random.Range(0, CorrectionFleet[0].GetComponent<Captan>().CurCap.Select.Count)];
-                    gameObject.GetComponent<AudioSource>().Play();
-                }
+                Stats _st = obj.GetComponent<Stats>();
+                _st.Proector.GetComponent<MeshRenderer>().enabled = true;
+                _st.BoxSelected = true;
+                _st.WasSelect = true;
+                _st.isSelect = true;
+
+                gameObject.GetComponent<Select>().PlayUnitSound(CorrectionFleet[0], "Select");
             }
         }
         if (Num1.Count > 0 && !CorrectionFleet[0].GetComponent<Stats>())
@@ -401,14 +399,4 @@ public class CtrlNum : MonoBehaviour
         ClickCount += 1;
         ClickNumber = ClickNum;
     }
-
-    bool FindInFleetList(GameObject obj, List<GameObject> Fleet)
-	{
-		foreach (GameObject selObj in Fleet)
-		{
-			if (selObj == obj)
-				return true;
-		}
-		return false;
-	}
 }

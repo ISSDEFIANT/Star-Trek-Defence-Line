@@ -137,9 +137,9 @@ public class ShipBuildModule : MonoBehaviour
 
 	public void CansledShip(int SlotNumber)
 	{
-		_SEL.PlayConstructingCanseledSound(gameObject);
+		_SEL.PlayComputerSound(_GDB.PlayerRace, "constructingCanseled");
 
-		_SB.Корабль.RemoveAt(SlotNumber-1);
+        _SB.Корабль.RemoveAt(SlotNumber-1);
 		_SB.Время.RemoveAt(SlotNumber-1);
 		_SB.StartBuild = false;
 		if (_SB.Время.Count != 0)

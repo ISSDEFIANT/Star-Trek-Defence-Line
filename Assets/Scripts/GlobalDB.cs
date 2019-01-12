@@ -1,28 +1,21 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
-public class GlobalDB : MonoBehaviour {
+public class GlobalDB : MonoBehaviour
+{
+    public VoiceIndex.enRace PlayerRace;
 
 	public float Humans;
 	public float Dilithium;
 	public float Titanium;
 
-	public float EnemyHumans;
-	public float EnemyDilithium;
-	public float EnemyTitanium;
-
-	public float FreandHumans;
-	public float FreandDilithium;
-	public float FreandTitanium;
-
 	public List<GameObject> obj = new List<GameObject>();
 	public int numIntersection;
 	public GameObject activeObjectInterface;
-	public List<GameObject> enemyList;
 	public List<GameObject> dwarfList;
 	public List<GameObject> selectList;
-	public List<GameObject> MineList;
 
 	public string PlayerName;
 
@@ -34,8 +27,8 @@ public class GlobalDB : MonoBehaviour {
 	public bool Fale;
 	// Use this for initialization
 	void Start () {
-	
-	}
+        
+    }
 	void OnGUI ()
 	{
 		if (Win) {
@@ -54,7 +47,10 @@ public class GlobalDB : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+	    if (Input.GetKeyDown(KeyCode.H))
+	    {
+            ErrorWindow.ShowError("TestError");
+        }
 	}
 	
 	public void activationTrigger ()
