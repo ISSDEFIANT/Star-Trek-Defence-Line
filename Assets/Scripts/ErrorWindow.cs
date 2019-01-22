@@ -1,51 +1,77 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class ErrorWindow : MonoBehaviour
+//TODO localize
+public sealed class ErrorWindow : MonoBehaviour
 {
-    private static bool messageWindowActive;
-    private static string curMessage;
+    private static readonly object Lock = new object();
+    private static bool _messageWindowActive;
+    private static string _curMessage;
 
-    public static void ShowError(string message)
+    /// <summary>
+    /// Show error message to the user
+    /// </summary>
+    /// <param name="message">the message</param>
+    public static void ShowErrorMessage(string message)
     {
-        ErrorWindow.curMessage = message;
-        ErrorWindow.messageWindowActive = true;
+        lock (Lock)
+        {
+            _curMessage = message;
+            _messageWindowActive = true;
+        }
+    }
+
+    /// <summary>
+    /// Show exception to the user
+    /// </summary>
+    /// <param name="e">the exception</param>
+    public static void ShowException(Exception e)
+    {
+        lock (Lock)
+        {
+            _curMessage = e.ToString();
+            _messageWindowActive = true;
+        }
     }
 
     void OnGUI()
     {
-        float x = Screen.width / 100;
-        float y = Screen.height / 100;
-
-        GUIStyle[] styles = new GUIStyle[3];
-        styles[0] = new GUIStyle(GUI.skin.box);
-        styles[1] = new GUIStyle(GUI.skin.label);
-        styles[2] = new GUIStyle(GUI.skin.button);
-
-
-        foreach (GUIStyle style in styles)
+        string msg;
+        lock (Lock)
         {
-            style.fontSize = (int)(y * 3);
+            if (!_messageWindowActive)
+                return;
+            msg = _curMessage;
         }
 
-        if (ErrorWindow.messageWindowActive)
-        {
-            GUI.color = Color.red;
-            GUI.Box(new Rect(x * 25, y * 5, x * 60, y * 90), "Error", styles[0]);
-            GUI.Label(new Rect(x * 30, y * 10, x * 50, y * 5),
-                "Произошла ошибка. Пожалуйста, напишите нам о ней в багтрекер:", styles[1]);
-            GUI.Label(new Rect(x * 30, y * 15, x * 50, y * 80), ErrorWindow.curMessage, styles[1]);
-            GUI.color = Color.white;
-            if (GUI.Button(new Rect(x * 30, y * 85, x * 5, y * 3), "Close", styles[2]))
-            {
-                ErrorWindow.messageWindowActive = false;
-            }
+        var x = Screen.width / 100F;
+        var y = Screen.height / 100F;
+        var fontSize = (int) (y * 3);
 
-            if (GUI.Button(new Rect(x * 60, y * 85, x * 20, y * 5), "Open bugtracker", styles[2]))
-            {
-                Application.OpenURL("https://github.com/ISSDEFIANT/Star-Trek-Defence-Line/issues");
-            }
-        }
+        var box = new GUIStyle(GUI.skin.box)
+        {
+            fontSize = fontSize
+        };
+        var label = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = fontSize
+        };
+        var button = new GUIStyle(GUI.skin.button)
+        {
+            fontSize = fontSize
+        };
+
+        GUI.color = Color.red;
+        GUI.Box(new Rect(x * 25, y * 5, x * 60, y * 90), "Error", box);
+        GUI.Label(new Rect(x * 30, y * 10, x * 50, y * 5),
+            "Произошла ошибка. Пожалуйста, напишите нам о ней в багтрекер:", label);
+        GUI.Label(new Rect(x * 30, y * 15, x * 50, y * 80), msg, button);
+        GUI.color = Color.white;
+        if (GUI.Button(new Rect(x * 30, y * 85, x * 5, y * 3), "Close", button))
+            lock (Lock)
+                _messageWindowActive = false;
+
+        if (GUI.Button(new Rect(x * 60, y * 85, x * 20, y * 5), "Open bugtracker", button))
+            Application.OpenURL("https://github.com/ISSDEFIANT/Star-Trek-Defence-Line/issues");
     }
 }
