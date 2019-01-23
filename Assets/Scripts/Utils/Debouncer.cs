@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Utils
 {
-    //TODO Run actions in other thread
-    //TODO Send exceptions to player
     public class Debouncer : Singleton<Debouncer>
     {
         private readonly Dictionary<object, TimedAction> _actions = new Dictionary<object, TimedAction>();
@@ -75,14 +74,17 @@ namespace Utils
 
             public void Run()
             {
-                try
+                ThreadPool.QueueUserWorkItem(state =>
                 {
-                    _action.Invoke();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
+                    try
+                    {
+                        _action.Invoke();
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorWindow.ShowException(e);
+                    }
+                });
             }
         }
     }

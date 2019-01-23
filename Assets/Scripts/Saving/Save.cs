@@ -54,7 +54,7 @@ namespace Saving
             }
             catch (Exception e)
             {
-                //TODO handle
+                ErrorWindow.ShowException(e);
                 Invalid = true;
             }
         }

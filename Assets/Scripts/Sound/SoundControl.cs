@@ -3,10 +3,11 @@ using UnityEngine.Audio;
 
 namespace Sound
 {
+    /// <inheritdoc />
     /// <summary>
     /// This class initializes audio mixer with global audio volume. It also provides methods to control global audio volume
     /// </summary>
-    /// <seealso cref="Assets/AudioMixer"/>
+    /// <seealso cref="!:Assets/AudioMixer" />
     public sealed class SoundControl : MonoBehaviour
     {
         public AudioMixer mixer;

@@ -49,7 +49,7 @@ public class GlobalDB : MonoBehaviour
 	void Update () {
 	    if (Input.GetKeyDown(KeyCode.H))
 	    {
-            ErrorWindow.ShowError("TestError");
+            ErrorWindow.ShowErrorMessage("TestError");
         }
 	}
 	
