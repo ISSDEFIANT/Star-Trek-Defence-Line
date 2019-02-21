@@ -19,24 +19,24 @@ namespace Model.Ability.Impl
             this.maxHealth = maxHealth;
         }
 
-        public void Init(IWorld world, IWorldObject obj)
+        public void Init(IWorld world, WorldObject obj)
         {
-            obj.GetStore().Set<uint>(HealthPropertyName, baseHealth);
+            obj.Store.Set(HealthPropertyName, baseHealth);
         }
 
-        public void Destroy(IWorld world, IWorldObject obj)
+        public void Destroy(IWorld world, WorldObject obj)
         {
         }
 
-        public int Damage(IWorld world, IWorldObject target, IWorldObject invoker, uint damage)
+        public int Damage(IWorld world, WorldObject target, WorldObject invoker, uint damage)
         {
-            var health = target.GetStore().Get<uint>(HealthPropertyName);
+            var health = target.Store.Get<uint>(HealthPropertyName);
             if (health <= 0)
                 return -1;
 
             var realDamage = health < damage ? health : damage;
             var currentHealth = health - realDamage;
-            target.GetStore().Set<uint>(HealthPropertyName, currentHealth);
+            target.Store.Set(HealthPropertyName, currentHealth);
             foreach (var del in target.GetEventListenersForType<DamagedDelegate>()
                 .Union(world.GetGlobalEventListenersForType<DamagedDelegate>()))
                 del.DynamicInvoke(world, target, invoker, realDamage, currentHealth);
@@ -46,9 +46,9 @@ namespace Model.Ability.Impl
             return (int) realDamage;
         }
 
-        public int Heal(IWorld world, IWorldObject target, IWorldObject invoker, uint heal)
+        public int Heal(IWorld world, WorldObject target, WorldObject invoker, uint heal)
         {
-            var health = target.GetStore().Get<uint>(HealthPropertyName);
+            var health = target.Store.Get<uint>(HealthPropertyName);
             if (health <= 0)
                 return -1;
 
@@ -57,7 +57,7 @@ namespace Model.Ability.Impl
                 return -1;
             
             var currentHealth = health + realHeal;
-            target.GetStore().Set<uint>(HealthPropertyName, currentHealth);
+            target.Store.Set(HealthPropertyName, currentHealth);
             foreach (var del in target.GetEventListenersForType<HealedDelegate>()
                 .Union(world.GetGlobalEventListenersForType<HealedDelegate>()))
                 del.DynamicInvoke(world, target, invoker, realHeal, currentHealth);
@@ -65,19 +65,19 @@ namespace Model.Ability.Impl
             return (int) realHeal;
         }
 
-        public uint GetHealth(IWorld world, IWorldObject target)
+        public uint GetHealth(IWorld world, WorldObject target)
         {
-            return target.GetStore().Get<uint>(HealthPropertyName);
+            return target.Store.Get<uint>(HealthPropertyName);
         }
 
-        public uint GetMaxHealth(IWorld world, IWorldObject target)
+        public uint GetMaxHealth(IWorld world, WorldObject target)
         {
             return maxHealth;
         }
 
-        public bool Kill(IWorld world, IWorldObject target)
+        public bool Kill(IWorld world, WorldObject target)
         {
-            if (target.GetStore().Set<uint>(HealthPropertyName, 0) <= 0)
+            if (target.Store.Set<uint>(HealthPropertyName, 0) <= 0)
                 return false;
             foreach (var del in target.GetEventListenersForType<KilledDelegate>()
                 .Union(world.GetGlobalEventListenersForType<KilledDelegate>()))

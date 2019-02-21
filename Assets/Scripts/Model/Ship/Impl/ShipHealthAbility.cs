@@ -35,23 +35,29 @@ namespace Model.Ship.Impl
         {
             this.baseDefaultHealth = baseDefaultHealth;
             this.baseMaxHealth = baseMaxHealth;
+            // ReSharper disable once PossibleMultipleEnumeration
             this.modules = modules;
             this.damageTargetManagerDelegate = damageTargetManagerDelegate;
+            // ReSharper disable once PossibleMultipleEnumeration
+            if((from module in modules
+                where module.Key == "base"
+                select module).Any())
+                throw new ArgumentException("Cannot have health module with name 'base'");
         }
 
-        public void Init(IWorld world, IWorldObject obj)
+        public void Init(IWorld world, WorldObject obj)
         {
             if (baseDefaultHealth != -1 && baseMaxHealth != -1)
-                obj.GetStore().Set<uint>(HealthStoreParameter + "base", baseDefaultHealth);
+                obj.Store.Set(HealthStoreParameter + "base", (uint) baseDefaultHealth);
             foreach (var module in modules)
-                obj.GetStore().Set<uint>(HealthStoreParameter + module.Key, module.Value.Key);
+                obj.Store.Set(HealthStoreParameter + module.Key, module.Value.Key);
         }
 
-        public void Destroy(IWorld world, IWorldObject obj)
+        public void Destroy(IWorld world, WorldObject obj)
         {
         }
 
-        public int Damage(IWorld world, IWorldObject target, IWorldObject invoker, uint damage)
+        public int Damage(IWorld world, WorldObject target, WorldObject invoker, uint damage)
         {
             bool killed = false;
             uint realDamage = 0;
@@ -59,14 +65,14 @@ namespace Model.Ship.Impl
             uint currentHealth = 0;
             if (baseDefaultHealth != -1 && baseMaxHealth != -1)
             {
-                var health = target.GetStore().Get<uint>(HealthStoreParameter + "base");
+                var health = target.Store.Get<uint>(HealthStoreParameter + "base");
                 if (health <= 0)
                     return -1;
                 var damagePercent = Random.Next(10, last);
                 last -= damagePercent;
                 var dmg = (uint) (damage * 0.01F * damagePercent);
                 var realDmg = Math.Min(dmg, health);
-                target.GetStore().Set<uint>(HealthStoreParameter + "base", health - realDmg);
+                target.Store.Set(HealthStoreParameter + "base", health - realDmg);
                 currentHealth += health - realDmg;
 
                 if (realDmg == health)
@@ -85,9 +91,9 @@ namespace Model.Ship.Impl
 
                 last -= damagePercent;
                 var dmg = (uint) (damage * 0.01F * damagePercent);
-                var health = target.GetStore().Get<uint>(HealthStoreParameter + module.Key);
+                var health = target.Store.Get<uint>(HealthStoreParameter + module.Key);
                 var realDmg = Math.Min(dmg, health);
-                target.GetStore().Set<uint>(HealthStoreParameter + module.Key, health - realDmg);
+                target.Store.Set(HealthStoreParameter + module.Key, health - realDmg);
                 currentHealth += health - realDmg;
 
                 foreach (var del in target.GetEventListenersForType<ModuleDamagedDelegate>()
@@ -111,14 +117,14 @@ namespace Model.Ship.Impl
             return (int) realDamage;
         }
 
-        public int Heal(IWorld world, IWorldObject target, IWorldObject invoker, uint heal)
+        public int Heal(IWorld world, WorldObject target, WorldObject invoker, uint heal)
         {
             uint realHealForAll = 0;
             int last = 100;
             uint currentHealth = 0;
             if (baseDefaultHealth != -1 && baseMaxHealth != -1)
             {
-                var health = target.GetStore().Get<uint>(HealthStoreParameter + "base");
+                var health = target.Store.Get<uint>(HealthStoreParameter + "base");
                 if (health <= 0)
                     return -1;
                 var healthRequired = baseMaxHealth - health;
@@ -129,7 +135,7 @@ namespace Model.Ship.Impl
                     last -= healPercent;
                     var h = (uint) (heal * 0.01F * healPercent);
                     var realHeal = Math.Min(h, health);
-                    target.GetStore().Set<uint>(HealthStoreParameter + "base", health + realHeal);
+                    target.Store.Set(HealthStoreParameter + "base", health + realHeal);
                     currentHealth += health + realHeal;
 
                     foreach (var del in target.GetEventListenersForType<BaseHealedDelegate>()
@@ -141,7 +147,7 @@ namespace Model.Ship.Impl
 
             foreach (var module in modules)
             {
-                var health = target.GetStore().Get<uint>(HealthStoreParameter + module.Key);
+                var health = target.Store.Get<uint>(HealthStoreParameter + module.Key);
                 var healthRequired = module.Value.Value - health;
                 int percentage = (int) (healthRequired * 1.0F / heal * 100);
                 var healPercent = Random.Next(Math.Min(percentage, last));
@@ -150,7 +156,7 @@ namespace Model.Ship.Impl
                     last -= healPercent;
                     var h = (uint) (heal * 0.01F * healPercent);
                     var realHeal = Math.Min(h, healthRequired);
-                    target.GetStore().Set<uint>(HealthStoreParameter + module.Key, health + realHeal);
+                    target.Store.Set(HealthStoreParameter + module.Key, health + realHeal);
                     currentHealth += health + realHeal;
 
                     foreach (var del in target.GetEventListenersForType<ModuleHealedDelegate>()
@@ -169,46 +175,48 @@ namespace Model.Ship.Impl
             return (int) realHealForAll;
         }
 
-        public uint GetHealth(IWorld world, IWorldObject target)
+        public uint GetHealth(IWorld world, WorldObject target)
         {
             uint health = 0;
             if (baseMaxHealth != -1 && baseDefaultHealth != -1)
-                health += target.GetStore().Get<uint>(HealthStoreParameter + "base");
+                health += target.Store.Get<uint>(HealthStoreParameter + "base");
             return modules.Aggregate(health,
-                (current, module) => current + target.GetStore().Get<uint>(HealthStoreParameter + module.Key));
+                (current, module) => current + target.Store.Get<uint>(HealthStoreParameter + module.Key));
         }
 
-        public uint GetMaxHealth(IWorld world, IWorldObject target)
+        public uint GetMaxHealth(IWorld world, WorldObject target)
         {
             return modules.Aggregate((uint) (baseMaxHealth == -1 ? 0 : baseMaxHealth),
                 (current, module) => current + module.Value.Value);
         }
 
-        public bool Kill(IWorld world, IWorldObject target)
+        public bool Kill(IWorld world, WorldObject target)
         {
             if (baseMaxHealth != -1 && baseDefaultHealth != -1)
             {
-                if (target.GetStore().Get<uint>(HealthStoreParameter + "base") == 0)
+                if (target.Store.Get<uint>(HealthStoreParameter + "base") == 0)
                     return false;
-                target.GetStore().Set<uint>(HealthStoreParameter + "base", 0);
+                target.Store.Set<uint>(HealthStoreParameter + "base", 0);
             }
 
             var lashHealth = modules.Aggregate<KeyValuePair<string, KeyValuePair<uint, uint>>, uint>(0,
                 (current, module) =>
-                    current + target.GetStore().Set<uint>(HealthStoreParameter + module.Key, 0));
+                    current + target.Store.Set<uint>(HealthStoreParameter + module.Key, 0));
             return lashHealth > 0;
         }
 
-        public int GetModuleHealth(IWorld world, IWorldObject target, string name)
+        public int GetModuleHealth(IWorld world, WorldObject target, string name)
         {
+            if (name == "base")
+                return GetBaseHealth(world, target);
             foreach (var module in modules)
                 if (module.Key == name)
-                    return (int) target.GetStore().Get<uint>(HealthStoreParameter + module.Key);
+                    return (int) target.Store.Get<uint>(HealthStoreParameter + module.Key);
 
             return -1;
         }
 
-        public int GetMaxModuleHealth(IWorld world, IWorldObject target, string name)
+        public int GetMaxModuleHealth(IWorld world, WorldObject target, string name)
         {
             foreach (var module in modules)
                 if (module.Key == name)
@@ -217,22 +225,24 @@ namespace Model.Ship.Impl
             return -1;
         }
 
-        public IEnumerable<string> GetModules(IWorld world, IWorldObject target)
+        public IEnumerable<string> GetModules(IWorld world, WorldObject target)
         {
             return from module in modules select module.Key;
         }
 
-        public int DamageModule(IWorld world, IWorldObject target, IWorldObject invoker, string name, uint damage)
+        public int DamageModule(IWorld world, WorldObject target, WorldObject invoker, string name, uint damage)
         {
+            if (name == "base")
+                return DamageBase(world, target, invoker, damage);
             var ret = -1;
             foreach (var module in modules)
                 if (module.Key == name)
                 {
-                    var health = target.GetStore().Get<uint>(HealthStoreParameter + module.Key);
+                    var health = target.Store.Get<uint>(HealthStoreParameter + module.Key);
                     if (health == 0)
                         return 1;
                     var realDmg = Math.Min(damage, health);
-                    target.GetStore().Set<uint>(HealthStoreParameter + module.Key, health - realDmg);
+                    target.Store.Set(HealthStoreParameter + module.Key, health - realDmg);
 
                     foreach (var del in target.GetEventListenersForType<ModuleDamagedDelegate>()
                         .Union(world.GetGlobalEventListenersForType<ModuleDamagedDelegate>()))
@@ -248,7 +258,7 @@ namespace Model.Ship.Impl
 
             if (baseMaxHealth == -1 && baseDefaultHealth == -1)
             {
-                bool dead = modules.All(module => target.GetStore().Get<uint>(HealthStoreParameter + module.Key) <= 0);
+                var dead = modules.All(module => target.Store.Get<uint>(HealthStoreParameter + module.Key) <= 0);
                 if (dead)
                     foreach (var del in target.GetEventListenersForType<KilledDelegate>()
                         .Union(world.GetGlobalEventListenersForType<KilledDelegate>()))
@@ -258,18 +268,20 @@ namespace Model.Ship.Impl
             return ret;
         }
 
-        public int HealModule(IWorld world, IWorldObject target, IWorldObject invoker, string name, uint heal)
+        public int HealModule(IWorld world, WorldObject target, WorldObject invoker, string name, uint heal)
         {
+            if (name == "base")
+                return HealBase(world, target, invoker, heal);
             foreach (var module in modules)
                 if (module.Key == name)
                 {
-                    var health = target.GetStore().Get<uint>(HealthStoreParameter + module.Key);
+                    var health = target.Store.Get<uint>(HealthStoreParameter + module.Key);
                     if (health == module.Value.Value)
                         return -1;
                     var healthRequired = module.Value.Value - health;
 
                     var realHeal = Math.Min(heal, healthRequired);
-                    target.GetStore().Set<uint>(HealthStoreParameter + module.Key, health + realHeal);
+                    target.Store.Set(HealthStoreParameter + module.Key, health + realHeal);
 
                     foreach (var del in target.GetEventListenersForType<ModuleHealedDelegate>()
                         .Union(world.GetGlobalEventListenersForType<ModuleHealedDelegate>()))
@@ -280,28 +292,28 @@ namespace Model.Ship.Impl
             return -1;
         }
 
-        public int GetBaseHealth(IWorld world, IWorldObject target)
+        public int GetBaseHealth(IWorld world, WorldObject target)
         {
             return baseMaxHealth != -1 && baseDefaultHealth != -1
-                ? (int) target.GetStore().Get<uint>(HealthStoreParameter + "base")
+                ? (int) target.Store.Get<uint>(HealthStoreParameter + "base")
                 : -1;
         }
 
-        public int GetBaseMaxHealth(IWorld world, IWorldObject target)
+        public int GetBaseMaxHealth(IWorld world, WorldObject target)
         {
             return baseMaxHealth;
         }
 
-        public int DamageBase(IWorld world, IWorldObject target, IWorldObject invoker, uint damage)
+        public int DamageBase(IWorld world, WorldObject target, WorldObject invoker, uint damage)
         {
             if (baseMaxHealth == -1 || baseDefaultHealth == -1)
                 return -1;
 
-            var health = target.GetStore().Get<uint>(HealthStoreParameter + "base");
+            var health = target.Store.Get<uint>(HealthStoreParameter + "base");
             if (health == 0)
                 return 1;
             var realDmg = Math.Min(damage, health);
-            target.GetStore().Set<uint>(HealthStoreParameter + "base", health - realDmg);
+            target.Store.Set(HealthStoreParameter + "base", health - realDmg);
 
             foreach (var del in target.GetEventListenersForType<BaseDamagedDelegate>()
                 .Union(world.GetGlobalEventListenersForType<BaseDamagedDelegate>()))
@@ -314,12 +326,12 @@ namespace Model.Ship.Impl
             return (int) realDmg;
         }
 
-        public int HealBase(IWorld world, IWorldObject target, IWorldObject invoker, uint heal)
+        public int HealBase(IWorld world, WorldObject target, WorldObject invoker, uint heal)
         {
             if (baseMaxHealth == -1 || baseDefaultHealth == -1)
                 return -1;
 
-            var health = target.GetStore().Get<uint>(HealthStoreParameter + "base");
+            var health = target.Store.Get<uint>(HealthStoreParameter + "base");
             if (health <= 0)
                 return -1;
 
@@ -328,7 +340,7 @@ namespace Model.Ship.Impl
                 return -1;
 
             var realHeal = Math.Min(heal, healthRequired);
-            target.GetStore().Set<uint>(HealthStoreParameter + "base", health + realHeal);
+            target.Store.Set(HealthStoreParameter + "base", (uint) (health + realHeal));
 
             foreach (var del in target.GetEventListenersForType<BaseHealedDelegate>()
                 .Union(world.GetGlobalEventListenersForType<BaseHealedDelegate>()))
@@ -336,7 +348,7 @@ namespace Model.Ship.Impl
             return (int) realHeal;
         }
 
-        public int DamageTargeted(IWorld world, IWorldObject target, IWorldObject invoker, string name, uint damage)
+        public int DamageTargeted(IWorld world, WorldObject target, WorldObject invoker, string name, uint damage)
         {
             return (from module in damageTargetManagerDelegate(name)
                 let dmg = damage * 0.01F * module.Value
