@@ -98,7 +98,7 @@ public class USplashScreen : MonoBehaviour {
             if (t_current >= m_uss.Count - 1)
             {
                 yield return new WaitForSeconds(1f);
-                if (VoiceSystem.LoadingCompleat)
+                if (VoiceSystem.Instance.LoadingCompleat)
                 {
                     SceneManager.LoadScene(m_NextLevel);
                 }

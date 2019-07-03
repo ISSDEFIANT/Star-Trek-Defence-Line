@@ -28,22 +28,22 @@ public class VoiceIndex : MonoBehaviour
         switch (race)
         {
             case enRace.Borg:
-                CapNum = Random.Range(0, VoiceSystem.BorgVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.BorgVoice.Length);
                 break;
             case enRace.Federation:
-                CapNum = Random.Range(0, VoiceSystem.FedVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.FedVoice.Length);
                 break;
             case enRace.Klingon:
-                CapNum = Random.Range(0, VoiceSystem.KliVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.KliVoice.Length);
                 break;
             case enRace.Romulan:
-                CapNum = Random.Range(0, VoiceSystem.RomVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.RomVoice.Length);
                 break;
             case enRace.Cardassian:
-                CapNum = Random.Range(0, VoiceSystem.CarVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.CarVoice.Length);
                 break;
             case enRace.S8472:
-                CapNum = Random.Range(0, VoiceSystem.SpiVoice.Length);
+                CapNum = Random.Range(0, VoiceSystem.Instance.SpiVoice.Length);
                 break;
         }
     }

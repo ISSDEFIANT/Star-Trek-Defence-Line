@@ -27,7 +27,7 @@ public class CircleRenderer : MonoBehaviour {
 	}
 
 	public void DoRenderer ( ) {
-		lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+		lineRenderer.material = new Material(Shader.Find("Particles/Additive_Always"));
 		lineRenderer.startColor = color;
 		lineRenderer.endColor = color;
 		lineRenderer.startWidth = 0.5f;

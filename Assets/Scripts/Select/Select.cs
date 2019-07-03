@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Utils;
 
 public class Select : MonoBehaviour
 {
@@ -1096,25 +1097,25 @@ public class Select : MonoBehaviour
         switch (_vi.race)
         {
             case VoiceIndex.enRace.Borg:
-                curCap = VoiceSystem.BorgVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.BorgVoice[_vi.CapNum];
                 break;
             case VoiceIndex.enRace.Federation:
-                curCap = VoiceSystem.FedVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.FedVoice[_vi.CapNum];
                 break;
             case VoiceIndex.enRace.Klingon:
-                curCap = VoiceSystem.KliVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.KliVoice[_vi.CapNum];
                 break;
             case VoiceIndex.enRace.Romulan:
-                curCap = VoiceSystem.RomVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.RomVoice[_vi.CapNum];
                 break;
             case VoiceIndex.enRace.Cardassian:
-                curCap = VoiceSystem.CarVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.CarVoice[_vi.CapNum];
                 break;
             case VoiceIndex.enRace.S8472:
-                curCap = VoiceSystem.SpiVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.SpiVoice[_vi.CapNum];
                 break;
             default:
-                curCap = VoiceSystem.FedVoice[_vi.CapNum];
+                curCap = VoiceSystem.Instance.FedVoice[_vi.CapNum];
                 break;
 
         }
@@ -1151,25 +1152,25 @@ public class Select : MonoBehaviour
         switch (race)
         {
             case VoiceIndex.enRace.Borg:
-                _cv = VoiceSystem.BorgSystemVoice;
+                _cv = VoiceSystem.Instance.BorgSystemVoice;
                 break;
             case VoiceIndex.enRace.Federation:
-                _cv = VoiceSystem.FedSystemVoice;
+                _cv = VoiceSystem.Instance.FedSystemVoice;
                 break;
             case VoiceIndex.enRace.Klingon:
-                _cv = VoiceSystem.KliSystemVoice;
+                _cv = VoiceSystem.Instance.KliSystemVoice;
                 break;
             case VoiceIndex.enRace.Romulan:
-                _cv = VoiceSystem.RomSystemVoice;
+                _cv = VoiceSystem.Instance.RomSystemVoice;
                 break;
             case VoiceIndex.enRace.Cardassian:
-                _cv = VoiceSystem.CarSystemVoice;
+                _cv = VoiceSystem.Instance.CarSystemVoice;
                 break;
             case VoiceIndex.enRace.S8472:
-                _cv = VoiceSystem.SpiSystemVoice;
+                _cv = VoiceSystem.Instance.SpiSystemVoice;
                 break;
             default:
-                _cv = VoiceSystem.FedSystemVoice;
+                _cv = VoiceSystem.Instance.FedSystemVoice;
                 break;
 
         }
